@@ -2,7 +2,6 @@ package com.example.piramidadjii.services.impl;
 
 import com.example.piramidadjii.entities.Person;
 import com.example.piramidadjii.entities.Plan;
-import com.example.piramidadjii.entities.Transaction;
 import com.example.piramidadjii.repositories.PersonRepository;
 import com.example.piramidadjii.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.services.RegistrationTreeService;
@@ -11,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Service
 public class RegistrationTreeServiceImpl implements RegistrationTreeService {
-
     @Autowired
     private PersonRepository personRepository;
 
@@ -25,28 +22,44 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
 
-    private int counter = 0;
-
     @Override
-    public void registerPerson(Person person, Plan plan) {
-        person.setSubscriptionPlan(plan);
+    public void registerPerson(Person person) {
+
+        if (checkBalance(person, 4L) >0){
+            setSubscription(person, 4L);
+        }else if (checkBalance(person, 3L) >0){
+            setSubscription(person, 3L);
+        }else if (checkBalance(person, 2L) >0){
+            setSubscription(person, 2L);
+        }else if (checkBalance(person, 1L) >0){
+            setSubscription(person, 1L);
+        }else {
+            throw new RuntimeException();
+        }
+
         this.personRepository.save(person);
-        initialFee(person, person.getSubscriptionPlan().getRegistrationFee());
+    }
+
+
+    private int checkBalance(Person person, long id) {
+        return person.getBalance().compareTo(subscriptionPlanRepository.getPlanById(id).orElseThrow().getRegistrationFee());
+    }
+
+    private void setSubscription(Person person, long id) {
+        person.setSubscriptionPlan(subscriptionPlanRepository.getPlanById(id).orElseThrow());
+        BigDecimal balance=person.getBalance();
+        BigDecimal fee=subscriptionPlanRepository.getPlanById(id).orElseThrow().getRegistrationFee();
+        BigDecimal newBalance=balance.subtract(fee);
+        person.setBalance(newBalance);
     }
 
     @Override
     public void sell(BigDecimal sellPrice, Person person) {
-        if (counter < 4 && person.getParent().getId() != 1) {
-
-        }
-
-
+        this.transactionService.createTransaction(person, sellPrice, 0);
     }
 
     @Override
-    public void initialFee(Person person, BigDecimal tax) {
-//        transactionService.createTransaction(person, tax,4); TODO;
+    public void initialFee(Person person) {
+
     }
-
-
 }

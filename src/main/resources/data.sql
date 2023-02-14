@@ -27,14 +27,14 @@ create table persons (
 insert into persons (id,name)
 values (1,'Boss');
 
-insert into plan (id,name,levels,percent)
-values (1,'Bronze',1,2);
+insert into plan (id,name,levels,percent,registration_fee)
+values (1,'Bronze',1,2,200);
 
-insert into plan (id,name,levels,percent)
-values (2,'Silver',2,3);
+insert into plan (id,name,levels,percent,registration_fee)
+values (2,'Silver',2,3,300);
 
-insert into plan (id,name,levels,percent)
-values (3,'Gold',3,4);
+insert into plan (id,name,levels,percent,registration_fee)
+values (3,'Gold',3,4,400);
 
-insert into plan (id,name,levels,percent)
-values (4,'Platinum',4,5);
+insert into plan (id,name,levels,percent,registration_fee)
+values (4,'Platinum',4,5,500);

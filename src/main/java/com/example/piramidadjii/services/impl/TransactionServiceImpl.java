@@ -36,7 +36,7 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
-    private void transactionDetails(Person person,BigDecimal percent, BigDecimal price) {
+    private void transactionDetails(Person person, BigDecimal percent, BigDecimal price) {
         Transaction transaction = new Transaction();
         transaction.setPercent(percent);
         transaction.setPrice(calculatePrice(percent, price));
