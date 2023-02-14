@@ -1,6 +1,5 @@
 package com.example.piramidadjii.entities;
 
-import com.example.piramidadjii.entities.enums.PlanNameEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,10 +18,11 @@ public class Plan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private PlanNameEnum name;
+    private String  name;
 
     private Integer levels;
 
     private BigDecimal percent;
+
+    private BigDecimal registrationFee;
 }

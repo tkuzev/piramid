@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "persons")
 @Getter
@@ -20,7 +22,10 @@ public class Person {
 
     @ManyToOne
     private Plan subscriptionPlan;
+    @ManyToOne
+    private Person parent;
 
-    private Long parentId;
+    private BigDecimal balance;
+
 
 }
