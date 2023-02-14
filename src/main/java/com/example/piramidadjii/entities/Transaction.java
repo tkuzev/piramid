@@ -18,8 +18,8 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Person personId;
+
+    private Long personId;
 
     @Column(nullable = false)
     private BigDecimal percent;
