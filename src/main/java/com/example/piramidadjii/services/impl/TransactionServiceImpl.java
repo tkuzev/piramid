@@ -22,7 +22,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional
     public void createTransaction(Person person, BigDecimal price, int counter) {
 
-        if (counter < 5 && person.getParent().getId() != 1) {
+        if (counter < 5 && person.getParent() != null ) {
             if (counter == 0) {
                 transactionDetails(person, FLAT_PERCENTAGE, price);
             } else {

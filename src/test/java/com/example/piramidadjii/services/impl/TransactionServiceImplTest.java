@@ -36,6 +36,7 @@ class TransactionServiceImplTest {
     @AfterEach
     void tearDown() {
         personRepository.deleteAll(personList);
+
         transactionRepository.deleteAll(transactionList);
     }
 
@@ -45,19 +46,19 @@ class TransactionServiceImplTest {
         Person person1 = createPerson("1", 1L);
         personList.add(person1);
 
-        Person person2 = createPerson( "2", 2L);
+        Person person2 = createPerson( "2", person1.getId());
         personList.add(person2);
 
-        Person person3 = createPerson( "3", 3L);
+        Person person3 = createPerson( "3", person2.getId());
         personList.add(person3);
 
-        Person person4 = createPerson( "4", 4L);
+        Person person4 = createPerson( "4", person3.getId());
         personList.add(person4);
 
-        Person person5 = createPerson( "5", 5L);
+        Person person5 = createPerson( "5", person4.getId());
         personList.add(person5);
 
-        Person person6 = createPerson( "person6", 6L);
+        Person person6 = createPerson( "person6", person5.getId());
         personList.add(person6);
 
         int before = transactionRepository.findAll().size();
@@ -65,22 +66,26 @@ class TransactionServiceImplTest {
         transactionService.createTransaction(person6, BigDecimal.valueOf(20), 0);
 
         int after = transactionRepository.findAll().size();
+
+        transactionList = transactionRepository.findAll().subList(before, after);
 
         assertEquals(before + 5, after);
     }
 
     @Test
     void createTransactionWithOnePerson() {
-        Person person6 = createPerson( "person6", 6L);
-        personList.add(person6);
+        Person person = createPerson( "person", 1L);
+        personList.add(person);
 
         int before = transactionRepository.findAll().size();
 
-        transactionService.createTransaction(person6, BigDecimal.valueOf(20), 0);
+        transactionService.createTransaction(person, BigDecimal.valueOf(20), 0);
 
         int after = transactionRepository.findAll().size();
 
-        assertEquals(before + 5, after);
+        transactionList = transactionRepository.findAll().subList(before, after);
+
+        assertEquals(before + 1, after);
     }
 
 
