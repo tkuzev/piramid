@@ -1,7 +1,6 @@
 package com.example.piramidadjii.dtos;
 
 import com.example.piramidadjii.entities.Plan;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 

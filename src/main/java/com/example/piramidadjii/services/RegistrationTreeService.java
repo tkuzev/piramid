@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 
 public interface RegistrationTreeService {
 
-    void registerPerson(Person person, Plan plan);
+    void registerPerson(Person person);
 
     void sell(BigDecimal sellPrice, Person person);
 
-    void initialFee(Person person,BigDecimal tax);
+    void initialFee(Person person);
 }

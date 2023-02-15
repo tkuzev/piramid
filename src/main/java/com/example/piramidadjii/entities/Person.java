@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.math.BigDecimal;
 
 @Entity
@@ -26,6 +25,5 @@ public class Person {
     private Person parent;
 
     private BigDecimal balance;
-
 
 }
