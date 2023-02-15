@@ -40,7 +40,17 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
         this.personRepository.save(person);
     }
 
+    @Override
+    public void sell(BigDecimal sellPrice, Person person) {
+        this.transactionService.createTransaction(person, sellPrice, 0);
+    }
 
+    @Override
+    public void initialFee(Person person) {
+
+    }
+
+    //Helper methods
     private int checkBalance(Person person, long id) {
         return person.getBalance().compareTo(subscriptionPlanRepository.getPlanById(id).orElseThrow().getRegistrationFee());
     }
@@ -51,15 +61,5 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
         BigDecimal fee=subscriptionPlanRepository.getPlanById(id).orElseThrow().getRegistrationFee();
         BigDecimal newBalance=balance.subtract(fee);
         person.setBalance(newBalance);
-    }
-
-    @Override
-    public void sell(BigDecimal sellPrice, Person person) {
-        this.transactionService.createTransaction(person, sellPrice, 0);
-    }
-
-    @Override
-    public void initialFee(Person person) {
-
     }
 }

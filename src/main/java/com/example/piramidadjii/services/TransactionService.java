@@ -8,4 +8,6 @@ public interface TransactionService {
 
     void createTransaction(Person person, BigDecimal price, int counter);
 
+
+
 }
