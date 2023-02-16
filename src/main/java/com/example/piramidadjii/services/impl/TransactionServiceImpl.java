@@ -19,6 +19,8 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private SubscriptionPlanRepository  subscriptionPlanRepository;
 
+
+
     private final BigDecimal FLAT_PERCENTAGE = BigDecimal.valueOf(5L);
 
 
