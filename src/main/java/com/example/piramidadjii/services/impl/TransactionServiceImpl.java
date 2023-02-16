@@ -2,6 +2,7 @@ package com.example.piramidadjii.services.impl;
 
 import com.example.piramidadjii.entities.Person;
 import com.example.piramidadjii.entities.Transaction;
+import com.example.piramidadjii.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.repositories.TransactionRepository;
 import com.example.piramidadjii.services.TransactionService;
 import jakarta.transaction.Transactional;
@@ -12,17 +13,22 @@ import java.math.BigDecimal;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
+    @Autowired
+    private TransactionRepository transactionRepository;
+
+    @Autowired
+    private SubscriptionPlanRepository  subscriptionPlanRepository;
 
     private final BigDecimal FLAT_PERCENTAGE = BigDecimal.valueOf(5L);
 
-    @Autowired
-    private TransactionRepository transactionRepository;
+
+
 
     @Override
     @Transactional
     public void createTransaction(Person person, BigDecimal price, int counter) {
 
-        if (counter < 5 && person.getParent() != null ) {
+        if (counter < subscriptionPlanRepository.count() + 1 && person.getParent() != null ) {
             if (counter == 0) {
                 transactionDetails(person, FLAT_PERCENTAGE, price);
             } else {

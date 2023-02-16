@@ -11,10 +11,6 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
 
-    public SubscriptionPlanServiceImpl(SubscriptionPlanRepository subscriptionPlanRepository) {
-        this.subscriptionPlanRepository = subscriptionPlanRepository;
-    }
-
     @Override
     public void createSubscriptionPlan(Plan plan) {
         Plan newPlan = new Plan();
