@@ -63,7 +63,7 @@ class TransactionServiceImplTest {
 
         int before = transactionRepository.findAll().size();
 
-        transactionService.createTransaction(person6, BigDecimal.valueOf(20), 0);
+        transactionService.createTransaction(person6, BigDecimal.valueOf(20));
 
         int after = transactionRepository.findAll().size();
 
@@ -79,7 +79,7 @@ class TransactionServiceImplTest {
 
         int before = transactionRepository.findAll().size();
 
-        transactionService.createTransaction(person, BigDecimal.valueOf(20), 0);
+        transactionService.createTransaction(person, BigDecimal.valueOf(20));
 
         int after = transactionRepository.findAll().size();
 
@@ -91,7 +91,7 @@ class TransactionServiceImplTest {
 
     private Person createPerson(String name, long parentId) {
         Person person1 = new Person();
-        person1.setSubscriptionPlan(subscriptionPlanRepository.getPlanById(1L).orElseThrow());
+        person1.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(2L).orElseThrow());
         person1.setName(name);
         person1.setBalance(BigDecimal.ZERO);
         person1.setParent(personRepository.getPersonById(parentId).orElseThrow());

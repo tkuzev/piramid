@@ -2,7 +2,6 @@ package com.example.piramidadjii.services.impl;
 
 import com.example.piramidadjii.entities.Person;
 import com.example.piramidadjii.entities.Transaction;
-import com.example.piramidadjii.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.repositories.TransactionRepository;
 import com.example.piramidadjii.services.TransactionService;
 import jakarta.transaction.Transactional;
@@ -10,42 +9,53 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
-    private BigDecimal FLAT_PERCENTAGE = BigDecimal.valueOf(5L);
+    private Long FLAT_PERCENTAGE = 5L;
 
     @Autowired
     private TransactionRepository transactionRepository;
 
+    @Autowired
+    private SubscriptionPlanServiceImpl subscriptionPlanService;
+
     @Override
     @Transactional
     public void createTransaction(Person person, BigDecimal price) {
-        final BigDecimal[] percent = new BigDecimal[1];
+        final Long[] percent = new Long[1];
         AtomicInteger counter = new AtomicInteger();
+
         traverseFromNodeToRoot(person)
                 .parallel()
                 .limit(5)
                 .forEach(node -> setNewTransactions(person, price, percent, counter, node));
     }
 
-    private void setNewTransactions(Person person, BigDecimal price, BigDecimal[] percent, AtomicInteger counter, Person node) {
-        checkPercent(person, percent, counter, node);
-        counter.addAndGet(1);
+    private void setNewTransactions(Person person, BigDecimal price, Long[] percent, AtomicInteger counter, Person node) {
+        List<Long> percents = subscriptionPlanService.mapFromStringToLong(person.getSubscriptionPlan().getPercents());
+        checkPercent(person, percent, counter, node,percents);
+        counter.getAndAdd(1);
         returnNewValue(node, price, percent[0]);
     }
-    private void checkPercent(Person person, BigDecimal[] percent, AtomicInteger counter, Person node) {
+    private void checkPercent(Person person, Long[] percent, AtomicInteger counter, Person node,List<Long> percents) {
+
+        if (counter.get()>percents.size()){
+            return;
+        }
+
         if (node.getId().equals(person.getId())) {
-            percent[0] = FLAT_PERCENTAGE;
-        } else if (counter.get() > node.getSubscriptionPlan().getLevels()) {
-            percent[0] = BigDecimal.ZERO;
+                percent[0] = FLAT_PERCENTAGE;
+        } else if (counter.get() > percents.size()) {
+            percent[0] = 0L;
         } else {
-            percent[0] = node.getSubscriptionPlan().getPercent();
+            percent[0] = percents.get(counter.get());
         }
     }
     public Stream<Person> traverseFromNodeToRoot(Person node) {
@@ -56,17 +66,19 @@ public class TransactionServiceImpl implements TransactionService {
         return Stream.concat(Stream.of(node), traverseFromNodeToRoot(node.getParent()));
     }
 
-    private static BigDecimal calculatePrice(BigDecimal percent, BigDecimal price) {
-        return percent.multiply(price).divide(new BigDecimal(100));
+    private static BigDecimal calculatePrice(Long percent, BigDecimal price) {
+        return price.multiply(new BigDecimal(percent)).divide(new BigDecimal(100), RoundingMode.HALF_UP);
     }
 
-    public BigDecimal returnNewValue(Person person, BigDecimal sellingPrice, BigDecimal percent) {
-        person.setBalance(person.getBalance().add(sellingPrice.multiply(percent)));
+    public BigDecimal returnNewValue(Person person, BigDecimal sellingPrice, Long percent) {
+
+        person.setBalance(person.getBalance().add(sellingPrice.multiply(BigDecimal.valueOf(percent))));
         transactionDetails(person, sellingPrice, percent);
         return person.getBalance();
+
     }
 
-    private void transactionDetails(Person person, BigDecimal price, BigDecimal percent) {
+    private void transactionDetails(Person person, BigDecimal price, Long percent) {
         Transaction transaction = new Transaction();
         transaction.setPercent(percent);
         transaction.setPrice(calculatePrice(percent, price));

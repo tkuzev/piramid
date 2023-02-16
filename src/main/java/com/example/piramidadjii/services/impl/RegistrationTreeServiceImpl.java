@@ -1,7 +1,7 @@
 package com.example.piramidadjii.services.impl;
 
 import com.example.piramidadjii.entities.Person;
-import com.example.piramidadjii.entities.Plan;
+import com.example.piramidadjii.entities.SubscriptionPlan;
 import com.example.piramidadjii.repositories.PersonRepository;
 import com.example.piramidadjii.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.services.RegistrationTreeService;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,31 +25,20 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
 
-    List<Plan> plans = new ArrayList<>();
+    List<SubscriptionPlan> subscriptionPlans = new ArrayList<>();
 
 
     @Override
     public void registerPerson(Person person) {
 
-//        if (checkBalance(person, 4L) >0){
-//            setSubscription(person, 4L);
-//        }else if (checkBalance(person, 3L) >0){
-//            setSubscription(person, 3L);
-//        }else if (checkBalance(person, 2L) >0){
-//            setSubscription(person, 2L);
-//        }else if (checkBalance(person, 1L) >0){
-//            setSubscription(person, 1L);
-//        }else {
-//            throw new RuntimeException();
-//        }
+        subscriptionPlans.addAll(subscriptionPlanRepository.findAll());
+        Collections.reverse(subscriptionPlans);
 
-        plans.addAll(subscriptionPlanRepository.findAll());
-        Collections.reverse(plans);
-
-        for (Plan plan : plans) {
-            if (checkBalance(person, plan.getId()) > 0) {
-                setSubscription(person, plan.getId());
-            } else if(plan.getId() == 1){
+        for (SubscriptionPlan subscriptionPlan : subscriptionPlans) {
+            if (checkBalance(person, subscriptionPlan.getId()) > 0) {
+                setSubscription(person, subscriptionPlan.getId());
+                break;
+            } else if(subscriptionPlan.getId() == 1){
                 throw new RuntimeException();
             }
         }
@@ -70,13 +58,13 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
 
     //Helper methods
     private int checkBalance(Person person, long planId) {
-        return person.getBalance().compareTo(subscriptionPlanRepository.getPlanById(planId).orElseThrow().getRegistrationFee());
+        return person.getBalance().compareTo(subscriptionPlanRepository.getSubscriptionPlanById(planId).orElseThrow().getRegistrationFee());
     }
 
     private void setSubscription(Person person, long id) {
-        person.setSubscriptionPlan(subscriptionPlanRepository.getPlanById(id).orElseThrow());
+        person.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(id).orElseThrow());
         BigDecimal balance=person.getBalance();
-        BigDecimal fee=subscriptionPlanRepository.getPlanById(id).orElseThrow().getRegistrationFee();
+        BigDecimal fee=subscriptionPlanRepository.getSubscriptionPlanById(id).orElseThrow().getRegistrationFee();
         BigDecimal newBalance=balance.subtract(fee);
         person.setBalance(newBalance);
     }

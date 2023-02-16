@@ -1,7 +1,7 @@
 package com.example.piramidadjii.services;
 
-import com.example.piramidadjii.entities.Plan;
+import com.example.piramidadjii.entities.SubscriptionPlan;
 
 public interface SubscriptionPlanService {
-    void createSubscriptionPlan(Plan plan);
+    void createSubscriptionPlan(SubscriptionPlan subscriptionPlan);
 }

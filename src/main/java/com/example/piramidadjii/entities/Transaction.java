@@ -1,5 +1,6 @@
 package com.example.piramidadjii.entities;
 
+import com.example.piramidadjii.enums.OperationType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,10 @@ public class Transaction extends BaseEntity{
 
     private Long personId;
     @Column(nullable = false)
-    private BigDecimal percent;
+    private Long percent;
     @Column(nullable = false)
     private BigDecimal price;
+
+    @Enumerated(EnumType.STRING)
+    private OperationType operationType;
 }
