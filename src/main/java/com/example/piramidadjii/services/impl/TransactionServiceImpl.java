@@ -2,6 +2,7 @@ package com.example.piramidadjii.services.impl;
 
 import com.example.piramidadjii.entities.Person;
 import com.example.piramidadjii.entities.Transaction;
+import com.example.piramidadjii.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.repositories.TransactionRepository;
 import com.example.piramidadjii.services.TransactionService;
 import jakarta.transaction.Transactional;
@@ -22,10 +23,6 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
-
-    public Consumer<Person> hui(int b){
-        return a-> System.out.println();
-    }
     @Override
     @Transactional
     public void createTransaction(Person person, BigDecimal price) {
@@ -75,6 +72,10 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setPrice(calculatePrice(percent, price));
         transaction.setPersonId(person.getId());
         transactionRepository.save(transaction);
+    }
+
+    private static BigDecimal calculatePrice(BigDecimal percent, BigDecimal price) {
+        return percent.multiply(price).divide(new BigDecimal(100));
     }
 
 }
