@@ -8,15 +8,11 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 @Entity
-@Table
+@Table(name = "subscription_plan")
 @NoArgsConstructor
 @Getter
 @Setter
-public class Plan {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Plan extends BaseEntity{
 
     private String name;
 

@@ -8,15 +8,12 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "transactions")
+@Table(name = "transaction")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Transaction {
+public class Transaction extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private Long personId;
     @Column(nullable = false)
     private BigDecimal percent;

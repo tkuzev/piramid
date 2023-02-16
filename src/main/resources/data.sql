@@ -1,4 +1,4 @@
-create table persons (
+create table person (
        id bigint not null auto_increment,
         balance decimal(38,2),
         name varchar(255),
@@ -16,7 +16,7 @@ create table persons (
         primary key (id)
     );
 
-    create table transactions (
+    create table transaction (
        id bigint not null auto_increment,
         percent decimal(38,2) not null,
         price decimal(38,2) not null,
@@ -24,7 +24,7 @@ create table persons (
         primary key (id)
     );
 
-insert into persons (id,name)
+insert into person (id,name)
 values (1,'Boss');
 
 insert into plan (id,name,levels,percent,registration_fee)
