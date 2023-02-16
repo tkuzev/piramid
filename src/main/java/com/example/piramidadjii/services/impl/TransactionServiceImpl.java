@@ -74,8 +74,5 @@ public class TransactionServiceImpl implements TransactionService {
         transactionRepository.save(transaction);
     }
 
-    private static BigDecimal calculatePrice(BigDecimal percent, BigDecimal price) {
-        return percent.multiply(price).divide(new BigDecimal(100));
-    }
 
 }
