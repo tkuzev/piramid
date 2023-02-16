@@ -60,7 +60,7 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
 
     @Override
     public void sell(BigDecimal sellPrice, Person person) {
-        this.transactionService.createTransaction(person, sellPrice, 0);
+        this.transactionService.createTransaction(person, sellPrice);
     }
 
     @Override
