@@ -16,7 +16,7 @@ public class Person extends BaseEntity{
     private String name;
 
     @ManyToOne
-    private Plan subscriptionPlan;
+    private SubscriptionPlan subscriptionPlan;
     @ManyToOne
     private Person parent;
 

@@ -1,6 +1,6 @@
 package com.example.piramidadjii.dtos;
 
-import com.example.piramidadjii.entities.Plan;
+import com.example.piramidadjii.entities.SubscriptionPlan;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +9,7 @@ import lombok.Setter;
 public class PersonDTO {
     private String name;
 
-    private Plan subscriptionPlan;
+    private SubscriptionPlan subscriptionPlan;
 
     private Long parentId;
 }

@@ -12,13 +12,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Plan extends BaseEntity{
-
+public class SubscriptionPlan extends BaseEntity{
     private String name;
 
-    private Integer levels;
-
-    private BigDecimal percent;
+    private String percents;
 
     private BigDecimal registrationFee;
+
 }
