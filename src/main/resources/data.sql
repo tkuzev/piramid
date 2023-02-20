@@ -1,11 +1,3 @@
---create table person (
---       id bigint not null auto_increment,
---        balance decimal(38,2),
---        name varchar(255),
---        subscription_plan_id bigint,
---        primary key (id)
---);
-
 create table registration_tree (
        id bigint not null auto_increment,
         balance decimal(38,2),
@@ -24,14 +16,20 @@ create table registration_tree (
         primary key (id)
     );
 
-    create table transaction (
+create table transaction (
        id bigint not null auto_increment,
         operation_type varchar(255),
         percent bigint not null,
-        person_id bigint,
         price decimal(38,2) not null,
         primary key (id)
     );
+
+--
+--    create table transaction_registration_tree (
+--       transaction_id bigint not null,
+--        registration_tree_id bigint not null,
+--        primary key (transaction_id, registration_tree_id)
+--    );
 
 insert into registration_tree (id,name)
 values (1,'Boss');

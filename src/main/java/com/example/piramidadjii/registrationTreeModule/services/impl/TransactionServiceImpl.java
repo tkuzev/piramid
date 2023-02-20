@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -81,7 +82,8 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = new Transaction();
         transaction.setPercent(percent);
         transaction.setPrice(calculatePrice(percent, price));
-        transaction.setPersonId(registrationTree.getId());
+        transaction
+                .setRegistrationTree(registrationTree);
         transaction.setOperationType(operationType);
         transactionRepository.save(transaction);
     }
