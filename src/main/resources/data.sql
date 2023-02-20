@@ -2,7 +2,6 @@ create table registration_tree (
        id bigint not null auto_increment,
         balance decimal(38,2),
         name varchar(255),
-        parent_id bigint,
         subscription_plan_id bigint,
         primary key (id)
 );
