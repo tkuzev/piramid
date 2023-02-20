@@ -60,6 +60,7 @@ class TransactionServiceImplTest {
         personListToDelete.addAll(streamList);
 
 
+
         int before = transactionRepository.findAll().size();
 
         transactionService.createTransaction(streamList.get(streamList.size()-1), BigDecimal.valueOf(5000));
@@ -77,6 +78,9 @@ class TransactionServiceImplTest {
         assertNull(transactionRepository.findByPersonId(streamList.get(0).getId())); // no transaction expected // working
         assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByPersonId(streamList.get(5).getId()).getPrice());
         //assertEquals for operation type
+        assertEquals("SOLD",transactionRepository.findByPersonId(streamList.get(streamList.size()-1).getId()).getOperationType().toString());
+        assertEquals("BONUS",transactionRepository.findByPersonId(streamList.get(2).getId()).getOperationType().toString());
+
     }
 
     @Test

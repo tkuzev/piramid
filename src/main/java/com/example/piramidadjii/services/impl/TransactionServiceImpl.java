@@ -2,6 +2,7 @@ package com.example.piramidadjii.services.impl;
 
 import com.example.piramidadjii.entities.Person;
 import com.example.piramidadjii.entities.Transaction;
+import com.example.piramidadjii.enums.OperationType;
 import com.example.piramidadjii.repositories.TransactionRepository;
 import com.example.piramidadjii.services.TransactionService;
 import jakarta.transaction.Transactional;
@@ -29,28 +30,32 @@ public class TransactionServiceImpl implements TransactionService {
     public void createTransaction(Person person, BigDecimal price) {
         final Long[] percent = new Long[1];
         AtomicInteger counter = new AtomicInteger(0);
+        OperationType[] operationType = new OperationType[1];
 
         traverseFromNodeToRoot(person)
                 // removed .parallel() shtoto se nasira
                 .limit(5) // one more transaction for the root node must be added nqkoga
-                .forEach(node -> setNewTransactions(person, price, percent, counter, node));
+                .forEach(node -> setNewTransactions(person, price, percent, counter, node, operationType));
     }
 
-    private void setNewTransactions(Person person, BigDecimal price, Long[] percent, AtomicInteger counter, Person node) {
-        checkPercent(person, percent, counter, node);
+    private void setNewTransactions(Person person, BigDecimal price, Long[] percent, AtomicInteger counter, Person node, OperationType [] operationType) {
+        checkPercent(person, percent, counter, node, operationType);
         counter.getAndAdd(1);
-        returnNewValue(node, price, percent[0]);
+        returnNewValue(node, price, percent[0], operationType[0]);
     }
 
-    private void checkPercent(Person person, Long[] percent, AtomicInteger counter, Person node) {
+    private void checkPercent(Person person, Long[] percent, AtomicInteger counter, Person node, OperationType [] operationType) {
         List<Long> percents = subscriptionPlanService.mapFromStringToLong(node.getSubscriptionPlan().getPercents());
 
         if (node.getId().equals(person.getId())) {
             percent[0] = FLAT_PERCENTAGE;
+            operationType[0] = OperationType.SOLD;
         } else if (counter.get() > percents.size()) {
             percent[0] = 0L;
+            operationType[0] = OperationType.BONUS;
         } else {
             percent[0] = percents.get(counter.get() - 1);
+            operationType[0] = OperationType.BONUS;
         }
     }
 
@@ -63,20 +68,21 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private static BigDecimal calculatePrice(Long percent, BigDecimal price) {
-        return price.multiply(new BigDecimal(percent)).divide(new BigDecimal(100), RoundingMode.HALF_UP);
+        return price.multiply(new BigDecimal(percent)).divide(new BigDecimal(100), RoundingMode.HALF_DOWN);
     }
 
-    public BigDecimal returnNewValue(Person person, BigDecimal sellingPrice, Long percent) {
+    public BigDecimal returnNewValue(Person person, BigDecimal sellingPrice, Long percent, OperationType operationType) {
         person.setBalance(person.getBalance().add(sellingPrice.multiply(BigDecimal.valueOf(percent))));
-        transactionDetails(person, sellingPrice, percent);
+        transactionDetails(person, sellingPrice, percent, operationType);
         return person.getBalance();
     }
 
-    private void transactionDetails(Person person, BigDecimal price, Long percent) {
+    private void transactionDetails(Person person, BigDecimal price, Long percent, OperationType operationType) {
         Transaction transaction = new Transaction();
         transaction.setPercent(percent);
         transaction.setPrice(calculatePrice(percent, price));
         transaction.setPersonId(person.getId());
+        transaction.setOperationType(operationType);
         transactionRepository.save(transaction);
     }
 }

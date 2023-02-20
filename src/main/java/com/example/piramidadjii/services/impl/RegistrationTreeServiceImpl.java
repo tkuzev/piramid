@@ -2,6 +2,7 @@ package com.example.piramidadjii.services.impl;
 
 import com.example.piramidadjii.entities.Person;
 import com.example.piramidadjii.entities.SubscriptionPlan;
+import com.example.piramidadjii.enums.OperationType;
 import com.example.piramidadjii.repositories.PersonRepository;
 import com.example.piramidadjii.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.services.RegistrationTreeService;
