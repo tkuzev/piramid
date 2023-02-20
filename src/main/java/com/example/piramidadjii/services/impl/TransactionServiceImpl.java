@@ -68,7 +68,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private static BigDecimal calculatePrice(Long percent, BigDecimal price) {
-        return price.multiply(new BigDecimal(percent)).divide(new BigDecimal(100), RoundingMode.HALF_UP);
+        return price.multiply(new BigDecimal(percent)).divide(new BigDecimal(100), RoundingMode.HALF_DOWN);
     }
 
     public BigDecimal returnNewValue(Person person, BigDecimal sellingPrice, Long percent, OperationType operationType) {
