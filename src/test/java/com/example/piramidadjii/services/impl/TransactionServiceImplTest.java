@@ -13,13 +13,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 class TransactionServiceImplTest {
-    private List<Person> personList = new ArrayList<>();
+    private List<Person> personListToDelete = new ArrayList<>();
+    private List<Person> personListToSave = new ArrayList<>();
     private List<Transaction> transactionList = new ArrayList<>();
 
     @Autowired
@@ -33,72 +39,56 @@ class TransactionServiceImplTest {
 
     @AfterEach
     void tearDown() {
-        personRepository.deleteAll(personList);
+        personRepository.deleteAll(personListToDelete);
         transactionRepository.deleteAll(transactionList);
     }
 
     @Test
     void createTransactionWithSixPeople() {
-        Person person1 = createPerson("1", 1L);
-        person1.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(4L).orElseThrow());
-        person1 = personRepository.save(person1);
-        personList.add(person1); // streamche
-
-        Person person2 = createPerson( "2", person1.getId());
-        person2.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(4L).orElseThrow());
-        person2 = personRepository.save(person2);
-        personList.add(person2);
-
-        Person person3 = createPerson( "3", person2.getId());
-        person3.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(3L).orElseThrow());
-        person3 = personRepository.save(person3);
-        personList.add(person3);
-
-        Person person4 = createPerson( "4", person3.getId());
-        person4.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(1L).orElseThrow());
-        person4 = personRepository.save(person4);
-        personList.add(person4);
-
-        Person person5 = createPerson( "5", person4.getId());
-        person5.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(2L).orElseThrow());
-        person5 = personRepository.save(person5);
-        personList.add(person5);
+        List<Person> streamList = IntStream.range(2, 8)
+                .mapToObj(i -> {
+                    Person person = new Person();
+                    person.setId((long) i);
+                    person.setName(String.valueOf(i));
+                    person.setBalance(BigDecimal.ZERO);
+                    person.setParent(personRepository.getPersonById(person.getId()-1).orElseThrow());
+                    person.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(ThreadLocalRandom.current().nextLong(1, 4)).orElseThrow());
+                    person = personRepository.save(person);
+                    return person;
+                })
+                        .toList();
+        personListToDelete.addAll(streamList);
 
 
-        Person person6 = createPerson( "6", person5.getId());
-        person6.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(1L).orElseThrow());
-        person6 = personRepository.save(person6);
-        personList.add(person6);
 
         int before = transactionRepository.findAll().size();
 
-        transactionService.createTransaction(person6, BigDecimal.valueOf(5000));
+        transactionService.createTransaction(streamList.get(streamList.size()-1), BigDecimal.valueOf(5000));
 
         int after = transactionRepository.findAll().size();
 
         transactionList = transactionRepository.findAll().subList(before, after);
 
         assertEquals(before + 5, after);
-        assertEquals(5, transactionRepository.findByPersonId(person6.getId()).getPercent()); // expected 5% // working
-        assertEquals(3, transactionRepository.findByPersonId(person5.getId()).getPercent()); // expected 3% // not working
-        assertEquals(0, transactionRepository.findByPersonId(person4.getId()).getPercent()); // expected 0% // not working
-        assertEquals(2, transactionRepository.findByPersonId(person3.getId()).getPercent());// expected 2% // not working
-        assertEquals(2, transactionRepository.findByPersonId(person2.getId()).getPercent()); // expected 2% // not working
-        assertNull(transactionRepository.findByPersonId(person1.getId())); // no transaction expected // working
-        //assertEquals for price
-        assertEquals("SOLD",transactionRepository.findByPersonId(person6.getId()).getOperationType().toString());
-        assertEquals("BONUS",transactionRepository.findByPersonId(person3.getId()).getOperationType().toString());
-
-
-        assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByPersonId(person6.getId()).getPrice());
+        assertEquals(5, transactionRepository.findByPersonId(streamList.get(5).getId()).getPercent()); // expected 5% // working
+        assertEquals(3, transactionRepository.findByPersonId(streamList.get(4).getId()).getPercent()); // expected 3% // not working
+        assertEquals(0, transactionRepository.findByPersonId(streamList.get(3).getId()).getPercent()); // expected 0% // not working
+        assertEquals(2, transactionRepository.findByPersonId(streamList.get(2).getId()).getPercent());// expected 2% // not working
+        assertEquals(2, transactionRepository.findByPersonId(streamList.get(1).getId()).getPercent()); // expected 2% // not working
+        assertNull(transactionRepository.findByPersonId(streamList.get(0).getId())); // no transaction expected // working
+        assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByPersonId(streamList.get(5).getId()).getPrice());
         //assertEquals for operation type
+        assertEquals("SOLD",transactionRepository.findByPersonId(streamList.get(streamList.size()-1).getId()).getOperationType().toString());
+        assertEquals("BONUS",transactionRepository.findByPersonId(streamList.get(2).getId()).getOperationType().toString());
+
     }
 
     @Test
     void createTransactionWithOnePerson() {
         Person person = createPerson( "person", 1L);
         person.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(1L).orElseThrow());
-        personList.add(person);
+        person = personRepository.save(person);
+        personListToDelete.add(person);
 
         int before = transactionRepository.findAll().size();
 
@@ -112,7 +102,6 @@ class TransactionServiceImplTest {
         assertEquals(5, transactionRepository.findByPersonId(person.getId()).getPercent()); // expected 5% // working
         assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByPersonId(person.getId()).getPrice());
         //assertEquals for operation type
-
     }
 
     private Person createPerson(String name, long parentId) {
