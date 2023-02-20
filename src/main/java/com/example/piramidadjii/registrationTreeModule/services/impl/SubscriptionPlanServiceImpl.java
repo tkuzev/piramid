@@ -5,8 +5,8 @@ import com.example.piramidadjii.registrationTreeModule.repositories.Subscription
 import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,7 +24,7 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
         subscriptionPlanRepository.save(newSubscriptionPlan);
     }
 
-    public List<Long> mapFromStringToLong(String percents){
+    public List<Long> mapFromStringToLong(String percents) {
 
         List<Long> list = new ArrayList<>();
 

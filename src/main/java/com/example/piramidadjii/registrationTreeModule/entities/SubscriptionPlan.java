@@ -1,7 +1,8 @@
 package com.example.piramidadjii.registrationTreeModule.entities;
 
 import com.example.piramidadjii.entities.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -13,14 +13,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 class TransactionServiceImplTest {
@@ -52,7 +50,7 @@ class TransactionServiceImplTest {
                     registrationTree.setName(String.valueOf(i));
                     registrationTree.setBalance(BigDecimal.ZERO);
                     registrationTree = registrationTreeRepository.save(registrationTree);
-                    registrationTree.setRegistrationTree(registrationTreeRepository.getRegistrationTreeById(registrationTree.getId()-1).orElseThrow());
+                    registrationTree.setRegistrationTree(registrationTreeRepository.getRegistrationTreeById(registrationTree.getId() - 1).orElseThrow());
                     registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(ThreadLocalRandom.current().nextLong(1, 4)).orElseThrow());
                     registrationTree = registrationTreeRepository.save(registrationTree);
                     return registrationTree;
@@ -60,10 +58,9 @@ class TransactionServiceImplTest {
         registrationTreeListToDelete.addAll(streamList);
 
 
-
         int before = transactionRepository.findAll().size();
 
-        transactionService.createTransaction(streamList.get(streamList.size()-1), BigDecimal.valueOf(5000));
+        transactionService.createTransaction(streamList.get(streamList.size() - 1), BigDecimal.valueOf(5000));
 
         int after = transactionRepository.findAll().size();
 
@@ -85,7 +82,7 @@ class TransactionServiceImplTest {
 
     @Test
     void createTransactionWithOnePerson() {
-        RegistrationTree registrationTree = createRegistrationTree( "registrationTree", 1L);
+        RegistrationTree registrationTree = createRegistrationTree("registrationTree", 1L);
         registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(1L).orElseThrow());
         registrationTree = registrationTreeRepository.save(registrationTree);
         registrationTreeListToDelete.add(registrationTree);

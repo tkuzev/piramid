@@ -30,7 +30,7 @@ class RegistrationTreeServiceImplTest {
     }
 
     @AfterEach
-    void tearDown(){
+    void tearDown() {
         registrationTreeRepository.delete(registrationTree);
     }
 
@@ -44,6 +44,7 @@ class RegistrationTreeServiceImplTest {
 
         Assert.isTrue(savedPerson.getSubscriptionPlan().getId().equals(4L), "registerTestFourthTier has failed");
     }
+
     @Test
     void registerTestThirdTier() {
         registrationTree.setBalance(new BigDecimal("450"));
