@@ -42,7 +42,7 @@ class TransactionServiceImplTest {
         Person person1 = createPerson("1", 1L);
         person1.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(4L).orElseThrow());
         person1 = personRepository.save(person1);
-        personList.add(person1);
+        personList.add(person1); // streamche
 
         Person person2 = createPerson( "2", person1.getId());
         person2.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(4L).orElseThrow());
@@ -63,6 +63,7 @@ class TransactionServiceImplTest {
         person5.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(2L).orElseThrow());
         person5 = personRepository.save(person5);
         personList.add(person5);
+
 
         Person person6 = createPerson( "6", person5.getId());
         person6.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(1L).orElseThrow());
@@ -89,6 +90,8 @@ class TransactionServiceImplTest {
         assertEquals("BONUS",transactionRepository.findByPersonId(person3.getId()).getOperationType().toString());
 
 
+        assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByPersonId(person6.getId()).getPrice());
+        //assertEquals for operation type
     }
 
     @Test
@@ -107,7 +110,7 @@ class TransactionServiceImplTest {
 
         assertEquals(before + 1, after);
         assertEquals(5, transactionRepository.findByPersonId(person.getId()).getPercent()); // expected 5% // working
-//        assertEquals(BigDecimal.valueOf(250), transactionRepository.findByPersonId(person.getId()).getPrice()); // TUKA IMA MNOGO TUPA GRESHKA S BIG DECIMAL INACHE TRQ SI RABOTI
+        assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByPersonId(person.getId()).getPrice());
         //assertEquals for operation type
 
     }

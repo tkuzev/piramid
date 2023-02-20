@@ -22,4 +22,11 @@ public class Person extends BaseEntity{
 
     private BigDecimal balance;
 
+    public SubscriptionPlan getSubscriptionPlan() {
+        return subscriptionPlan;
+    }
+
+    public void setSubscriptionPlan(SubscriptionPlan subscriptionPlan) {
+        this.subscriptionPlan = subscriptionPlan;
+    }
 }
