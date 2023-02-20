@@ -35,16 +35,16 @@ public class TransactionServiceImpl implements TransactionService {
         traverseFromNodeToRoot(person)
                 // removed .parallel() shtoto se nasira
                 .limit(5) // one more transaction for the root node must be added nqkoga
-                .forEach(node -> setNewTransactions(person, price, percent, counter, node));
+                .forEach(node -> setNewTransactions(person, price, percent, counter, node, operationType));
     }
 
-    private void setNewTransactions(Person person, BigDecimal price, Long[] percent, AtomicInteger counter, Person node) {
-        checkPercent(person, percent, counter, node);
+    private void setNewTransactions(Person person, BigDecimal price, Long[] percent, AtomicInteger counter, Person node, OperationType [] operationType) {
+        checkPercent(person, percent, counter, node, operationType);
         counter.getAndAdd(1);
-        returnNewValue(node, price, percent[0]);
+        returnNewValue(node, price, percent[0], operationType[0]);
     }
 
-    private void checkPercent(Person person, Long[] percent, AtomicInteger counter, Person node) {
+    private void checkPercent(Person person, Long[] percent, AtomicInteger counter, Person node, OperationType [] operationType) {
         List<Long> percents = subscriptionPlanService.mapFromStringToLong(node.getSubscriptionPlan().getPercents());
 
         if (node.getId().equals(person.getId())) {
