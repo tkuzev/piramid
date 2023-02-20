@@ -41,26 +41,33 @@ class TransactionServiceImplTest {
     void createTransactionWithSixPeople() {
         Person person1 = createPerson("1", 1L);
         person1.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(4L).orElseThrow());
-        personList.add(person1);
+        person1 = personRepository.save(person1);
+        personList.add(person1); // streamche
 
         Person person2 = createPerson( "2", person1.getId());
         person2.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(4L).orElseThrow());
+        person2 = personRepository.save(person2);
         personList.add(person2);
 
         Person person3 = createPerson( "3", person2.getId());
         person3.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(3L).orElseThrow());
+        person3 = personRepository.save(person3);
         personList.add(person3);
 
         Person person4 = createPerson( "4", person3.getId());
         person4.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(1L).orElseThrow());
+        person4 = personRepository.save(person4);
         personList.add(person4);
 
         Person person5 = createPerson( "5", person4.getId());
         person5.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(2L).orElseThrow());
+        person5 = personRepository.save(person5);
         personList.add(person5);
+
 
         Person person6 = createPerson( "6", person5.getId());
         person6.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(1L).orElseThrow());
+        person6 = personRepository.save(person6);
         personList.add(person6);
 
         int before = transactionRepository.findAll().size();
@@ -73,12 +80,12 @@ class TransactionServiceImplTest {
 
         assertEquals(before + 5, after);
         assertEquals(5, transactionRepository.findByPersonId(person6.getId()).getPercent()); // expected 5% // working
-//        assertEquals(3, transactionRepository.findByPersonId(person5.getId()).getPercent()); // expected 3% // not working
-//        assertEquals(0, transactionRepository.findByPersonId(person4.getId()).getPercent()); // expected 0% // not working
-//        assertEquals(2, transactionRepository.findByPersonId(person3.getId()).getPercent());// expected 2% // not working
-//        assertEquals(2, transactionRepository.findByPersonId(person2.getId()).getPercent()); // expected 2% // not working
+        assertEquals(3, transactionRepository.findByPersonId(person5.getId()).getPercent()); // expected 3% // not working
+        assertEquals(0, transactionRepository.findByPersonId(person4.getId()).getPercent()); // expected 0% // not working
+        assertEquals(2, transactionRepository.findByPersonId(person3.getId()).getPercent());// expected 2% // not working
+        assertEquals(2, transactionRepository.findByPersonId(person2.getId()).getPercent()); // expected 2% // not working
         assertNull(transactionRepository.findByPersonId(person1.getId())); // no transaction expected // working
-        //assertEquals for price
+        assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByPersonId(person6.getId()).getPrice());
         //assertEquals for operation type
     }
 
@@ -98,7 +105,7 @@ class TransactionServiceImplTest {
 
         assertEquals(before + 1, after);
         assertEquals(5, transactionRepository.findByPersonId(person.getId()).getPercent()); // expected 5% // working
-//        assertEquals(BigDecimal.valueOf(250), transactionRepository.findByPersonId(person.getId()).getPrice()); // TUKA IMA MNOGO TUPA GRESHKA S BIG DECIMAL INACHE TRQ SI RABOTI
+        assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByPersonId(person.getId()).getPrice());
         //assertEquals for operation type
     }
 
@@ -108,7 +115,6 @@ class TransactionServiceImplTest {
         person.setBalance(BigDecimal.ZERO);
         person.setParent(personRepository.getPersonById(parentId).orElseThrow());
 
-        person = personRepository.save(person);
         return person;
     }
 }

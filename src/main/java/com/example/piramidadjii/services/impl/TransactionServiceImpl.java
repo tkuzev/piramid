@@ -43,7 +43,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private void checkPercent(Person person, Long[] percent, AtomicInteger counter, Person node) {
-        List<Long> percents = subscriptionPlanService.mapFromStringToLong(person.getSubscriptionPlan().getPercents());
+        List<Long> percents = subscriptionPlanService.mapFromStringToLong(node.getSubscriptionPlan().getPercents());
 
         if (node.getId().equals(person.getId())) {
             percent[0] = FLAT_PERCENTAGE;
