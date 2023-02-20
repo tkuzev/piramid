@@ -1,5 +1,6 @@
-package com.example.piramidadjii.entities;
+package com.example.piramidadjii.registrationTreeModule.entities;
 
+import com.example.piramidadjii.entities.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,11 +13,10 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
-public class SubscriptionPlan extends BaseEntity{
+public class SubscriptionPlan extends BaseEntity {
     private String name;
 
     private String percents;
 
     private BigDecimal registrationFee;
-
 }

@@ -1,10 +1,10 @@
-package com.example.piramidadjii.services.impl;
+package com.example.piramidadjii.registrationTreeModule.services.impl;
 
-import com.example.piramidadjii.entities.Person;
 import com.example.piramidadjii.entities.Transaction;
-import com.example.piramidadjii.enums.OperationType;
-import com.example.piramidadjii.repositories.TransactionRepository;
-import com.example.piramidadjii.services.TransactionService;
+import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
+import com.example.piramidadjii.registrationTreeModule.enums.OperationType;
+import com.example.piramidadjii.registrationTreeModule.repositories.TransactionRepository;
+import com.example.piramidadjii.registrationTreeModule.services.TransactionService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,27 +27,27 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public void createTransaction(Person person, BigDecimal price) {
+    public void createTransaction(RegistrationTree registrationTree, BigDecimal price) {
         final Long[] percent = new Long[1];
         AtomicInteger counter = new AtomicInteger(0);
         OperationType[] operationType = new OperationType[1];
 
-        traverseFromNodeToRoot(person)
+        traverseFromNodeToRoot(registrationTree)
                 // removed .parallel() shtoto se nasira
                 .limit(5) // one more transaction for the root node must be added nqkoga
-                .forEach(node -> setNewTransactions(person, price, percent, counter, node, operationType));
+                .forEach(node -> setNewTransactions(registrationTree, price, percent, counter, node, operationType));
     }
 
-    private void setNewTransactions(Person person, BigDecimal price, Long[] percent, AtomicInteger counter, Person node, OperationType [] operationType) {
+    private void setNewTransactions(RegistrationTree person, BigDecimal price, Long[] percent, AtomicInteger counter, RegistrationTree node, OperationType [] operationType) {
         checkPercent(person, percent, counter, node, operationType);
         counter.getAndAdd(1);
         returnNewValue(node, price, percent[0], operationType[0]);
     }
 
-    private void checkPercent(Person person, Long[] percent, AtomicInteger counter, Person node, OperationType [] operationType) {
+    private void checkPercent(RegistrationTree registrationTree, Long[] percent, AtomicInteger counter, RegistrationTree node, OperationType [] operationType) {
         List<Long> percents = subscriptionPlanService.mapFromStringToLong(node.getSubscriptionPlan().getPercents());
 
-        if (node.getId().equals(person.getId())) {
+        if (node.getId().equals(registrationTree.getId())) {
             percent[0] = FLAT_PERCENTAGE;
             operationType[0] = OperationType.SOLD;
         } else if (counter.get() > percents.size()) {
@@ -59,29 +59,29 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
-    public Stream<Person> traverseFromNodeToRoot(Person node) {
-        if (/* Stop */ Objects.isNull(node) || /* skip company */ Objects.isNull(node.getParent())) {
+    public Stream<RegistrationTree> traverseFromNodeToRoot(RegistrationTree node) {
+        if (/* Stop */ Objects.isNull(node) || /* skip company */ Objects.isNull(node.getRegistrationTree())) {
             return Stream.empty();
         }
 
-        return Stream.concat(Stream.of(node), traverseFromNodeToRoot(node.getParent()));
+        return Stream.concat(Stream.of(node), traverseFromNodeToRoot(node.getRegistrationTree()));
     }
 
     private static BigDecimal calculatePrice(Long percent, BigDecimal price) {
         return price.multiply(new BigDecimal(percent)).divide(new BigDecimal(100), RoundingMode.HALF_DOWN);
     }
 
-    public BigDecimal returnNewValue(Person person, BigDecimal sellingPrice, Long percent, OperationType operationType) {
-        person.setBalance(person.getBalance().add(sellingPrice.multiply(BigDecimal.valueOf(percent))));
-        transactionDetails(person, sellingPrice, percent, operationType);
-        return person.getBalance();
+    public BigDecimal returnNewValue(RegistrationTree registrationTree, BigDecimal sellingPrice, Long percent, OperationType operationType) {
+        registrationTree.setBalance(registrationTree.getBalance().add(sellingPrice.multiply(BigDecimal.valueOf(percent))));
+        transactionDetails(registrationTree, sellingPrice, percent, operationType);
+        return registrationTree.getBalance();
     }
 
-    private void transactionDetails(Person person, BigDecimal price, Long percent, OperationType operationType) {
+    private void transactionDetails(RegistrationTree registrationTree, BigDecimal price, Long percent, OperationType operationType) {
         Transaction transaction = new Transaction();
         transaction.setPercent(percent);
         transaction.setPrice(calculatePrice(percent, price));
-        transaction.setPersonId(person.getId());
+        transaction.setPersonId(registrationTree.getId());
         transaction.setOperationType(operationType);
         transactionRepository.save(transaction);
     }

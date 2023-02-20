@@ -1,10 +1,11 @@
 package com.example.piramidadjii.services.impl;
 
-import com.example.piramidadjii.entities.Person;
 import com.example.piramidadjii.entities.Transaction;
-import com.example.piramidadjii.repositories.PersonRepository;
-import com.example.piramidadjii.repositories.SubscriptionPlanRepository;
-import com.example.piramidadjii.repositories.TransactionRepository;
+import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
+import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
+import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
+import com.example.piramidadjii.registrationTreeModule.repositories.TransactionRepository;
+import com.example.piramidadjii.registrationTreeModule.services.impl.TransactionServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,20 +13,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 class TransactionServiceImplTest {
-    private List<Person> personListToDelete = new ArrayList<>();
-    private List<Person> personListToSave = new ArrayList<>();
+    private List<RegistrationTree> registrationTreeListToDelete = new ArrayList<>();
+    private List<RegistrationTree> registrationTreeListToSave = new ArrayList<>();
     private List<Transaction> transactionList = new ArrayList<>();
 
     @Autowired
@@ -33,31 +33,31 @@ class TransactionServiceImplTest {
     @Autowired
     TransactionServiceImpl transactionService;
     @Autowired
-    PersonRepository personRepository;
+    RegistrationTreeRepository registrationTreeRepository;
     @Autowired
     TransactionRepository transactionRepository;
 
     @AfterEach
     void tearDown() {
-        personRepository.deleteAll(personListToDelete);
+        registrationTreeRepository.deleteAll(registrationTreeListToDelete);
         transactionRepository.deleteAll(transactionList);
     }
 
     @Test
     void createTransactionWithSixPeople() {
-        List<Person> streamList = IntStream.range(2, 8)
+
+        List<RegistrationTree> streamList = IntStream.range(2, 8)
                 .mapToObj(i -> {
-                    Person person = new Person();
-                    person.setId((long) i);
-                    person.setName(String.valueOf(i));
-                    person.setBalance(BigDecimal.ZERO);
-                    person.setParent(personRepository.getPersonById(person.getId()-1).orElseThrow());
-                    person.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(ThreadLocalRandom.current().nextLong(1, 4)).orElseThrow());
-                    person = personRepository.save(person);
-                    return person;
-                })
-                        .toList();
-        personListToDelete.addAll(streamList);
+                    RegistrationTree registrationTree = new RegistrationTree();
+                    registrationTree.setName(String.valueOf(i));
+                    registrationTree.setBalance(BigDecimal.ZERO);
+                    registrationTree = registrationTreeRepository.save(registrationTree);
+                    registrationTree.setRegistrationTree(registrationTreeRepository.getRegistrationTreeById(registrationTree.getId()-1).orElseThrow());
+                    registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(ThreadLocalRandom.current().nextLong(1, 4)).orElseThrow());
+                    registrationTree = registrationTreeRepository.save(registrationTree);
+                    return registrationTree;
+                }).collect(Collectors.toList());
+        registrationTreeListToDelete.addAll(streamList);
 
 
 
@@ -85,31 +85,31 @@ class TransactionServiceImplTest {
 
     @Test
     void createTransactionWithOnePerson() {
-        Person person = createPerson( "person", 1L);
-        person.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(1L).orElseThrow());
-        person = personRepository.save(person);
-        personListToDelete.add(person);
+        RegistrationTree registrationTree = createRegistrationTree( "registrationTree", 1L);
+        registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(1L).orElseThrow());
+        registrationTree = registrationTreeRepository.save(registrationTree);
+        registrationTreeListToDelete.add(registrationTree);
 
         int before = transactionRepository.findAll().size();
 
-        transactionService.createTransaction(person, BigDecimal.valueOf(5000));
+        transactionService.createTransaction(registrationTree, BigDecimal.valueOf(5000));
 
         int after = transactionRepository.findAll().size();
 
         transactionList = transactionRepository.findAll().subList(before, after);
 
         assertEquals(before + 1, after);
-        assertEquals(5, transactionRepository.findByPersonId(person.getId()).getPercent()); // expected 5% // working
-        assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByPersonId(person.getId()).getPrice());
+        assertEquals(5, transactionRepository.findByPersonId(registrationTree.getId()).getPercent()); // expected 5% // working
+        assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByPersonId(registrationTree.getId()).getPrice());
         //assertEquals for operation type
     }
 
-    private Person createPerson(String name, long parentId) {
-        Person person = new Person();
-        person.setName(name);
-        person.setBalance(BigDecimal.ZERO);
-        person.setParent(personRepository.getPersonById(parentId).orElseThrow());
+    private RegistrationTree createRegistrationTree(String name, long parentId) {
+        RegistrationTree registrationTree = new RegistrationTree();
+        registrationTree.setName(name);
+        registrationTree.setBalance(BigDecimal.ZERO);
+        registrationTree.setRegistrationTree(registrationTreeRepository.getRegistrationTreeById(parentId).orElseThrow());
 
-        return person;
+        return registrationTree;
     }
 }
