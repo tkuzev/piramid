@@ -1,8 +1,8 @@
-package com.example.piramidadjii.services.impl;
+package com.example.piramidadjii.registrationTreeModule.services.impl;
 
-import com.example.piramidadjii.entities.SubscriptionPlan;
-import com.example.piramidadjii.repositories.SubscriptionPlanRepository;
-import com.example.piramidadjii.services.SubscriptionPlanService;
+import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
+import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
+import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;

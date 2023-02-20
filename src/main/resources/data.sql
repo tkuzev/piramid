@@ -1,4 +1,12 @@
-create table person (
+--create table person (
+--       id bigint not null auto_increment,
+--        balance decimal(38,2),
+--        name varchar(255),
+--        subscription_plan_id bigint,
+--        primary key (id)
+--);
+
+create table registration_tree (
        id bigint not null auto_increment,
         balance decimal(38,2),
         name varchar(255),
@@ -6,6 +14,7 @@ create table person (
         subscription_plan_id bigint,
         primary key (id)
 );
+
 
     create table subscription_plan (
        id bigint not null auto_increment,
@@ -24,7 +33,7 @@ create table person (
         primary key (id)
     );
 
-insert into person (id,name)
+insert into registration_tree (id,name)
 values (1,'Boss');
 
 insert into subscription_plan (id,name,percents,registration_fee)

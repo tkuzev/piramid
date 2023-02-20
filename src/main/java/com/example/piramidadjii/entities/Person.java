@@ -1,32 +1,23 @@
 package com.example.piramidadjii.entities;
 
+import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "person")
+@MappedSuperclass
 @Getter
 @Setter
 @NoArgsConstructor
-public class Person extends BaseEntity{
+public class Person extends BaseEntity {
 
     private String name;
 
     @ManyToOne
     private SubscriptionPlan subscriptionPlan;
-    @ManyToOne
-    private Person parent;
 
     private BigDecimal balance;
 
-    public SubscriptionPlan getSubscriptionPlan() {
-        return subscriptionPlan;
-    }
-
-    public void setSubscriptionPlan(SubscriptionPlan subscriptionPlan) {
-        this.subscriptionPlan = subscriptionPlan;
-    }
 }

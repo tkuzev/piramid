@@ -1,6 +1,7 @@
 package com.example.piramidadjii.entities;
 
-import com.example.piramidadjii.enums.OperationType;
+import com.example.piramidadjii.entities.BaseEntity;
+import com.example.piramidadjii.registrationTreeModule.enums.OperationType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Transaction extends BaseEntity{
+public class Transaction extends BaseEntity {
 
     private Long personId;
     @Column(nullable = false)

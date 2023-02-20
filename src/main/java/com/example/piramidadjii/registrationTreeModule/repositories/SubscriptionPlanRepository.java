@@ -1,6 +1,6 @@
-package com.example.piramidadjii.repositories;
+package com.example.piramidadjii.registrationTreeModule.repositories;
 
-import com.example.piramidadjii.entities.SubscriptionPlan;
+import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
