@@ -22,10 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class TransactionServiceImplTest {
-    private List<RegistrationTree> registrationTreeListToDelete = new ArrayList<>();
-    private List<RegistrationTree> registrationTreeListToSave = new ArrayList<>();
     private List<Transaction> transactionList = new ArrayList<>();
-
     @Autowired
     SubscriptionPlanRepository subscriptionPlanRepository;
     @Autowired
@@ -38,25 +35,12 @@ class TransactionServiceImplTest {
     @AfterEach
     void tearDown() {
 //        registrationTreeRepository.deleteAll(registrationTreeListToDelete);
-//        transactionRepository.deleteAll(transactionList);
+        transactionRepository.deleteAll(transactionList);
     }
 
     @Test
     void createTransactionWithSixPeople() {
-
-        List<RegistrationTree> streamList = IntStream.range(2, 8)
-                .mapToObj(i -> {
-                    RegistrationTree registrationTree = new RegistrationTree();
-                    registrationTree.setName(String.valueOf(i));
-                    registrationTree.setBalance(BigDecimal.ZERO);
-                    registrationTree = registrationTreeRepository.save(registrationTree);
-                    registrationTree.setRegistrationTree(registrationTreeRepository.getRegistrationTreeById(registrationTree.getId() - 1).orElseThrow());
-                    registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(ThreadLocalRandom.current().nextLong(1, 4)).orElseThrow());
-                    registrationTree = registrationTreeRepository.save(registrationTree);
-                    return registrationTree;
-                }).collect(Collectors.toList());
-        registrationTreeListToDelete.addAll(streamList);
-
+        List<RegistrationTree> streamList = createRegistrationTree(6);
 
         int before = transactionRepository.findAll().size();
 
@@ -67,25 +51,17 @@ class TransactionServiceImplTest {
         transactionList = transactionRepository.findAll().subList(before, after);
 
         assertEquals(before + 5, after);
-//        assertEquals(5, transactionRepository.findByPersonId(streamList.get(5).getId()).getPercent()); // expected 5% // working
-//        assertEquals(3, transactionRepository.findByPersonId(streamList.get(4).getId()).getPercent()); // expected 3% // not working
-//        assertEquals(0, transactionRepository.findByPersonId(streamList.get(3).getId()).getPercent()); // expected 0% // not working
-//        assertEquals(2, transactionRepository.findByPersonId(streamList.get(2).getId()).getPercent());// expected 2% // not working
-//        assertEquals(2, transactionRepository.findByPersonId(streamList.get(1).getId()).getPercent()); // expected 2% // not working
-//        assertNull(transactionRepository.findByPersonId(streamList.get(0).getId())); // no transaction expected // working
-//        assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByPersonId(streamList.get(5).getId()).getPrice());
-//        //assertEquals for operation type
-//        assertEquals("SOLD",transactionRepository.findByPersonId(streamList.get(streamList.size()-1).getId()).getOperationType().toString());
-//        assertEquals("BONUS",transactionRepository.findByPersonId(streamList.get(2).getId()).getOperationType().toString());
+        assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByRegistrationTree(streamList.get(5)).get().getPrice());
 
+        assertEquals("SOLD",transactionRepository.findByRegistrationTree(streamList.get(streamList.size()-1)).get().getOperationType().toString());
+        assertEquals("BONUS",transactionRepository.findByRegistrationTree(streamList.get(2)).get().getOperationType().toString());
     }
+
+
 
     @Test
     void createTransactionWithOnePerson() {
-        RegistrationTree registrationTree = createRegistrationTree("registrationTree", 1L);
-        registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(1L).orElseThrow());
-        registrationTree = registrationTreeRepository.save(registrationTree);
-        registrationTreeListToDelete.add(registrationTree);
+        RegistrationTree registrationTree = createPerson();
 
         int before = transactionRepository.findAll().size();
 
@@ -96,17 +72,34 @@ class TransactionServiceImplTest {
         transactionList = transactionRepository.findAll().subList(before, after);
 
         assertEquals(before + 1, after);
-//        assertEquals(5, transactionRepository.findByPersonId(registrationTree.getId()).getPercent()); // expected 5% // working
-//        assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByPersonId(registrationTree.getId()).getPrice());
-        //assertEquals for operation type
+        assertEquals(5, transactionRepository.findByRegistrationTree(registrationTree).get().getPercent()); // expected 5%
+        assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByRegistrationTree(registrationTree).get().getPrice());
+        assertEquals("SOLD",transactionRepository.findByRegistrationTree(registrationTree).get().getOperationType().toString());
     }
 
-    private RegistrationTree createRegistrationTree(String name, long parentId) {
+    private RegistrationTree createPerson() {
         RegistrationTree registrationTree = new RegistrationTree();
-        registrationTree.setName(name);
         registrationTree.setBalance(BigDecimal.ZERO);
-        registrationTree.setRegistrationTree(registrationTreeRepository.getRegistrationTreeById(parentId).orElseThrow());
-
+        registrationTree.setRegistrationTree(registrationTreeRepository.getRegistrationTreeById(1L).orElseThrow());
+        registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(1L).orElseThrow());
+        registrationTree = registrationTreeRepository.save(registrationTree);
         return registrationTree;
+    }
+
+    private List<RegistrationTree> createRegistrationTree( int numOfNodes) {
+        int n = numOfNodes + 2;
+
+        List<RegistrationTree> streamList = IntStream.range(2, n)
+                .mapToObj(i -> {
+                    RegistrationTree registrationTree = new RegistrationTree();
+                    registrationTree.setName(String.valueOf(i));
+                    registrationTree.setBalance(BigDecimal.ZERO);
+                    registrationTree = registrationTreeRepository.save(registrationTree);
+                    registrationTree.setRegistrationTree(registrationTreeRepository.getRegistrationTreeById(registrationTree.getId() - 1).orElseThrow()); // TODO random parent (between 1 and existing num of nodes)
+                    registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(ThreadLocalRandom.current().nextLong(1, 4)).orElseThrow());
+                    registrationTree = registrationTreeRepository.save(registrationTree);
+                    return registrationTree;
+                }).collect(Collectors.toList());
+        return streamList;
     }
 }
