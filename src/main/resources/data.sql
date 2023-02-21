@@ -9,7 +9,8 @@ create table registration_tree (
 
     create table subscription_plan (
        id bigint not null auto_increment,
-        name varchar(255),
+       is_eligible_for_binary bit not null,
+       name varchar(255),
         percents varchar(255),
         registration_fee decimal(38,2),
         primary key (id)
@@ -33,14 +34,14 @@ create table transaction (
 insert into registration_tree (id,name)
 values (1,'Boss');
 
-insert into subscription_plan (id,name,percents,registration_fee)
-values (1,'Bronze','2',200);
+insert into subscription_plan (id,name,percents,registration_fee,is_eligible_for_binary)
+values (1,'Bronze','2',200, false);
 
-insert into subscription_plan (id,name,percents,registration_fee)
-values (2,'Silver','3//2',300);
+insert into subscription_plan (id,name,percents,registration_fee, is_eligible_for_binary)
+values (2,'Silver','3//2',300, false);
 
-insert into subscription_plan (id,name,percents,registration_fee)
-values (3,'Gold','4//3//2',400);
+insert into subscription_plan (id,name,percents,registration_fee, is_eligible_for_binary)
+values (3,'Gold','4//3//2',400, true);
 
-insert into subscription_plan (id,name,percents,registration_fee)
-values (4,'Platinum','5//4//3//2',500);
+insert into subscription_plan (id,name,percents,registration_fee, is_eligible_for_binary)
+values (4,'Platinum','5//4//3//2',500, true);

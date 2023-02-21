@@ -20,4 +20,6 @@ public class SubscriptionPlan extends BaseEntity {
     private String percents;
 
     private BigDecimal registrationFee;
+
+    private boolean isEligibleForBinary;
 }
