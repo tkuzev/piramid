@@ -19,6 +19,8 @@ import java.util.stream.Stream;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
+    private Long FLAT_PERCENTAGE = 5L;
+    private Long percentages = 0L;
 
     @Autowired
     private TransactionRepository transactionRepository;
@@ -33,15 +35,23 @@ public class TransactionServiceImpl implements TransactionService {
         final Long[] percent = new Long[1];
         AtomicInteger counter = new AtomicInteger(0);
         OperationType[] operationType = new OperationType[1];
+        Long profit = 20L; //How exactly to calculate the bonus of the root?
 
         traverseFromNodeToRoot(registrationTree)
                 // removed .parallel() shtoto se nasira
                 .limit(5) // one more transaction for the root node must be added nqkoga
                 .forEach(node -> setNewTransactions(registrationTree, price, percent, counter, node, operationType));
+
+        transactionDetails(
+                registrationTreeRepository.getRegistrationTreeById(1L).orElseThrow(),
+                price,
+                profit - percentages,
+                OperationType.BONUS);
     }
 
     private void setNewTransactions(RegistrationTree person, BigDecimal price, Long[] percent, AtomicInteger counter, RegistrationTree node, OperationType[] operationType) {
         checkPercent(person, percent, counter, node, operationType);
+        percentages+=percent[0];
         counter.getAndAdd(1);
         transactionDetails(node, price, percent[0], operationType[0]);
     }
