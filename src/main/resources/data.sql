@@ -30,8 +30,8 @@ create table transaction (
 --        primary key (transaction_id, registration_tree_id)
 --    );
 
-insert into registration_tree (id,name)
-values (1,'Boss');
+insert into registration_tree (id,balance,name)
+values (1,0,'Boss');
 
 insert into subscription_plan (id,name,percents,registration_fee)
 values (1,'Bronze','2',200);

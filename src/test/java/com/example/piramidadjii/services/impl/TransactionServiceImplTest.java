@@ -50,7 +50,7 @@ class TransactionServiceImplTest {
 
         transactionList = transactionRepository.findAll().subList(before, after);
 
-        assertEquals(before + 5, after);
+        assertEquals(before + 6, after);
         assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByRegistrationTree(streamList.get(5)).get().getPrice());
 
         assertEquals("SOLD",transactionRepository.findByRegistrationTree(streamList.get(streamList.size()-1)).get().getOperationType().toString());
@@ -71,7 +71,7 @@ class TransactionServiceImplTest {
 
         transactionList = transactionRepository.findAll().subList(before, after);
 
-        assertEquals(before + 1, after);
+        assertEquals(before + 2, after);
         assertEquals(5, transactionRepository.findByRegistrationTree(registrationTree).get().getPercent()); // expected 5%
         assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByRegistrationTree(registrationTree).get().getPrice());
         assertEquals("SOLD",transactionRepository.findByRegistrationTree(registrationTree).get().getOperationType().toString());
