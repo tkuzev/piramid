@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -58,6 +59,11 @@ public class TransactionServiceImpl implements TransactionService {
 
     private void checkPercent(RegistrationTree registrationTree, Long[] percent, AtomicInteger counter, RegistrationTree node, OperationType[] operationType) {
         List<Long> percents = subscriptionPlanService.mapFromStringToLong(node.getSubscriptionPlan().getPercents());
+
+        if (!LocalDate.now().isAfter(registrationTree.getSubscriptionExpirationDate())){
+            //todo: dali da zapisvame tranzakciq ili da mu eba maikata?1?1?
+            return;
+        }
 
         if (node.getId().equals(registrationTree.getId())) {
             Long FLAT_PERCENTAGE = 5L;

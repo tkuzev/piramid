@@ -2,7 +2,9 @@ create table registration_tree (
        id bigint not null auto_increment,
         balance decimal(38,2),
         name varchar(255),
+        subscription_expiration_date date,
         subscription_plan_id bigint,
+        is_subscription_enabled bit,
         primary key (id)
 );
 
