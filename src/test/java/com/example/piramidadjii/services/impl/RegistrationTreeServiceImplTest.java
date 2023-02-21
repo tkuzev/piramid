@@ -77,5 +77,6 @@ class RegistrationTreeServiceImplTest {
 
         Assert.isTrue(savedPerson.getSubscriptionPlan().getId().equals(1L), "registerTestFirstTier has failed");
     }
+
 }
 

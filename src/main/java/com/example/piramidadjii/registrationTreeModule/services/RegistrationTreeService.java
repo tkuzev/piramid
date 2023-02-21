@@ -8,6 +8,8 @@ public interface RegistrationTreeService {
 
     void registerPerson(RegistrationTree registrationTree);
 
+    void chooseSubsPlan(RegistrationTree person, Long id);
+
     void sell(BigDecimal sellPrice, RegistrationTree registrationTree);
 
     void initialFee(RegistrationTree registrationTree);

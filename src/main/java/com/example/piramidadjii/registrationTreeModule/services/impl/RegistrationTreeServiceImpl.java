@@ -45,6 +45,10 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
 
         this.registrationTreeRepository.save(registrationTree);
     }
+    @Override
+    public void chooseSubsPlan(RegistrationTree person, Long id){
+        setSubscription(person, id);
+    }
 
     @Override
     public void sell(BigDecimal sellPrice, RegistrationTree registrationTree) {
@@ -68,4 +72,5 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
         BigDecimal newBalance = balance.subtract(fee);
         registrationTree.setBalance(newBalance);
     }
+
 }
