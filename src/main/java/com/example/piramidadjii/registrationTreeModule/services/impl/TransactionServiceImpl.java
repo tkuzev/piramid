@@ -49,14 +49,14 @@ public class TransactionServiceImpl implements TransactionService {
                 OperationType.BONUS);
     }
 
-    private void setNewTransactions(RegistrationTree person, BigDecimal price, Long[] percent, AtomicInteger counter, RegistrationTree node, OperationType [] operationType) {
+    private void setNewTransactions(RegistrationTree person, BigDecimal price, Long[] percent, AtomicInteger counter, RegistrationTree node, OperationType[] operationType) {
         checkPercent(person, percent, counter, node, operationType);
         percentages+=percent[0];
         counter.getAndAdd(1);
         transactionDetails(node, price, percent[0], operationType[0]);
     }
 
-    private void checkPercent(RegistrationTree registrationTree, Long[] percent, AtomicInteger counter, RegistrationTree node, OperationType [] operationType) {
+    private void checkPercent(RegistrationTree registrationTree, Long[] percent, AtomicInteger counter, RegistrationTree node, OperationType[] operationType) {
         List<Long> percents = subscriptionPlanService.mapFromStringToLong(node.getSubscriptionPlan().getPercents());
 
         if (node.getId().equals(registrationTree.getId())) {
@@ -83,14 +83,12 @@ public class TransactionServiceImpl implements TransactionService {
     private static BigDecimal calculatePrice(Long percent, BigDecimal price) {
         return price.multiply(new BigDecimal(percent)).divide(new BigDecimal(100), RoundingMode.HALF_DOWN);
     }
-    
 
     private void transactionDetails(RegistrationTree registrationTree, BigDecimal price, Long percent, OperationType operationType) {
         Transaction transaction = new Transaction();
         transaction.setPercent(percent);
         transaction.setPrice(calculatePrice(percent, price));
-        transaction
-                .setRegistrationTree(registrationTree);
+        transaction.setRegistrationTree(registrationTree);
         transaction.setOperationType(operationType);
         BigDecimal newBalance = registrationTree.getBalance().add(transaction.getPrice());
         registrationTree.setBalance(newBalance);

@@ -1,6 +1,5 @@
 package com.example.piramidadjii.registrationTreeModule.services.impl;
 
-import com.example.piramidadjii.entities.Person;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
@@ -39,7 +38,7 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
             if (checkBalance(registrationTree, subscriptionPlan.getId()) > 0) {
                 setSubscription(registrationTree, subscriptionPlan.getId());
                 break;
-            } else if(subscriptionPlan.getId() == 1){
+            } else if (subscriptionPlan.getId() == 1) {
                 throw new RuntimeException();
             }
         }
@@ -64,9 +63,9 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
 
     private void setSubscription(RegistrationTree registrationTree, long id) {
         registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(id).orElseThrow());
-        BigDecimal balance=registrationTree.getBalance();
-        BigDecimal fee=subscriptionPlanRepository.getSubscriptionPlanById(id).orElseThrow().getRegistrationFee();
-        BigDecimal newBalance=balance.subtract(fee);
+        BigDecimal balance = registrationTree.getBalance();
+        BigDecimal fee = subscriptionPlanRepository.getSubscriptionPlanById(id).orElseThrow().getRegistrationFee();
+        BigDecimal newBalance = balance.subtract(fee);
         registrationTree.setBalance(newBalance);
     }
 }

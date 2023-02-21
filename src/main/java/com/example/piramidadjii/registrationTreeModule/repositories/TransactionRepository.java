@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface TransactionRepository extends JpaRepository<Transaction,Long> {
+public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     Optional<Transaction> findByRegistrationTree(RegistrationTree registrationTree);
 }

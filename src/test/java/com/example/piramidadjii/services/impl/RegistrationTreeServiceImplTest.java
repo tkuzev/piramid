@@ -30,27 +30,28 @@ class RegistrationTreeServiceImplTest {
     }
 
     @AfterEach
-    void tearDown(){
+    void tearDown() {
         registrationTreeRepository.delete(registrationTree);
     }
 
     @Test
     void registerTestFourthTier() {
         registrationTree.setBalance(new BigDecimal("600"));
-        registrationTree = registrationTreeRepository.save(registrationTree);
         registrationTreeService.registerPerson(registrationTree);
+        registrationTreeRepository.save(registrationTree);
 
-        Person savedPerson = registrationTreeRepository.getRegistrationTreeById(registrationTree.getId()).orElseThrow();
+        RegistrationTree savedPerson = registrationTreeRepository.getRegistrationTreeById(registrationTree.getId()).orElseThrow();
 
         Assert.isTrue(savedPerson.getSubscriptionPlan().getId().equals(4L), "registerTestFourthTier has failed");
     }
+
     @Test
     void registerTestThirdTier() {
         registrationTree.setBalance(new BigDecimal("450"));
         registrationTree = registrationTreeRepository.save(registrationTree);
         registrationTreeService.registerPerson(registrationTree);
 
-        Person savedPerson = registrationTreeRepository.getRegistrationTreeById(registrationTree.getId()).orElseThrow();
+        RegistrationTree savedPerson = registrationTreeRepository.getRegistrationTreeById(registrationTree.getId()).orElseThrow();
 
         Assert.isTrue(savedPerson.getSubscriptionPlan().getId().equals(3L), "registerTestThirdTier has failed");
     }
@@ -61,7 +62,7 @@ class RegistrationTreeServiceImplTest {
         registrationTree = registrationTreeRepository.save(registrationTree);
         registrationTreeService.registerPerson(registrationTree);
 
-        Person savedPerson = registrationTreeRepository.getRegistrationTreeById(registrationTree.getId()).orElseThrow();
+        RegistrationTree savedPerson = registrationTreeRepository.getRegistrationTreeById(registrationTree.getId()).orElseThrow();
 
         Assert.isTrue(savedPerson.getSubscriptionPlan().getId().equals(2L), "registerTestSecondTier has failed");
     }
@@ -72,7 +73,7 @@ class RegistrationTreeServiceImplTest {
         registrationTree = registrationTreeRepository.save(registrationTree);
         registrationTreeService.registerPerson(registrationTree);
 
-        Person savedPerson = registrationTreeRepository.getRegistrationTreeById(registrationTree.getId()).orElseThrow();
+        RegistrationTree savedPerson = registrationTreeRepository.getRegistrationTreeById(registrationTree.getId()).orElseThrow();
 
         Assert.isTrue(savedPerson.getSubscriptionPlan().getId().equals(1L), "registerTestFirstTier has failed");
     }

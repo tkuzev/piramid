@@ -1,10 +1,12 @@
 package com.example.piramidadjii.entities;
 
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
-import jakarta.persistence.*;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.math.BigDecimal;
 
 @MappedSuperclass
