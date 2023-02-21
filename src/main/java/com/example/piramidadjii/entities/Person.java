@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @MappedSuperclass
 @Getter
@@ -23,5 +24,9 @@ public class Person extends BaseEntity {
     private BigDecimal balance;
 
     private String email;
+
+    private LocalDate subscriptionExpirationDate;
+
+    private boolean isSubscriptionEnabled;
 
 }

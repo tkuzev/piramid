@@ -31,12 +31,12 @@ class RegistrationTreeServiceImplTest {
 
     @AfterEach
     void tearDown() {
-        registrationTreeRepository.delete(registrationTree);
+//        registrationTreeRepository.delete(registrationTree);
     }
 
     @Test
     void registerTestFourthTier() {
-        registrationTree.setBalance(new BigDecimal("600"));
+        registrationTree.setBalance(new BigDecimal("500"));
         registrationTreeService.registerPerson(registrationTree);
         registrationTreeRepository.save(registrationTree);
 
@@ -47,7 +47,7 @@ class RegistrationTreeServiceImplTest {
 
     @Test
     void registerTestThirdTier() {
-        registrationTree.setBalance(new BigDecimal("450"));
+        registrationTree.setBalance(new BigDecimal("5000"));
         registrationTree = registrationTreeRepository.save(registrationTree);
         registrationTreeService.registerPerson(registrationTree);
 
@@ -59,7 +59,7 @@ class RegistrationTreeServiceImplTest {
     @Test
     void registerTestSecondTier() {
         registrationTree.setBalance(new BigDecimal("350"));
-        registrationTree = registrationTreeRepository.save(registrationTree);
+        registrationTreeRepository.save(registrationTree);
         registrationTreeService.registerPerson(registrationTree);
 
         RegistrationTree savedPerson = registrationTreeRepository.getRegistrationTreeById(registrationTree.getId()).orElseThrow();
@@ -70,7 +70,7 @@ class RegistrationTreeServiceImplTest {
     @Test
     void registerTestFirstTier() {
         registrationTree.setBalance(new BigDecimal("250"));
-        registrationTree = registrationTreeRepository.save(registrationTree);
+        registrationTreeRepository.save(registrationTree);
         registrationTreeService.registerPerson(registrationTree);
 
         RegistrationTree savedPerson = registrationTreeRepository.getRegistrationTreeById(registrationTree.getId()).orElseThrow();
