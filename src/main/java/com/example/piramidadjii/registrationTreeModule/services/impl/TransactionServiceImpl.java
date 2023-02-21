@@ -3,6 +3,7 @@ package com.example.piramidadjii.registrationTreeModule.services.impl;
 import com.example.piramidadjii.entities.Transaction;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
 import com.example.piramidadjii.registrationTreeModule.enums.OperationType;
+import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.TransactionRepository;
 import com.example.piramidadjii.registrationTreeModule.services.TransactionService;
 import jakarta.transaction.Transactional;
@@ -13,18 +14,20 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
     private Long FLAT_PERCENTAGE = 5L;
+    private Long percentages = 0L;
 
     @Autowired
     private TransactionRepository transactionRepository;
     @Autowired
     private SubscriptionPlanServiceImpl subscriptionPlanService;
+    @Autowired
+    private RegistrationTreeRepository registrationTreeRepository;
 
     @Override
     @Transactional
@@ -32,23 +35,32 @@ public class TransactionServiceImpl implements TransactionService {
         final Long[] percent = new Long[1];
         AtomicInteger counter = new AtomicInteger(0);
         OperationType[] operationType = new OperationType[1];
+        Long profit = 20L; //How exactly to calculate the bonus of the root?
 
         traverseFromNodeToRoot(registrationTree)
                 // removed .parallel() shtoto se nasira
                 .limit(5) // one more transaction for the root node must be added nqkoga
                 .forEach(node -> setNewTransactions(registrationTree, price, percent, counter, node, operationType));
+
+        transactionDetails(
+                registrationTreeRepository.getRegistrationTreeById(1L).orElseThrow(),
+                price,
+                profit - percentages,
+                OperationType.BONUS);
     }
 
     private void setNewTransactions(RegistrationTree person, BigDecimal price, Long[] percent, AtomicInteger counter, RegistrationTree node, OperationType [] operationType) {
         checkPercent(person, percent, counter, node, operationType);
+        percentages+=percent[0];
         counter.getAndAdd(1);
-        returnNewValue(node, price, percent[0], operationType[0]);
+        transactionDetails(node, price, percent[0], operationType[0]);
     }
 
     private void checkPercent(RegistrationTree registrationTree, Long[] percent, AtomicInteger counter, RegistrationTree node, OperationType [] operationType) {
         List<Long> percents = subscriptionPlanService.mapFromStringToLong(node.getSubscriptionPlan().getPercents());
 
         if (node.getId().equals(registrationTree.getId())) {
+            Long FLAT_PERCENTAGE = 5L;
             percent[0] = FLAT_PERCENTAGE;
             operationType[0] = OperationType.SOLD;
         } else if (counter.get() > percents.size()) {
@@ -71,12 +83,7 @@ public class TransactionServiceImpl implements TransactionService {
     private static BigDecimal calculatePrice(Long percent, BigDecimal price) {
         return price.multiply(new BigDecimal(percent)).divide(new BigDecimal(100), RoundingMode.HALF_DOWN);
     }
-
-    public BigDecimal returnNewValue(RegistrationTree registrationTree, BigDecimal sellingPrice, Long percent, OperationType operationType) {
-        registrationTree.setBalance(registrationTree.getBalance().add(sellingPrice.multiply(BigDecimal.valueOf(percent))));
-        transactionDetails(registrationTree, sellingPrice, percent, operationType);
-        return registrationTree.getBalance();
-    }
+    
 
     private void transactionDetails(RegistrationTree registrationTree, BigDecimal price, Long percent, OperationType operationType) {
         Transaction transaction = new Transaction();
@@ -85,6 +92,9 @@ public class TransactionServiceImpl implements TransactionService {
         transaction
                 .setRegistrationTree(registrationTree);
         transaction.setOperationType(operationType);
+        BigDecimal newBalance = registrationTree.getBalance().add(transaction.getPrice());
+        registrationTree.setBalance(newBalance);
+        registrationTreeRepository.save(registrationTree);
         transactionRepository.save(transaction);
     }
 }
