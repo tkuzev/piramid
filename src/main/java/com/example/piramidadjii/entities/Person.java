@@ -22,4 +22,6 @@ public class Person extends BaseEntity {
 
     private BigDecimal balance;
 
+    private String email;
+
 }

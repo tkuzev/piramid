@@ -5,6 +5,7 @@ import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree
 import com.example.piramidadjii.registrationTreeModule.enums.OperationType;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.TransactionRepository;
+import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
 import com.example.piramidadjii.registrationTreeModule.services.TransactionService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
