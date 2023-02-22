@@ -20,4 +20,5 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
         subscriptionPlanRepository.save(newSubscriptionPlan);
     }
 
+
 }

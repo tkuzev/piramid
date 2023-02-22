@@ -2,6 +2,7 @@ package com.example.piramidadjii.registrationTreeModule.services.impl;
 
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
+import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationTreeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ class RegistrationTreeServiceImplTest {
 
     @Autowired
     private RegistrationTreeRepository registrationTreeRepository;
+
+    @Autowired
+    private SubscriptionPlanRepository subscriptionPlanRepository;
 
     @Test
     void registerTestFourthTier() {
@@ -55,6 +59,18 @@ class RegistrationTreeServiceImplTest {
         RegistrationTree registrationTree = registrationTreeRepository.getFirstByEmail("email@person4.com").orElseThrow();
 
         assertEquals(1L, (long) registrationTree.getSubscriptionPlan().getId());
+    }
+
+    @Test
+    void upgradePlanTest(){
+        registrationTreeService.registerPerson("Person", "email@puhi.com", new BigDecimal("250"), 1L);
+        RegistrationTree registrationTree = registrationTreeRepository.getFirstByEmail("email@puhi.com").orElseThrow();
+        registrationTree.setBalance(registrationTree.getBalance().add(BigDecimal.valueOf(500L)));
+
+        registrationTreeService.upgradeSubscriptionPlan(registrationTree,subscriptionPlanRepository.getSubscriptionPlanById(3L).orElseThrow());
+
+        assertEquals(3L,registrationTree.getSubscriptionPlan().getId());
+        assertEquals(BigDecimal.valueOf(150).setScale(2), registrationTree.getBalance());
     }
 }
 
