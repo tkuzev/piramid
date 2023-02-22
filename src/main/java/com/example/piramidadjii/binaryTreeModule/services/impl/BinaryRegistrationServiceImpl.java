@@ -18,7 +18,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
 
     @Override
     public void registerNewPerson(RegistrationTree person) {
-        addBinaryPerson(binParent(findParent(person)), createBinaryPerson(person), true);
+        addBinaryPerson(binParent(findParent(person)), createBinaryPerson(person));
     }
 
     public RegistrationTree findParent(RegistrationTree node) {
@@ -49,22 +49,17 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
 
     }
 
-    private void addBinaryPerson(BinaryTree binParent, BinaryTree binChild, boolean direction) {
-        if (direction/*right*/) {
+    private void addBinaryPerson(BinaryTree binParent, BinaryTree binChild) {
+        if (binParent.isPreferredDirection()/*right*/) {
             if (!Objects.isNull(binParent.getRightChild())) {
-                addBinaryPerson(binParent.getRightChild(), binChild, Direction()/*nqkoga nema da e random moje bi*/);
+                addBinaryPerson(binParent.getRightChild(), binChild);
             }
             binParent.setRightChild(binChild);
         }
         /*left*/
         if (!Objects.isNull(binParent.getLeftChild())) {
-            addBinaryPerson(binParent.getLeftChild(), binChild, Direction()/*nqkoga nema da e random moje bi*/);
+            addBinaryPerson(binParent.getLeftChild(), binChild);
         }
         binParent.setLeftChild(binChild);
-
-    }
-
-    private boolean Direction() {
-        return new Random().nextBoolean();
     }
 }

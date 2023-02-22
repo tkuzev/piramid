@@ -15,6 +15,7 @@ create table binary_tree(
        right_container decimal(38,2),
        name varchar(255),
        email varchar(255) unique,
+       preferred_direction bit,
        primary key (id)
 );
 
@@ -39,8 +40,8 @@ create table transaction (
 insert into registration_tree (id,balance,name)
 values (1,0,'Boss');
 
-insert into binary_tree (id,left_container, right_container,name)
-values (1,0,0,'Boss');
+insert into binary_tree (id,left_container, right_container,name, preferred_direction)
+values (1,0,0,'Boss',1);
 
 insert into subscription_plan (id,name,percents,registration_fee,is_eligible_for_binary)
 values (1,'Bronze','2',200, false);

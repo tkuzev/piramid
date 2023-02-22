@@ -1,5 +1,6 @@
 package com.example.piramidadjii.registrationTreeModule.services.impl;
 
+import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
@@ -22,6 +23,9 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
 
+    @Autowired
+    private BinaryRegistrationService binaryRegistrationService;
+
     List<SubscriptionPlan> subscriptionPlans = new ArrayList<>();
 
     @Override
@@ -38,8 +42,11 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
                 throw new RuntimeException();
             }
         }
+        registrationTreeRepository.save(registrationTree);
+        if(registrationTree.getSubscriptionPlan().isEligibleForBinary()){
+            binaryRegistrationService.registerNewPerson(registrationTree);
+        }
 
-        this.registrationTreeRepository.save(registrationTree);
     }
 
     //Helper methods
