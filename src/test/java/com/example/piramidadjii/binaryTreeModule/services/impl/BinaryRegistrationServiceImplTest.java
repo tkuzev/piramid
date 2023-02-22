@@ -40,44 +40,30 @@ class BinaryRegistrationServiceImplTest {
         registrationTreeService.setSubscription(registrationTree,4);
         binaryRegistrationService.registerNewPerson(registrationTree);
         BinaryTree binaryTree = binaryTreeRepository.findByEmail("email@person.com").orElseThrow();
+
         assertEquals("email@person.com", binaryTree.getEmail());
     }
 
     @Test
     void method(){
-        RegistrationTree person1 = createPerson(1L,1L,"asdasdasd@asd.bg");
-        RegistrationTree person2 = createPerson(1L,3L, "asdasdasdasd@asd.bg");
-        RegistrationTree person3 = createPerson(2L,3L,"asdasdasd@asd123.bg");
-        RegistrationTree person4 = createPerson(3L,3L,"1231asdasdasd@asd.bg");
+        registrationTreeService.registerPerson("Person1", "email@person1.com", new BigDecimal("250"), 1L);
+        registrationTreeService.registerPerson("Person2", "email@person2.com", new BigDecimal("500"), 1L); // STACKOVERFLOW EXCEPTION HAHAHAH BEZKRAINA REKURSIIKAAAAA MMMMMMMMMM
+        registrationTreeService.registerPerson("Person3", "email@person3.com", new BigDecimal("500"), 1L);
+        registrationTreeService.registerPerson("Person4", "email@person4.com", new BigDecimal("500"), 3L); // gurmi samo s parent id 2 S DRUGITE NE???????????
 
-        binaryRegistrationService.registerNewPerson(person1);
-        binaryRegistrationService.registerNewPerson(person2);
-        binaryRegistrationService.registerNewPerson(person3);
-        binaryRegistrationService.registerNewPerson(person4);
-
-        BinaryTree binPerson1 = binaryTreeRepository.findByEmail("asdasdasd@asd.bg").orElseThrow();
-        BinaryTree binPerson2 = binaryTreeRepository.findByEmail("asdasdasdasd@asd.bg").orElseThrow();
-        BinaryTree binPerson3 = binaryTreeRepository.findByEmail("asdasdasd@asd123.bg").orElseThrow();
-        BinaryTree binPerson4 = binaryTreeRepository.findByEmail("1231asdasdasd@asd.bg").orElseThrow();
+        BinaryTree binPerson2 = binaryTreeRepository.findByEmail("email@person2.com").orElseThrow();
+        BinaryTree binPerson3 = binaryTreeRepository.findByEmail("email@person3.com").orElseThrow();
+        BinaryTree binPerson4 = binaryTreeRepository.findByEmail("email@person4.com").orElseThrow();
 
         binPerson2.setPreferredDirection(false);
         binPerson3.setPreferredDirection(true);
+        binaryTreeRepository.save(binPerson2);
+        binaryTreeRepository.save(binPerson3);
 
         assertEquals(binPerson2, binaryTreeRepository.findById(1L).get().getRightChild());
         assertEquals(binPerson3, binPerson2.getLeftChild());
         assertEquals(binPerson4, binPerson3.getRightChild());
 
-        assertEquals(false,binaryTreeRepository.findByEmail(binPerson1.getEmail()).isPresent());
-
-    }
-
-    private RegistrationTree createPerson(Long parentId, Long planId,String email) {
-        RegistrationTree registrationTree = new RegistrationTree();
-        registrationTree.setParent(registrationTreeRepository.getRegistrationTreeById(parentId).orElseThrow());
-        registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(planId).orElseThrow());
-        registrationTree.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
-        registrationTree.setEmail(email);
-        registrationTree = registrationTreeRepository.save(registrationTree);
-        return registrationTree;
+        assertFalse(binaryTreeRepository.findByEmail("email@person1.com").isPresent());
     }
 }

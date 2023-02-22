@@ -55,11 +55,13 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
                 addBinaryPerson(binParent.getRightChild(), binChild);
             }
             binParent.setRightChild(binChild);
+            binaryTreeRepository.save(binParent);
         }
         /*left*/
         if (!Objects.isNull(binParent.getLeftChild())) {
             addBinaryPerson(binParent.getLeftChild(), binChild);
         }
         binParent.setLeftChild(binChild);
+        binaryTreeRepository.save(binParent);
     }
 }
