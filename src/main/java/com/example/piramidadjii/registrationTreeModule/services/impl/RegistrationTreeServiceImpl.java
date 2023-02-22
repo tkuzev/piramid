@@ -15,19 +15,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Service
+
 public class RegistrationTreeServiceImpl implements RegistrationTreeService {
     @Autowired
     private RegistrationTreeRepository registrationTreeRepository;
 
     @Autowired
-    private TransactionService transactionService;
-
-    @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
 
     List<SubscriptionPlan> subscriptionPlans = new ArrayList<>();
-
 
     @Override
     public void registerPerson(RegistrationTree registrationTree) {
@@ -47,20 +43,6 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
         }
 
         this.registrationTreeRepository.save(registrationTree);
-    }
-    @Override
-    public void chooseSubsPlan(RegistrationTree person, Long id){
-        setSubscription(person, id);
-    }
-
-    @Override
-    public void sell(BigDecimal sellPrice, RegistrationTree registrationTree) {
-        this.transactionService.createTransaction(registrationTree, sellPrice);
-    }
-
-    @Override
-    public void initialFee(RegistrationTree registrationTree) {
-
     }
 
     //Helper methods

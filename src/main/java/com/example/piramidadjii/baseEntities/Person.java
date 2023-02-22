@@ -1,4 +1,4 @@
-package com.example.piramidadjii.entities;
+package com.example.piramidadjii.baseEntities;
 
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import jakarta.persistence.ManyToOne;

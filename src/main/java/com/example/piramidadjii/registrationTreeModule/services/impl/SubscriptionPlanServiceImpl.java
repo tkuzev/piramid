@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
 public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
@@ -24,16 +23,6 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
         subscriptionPlanRepository.save(newSubscriptionPlan);
     }
 
-    public List<Long> mapFromStringToLong(String percents) {
 
-        List<Long> list = new ArrayList<>();
 
-        String[] stringArray = percents.split("//");
-        for (String string : stringArray) {
-            Long longInt = Long.valueOf(string);
-            list.add(longInt);
-        }
-
-        return list;
-    }
 }

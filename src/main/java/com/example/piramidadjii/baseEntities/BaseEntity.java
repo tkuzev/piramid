@@ -1,4 +1,4 @@
-package com.example.piramidadjii.entities;
+package com.example.piramidadjii.baseEntities;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

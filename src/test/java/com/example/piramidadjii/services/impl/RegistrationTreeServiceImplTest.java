@@ -1,6 +1,5 @@
 package com.example.piramidadjii.services.impl;
 
-import com.example.piramidadjii.entities.Person;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationTreeService;

@@ -1,7 +1,8 @@
 package com.example.piramidadjii.registrationTreeModule.services.impl;
 
-import com.example.piramidadjii.entities.Transaction;
+import com.example.piramidadjii.baseEntities.Transaction;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
+import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.enums.OperationType;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.TransactionRepository;
@@ -14,20 +15,18 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-@Service
 public class TransactionServiceImpl implements TransactionService {
-    private Long FLAT_PERCENTAGE = 5L;
     private Long percentages = 0L;
 
     @Autowired
     private TransactionRepository transactionRepository;
-    @Autowired
-    private SubscriptionPlanServiceImpl subscriptionPlanService;
+
     @Autowired
     private RegistrationTreeRepository registrationTreeRepository;
 
@@ -37,11 +36,10 @@ public class TransactionServiceImpl implements TransactionService {
         final Long[] percent = new Long[1];
         AtomicInteger counter = new AtomicInteger(0);
         OperationType[] operationType = new OperationType[1];
-        Long profit = 20L; //How exactly to calculate the bonus of the root?
+        Long profit = 20L;
 
         traverseFromNodeToRoot(registrationTree)
-                // removed .parallel() shtoto se nasira
-                .limit(5) // one more transaction for the root node must be added nqkoga
+                .limit(5)
                 .forEach(node -> setNewTransactions(registrationTree, price, percent, counter, node, operationType));
 
         transactionDetails(
@@ -59,7 +57,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private void checkPercent(RegistrationTree registrationTree, Long[] percent, AtomicInteger counter, RegistrationTree node, OperationType[] operationType) {
-        List<Long> percents = subscriptionPlanService.mapFromStringToLong(node.getSubscriptionPlan().getPercents());
+        List<Long> percents = mapFromStringToLong(node.getSubscriptionPlan().getPercents());
 
         if (!LocalDate.now().isAfter(registrationTree.getSubscriptionExpirationDate())){
             //todo: dali da zapisvame tranzakciq ili da mu eba maikata?1?1?
@@ -101,5 +99,17 @@ public class TransactionServiceImpl implements TransactionService {
         registrationTree.setBalance(newBalance);
         registrationTreeRepository.save(registrationTree);
         transactionRepository.save(transaction);
+    }
+    public List<Long> mapFromStringToLong(String percents) {
+
+        List<Long> list = new ArrayList<>();
+
+        String[] stringArray = percents.split("//");
+        for (String string : stringArray) {
+            Long longInt = Long.valueOf(string);
+            list.add(longInt);
+        }
+
+        return list;
     }
 }

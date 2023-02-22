@@ -1,6 +1,6 @@
 package com.example.piramidadjii.services.impl;
 
-import com.example.piramidadjii.entities.Transaction;
+import com.example.piramidadjii.baseEntities.Transaction;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;

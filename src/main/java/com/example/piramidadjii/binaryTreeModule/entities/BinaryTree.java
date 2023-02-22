@@ -1,6 +1,6 @@
 package com.example.piramidadjii.binaryTreeModule.entities;
 
-import com.example.piramidadjii.entities.Person;
+import com.example.piramidadjii.baseEntities.Person;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

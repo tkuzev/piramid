@@ -1,6 +1,6 @@
 package com.example.piramidadjii.registrationTreeModule.entities;
 
-import com.example.piramidadjii.entities.Person;
+import com.example.piramidadjii.baseEntities.Person;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
