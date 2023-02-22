@@ -67,4 +67,20 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
 
         return registrationTree;
     }
+
+    @Override
+    public void upgradeSubscriptionPlan(RegistrationTree registrationTree,SubscriptionPlan subscriptionPlan){
+
+        if (isUpdateUnavailable(registrationTree, subscriptionPlan)){
+            return;
+        }
+
+        registrationTree.setBalance(registrationTree.getBalance().subtract(subscriptionPlan.getRegistrationFee()));
+        registrationTree.setSubscriptionPlan(subscriptionPlan);
+    }
+
+    private static boolean isUpdateUnavailable(RegistrationTree registrationTree, SubscriptionPlan subscriptionPlan) {
+        return registrationTree.getSubscriptionPlan().getPercents().length() > subscriptionPlan.getPercents().length()
+                || registrationTree.getBalance().compareTo(subscriptionPlan.getRegistrationFee().subtract(registrationTree.getSubscriptionPlan().getRegistrationFee())) < 0;
+    }
 }
