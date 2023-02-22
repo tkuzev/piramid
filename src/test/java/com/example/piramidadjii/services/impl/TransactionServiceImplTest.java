@@ -80,7 +80,7 @@ class TransactionServiceImplTest {
     private RegistrationTree createPerson() {
         RegistrationTree registrationTree = new RegistrationTree();
         registrationTree.setBalance(BigDecimal.ZERO);
-        registrationTree.setRegistrationTree(registrationTreeRepository.getRegistrationTreeById(1L).orElseThrow());
+        registrationTree.setParent(registrationTreeRepository.getRegistrationTreeById(1L).orElseThrow());
         registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(1L).orElseThrow());
         registrationTree = registrationTreeRepository.save(registrationTree);
         return registrationTree;
@@ -95,7 +95,7 @@ class TransactionServiceImplTest {
                     registrationTree.setName(String.valueOf(i));
                     registrationTree.setBalance(BigDecimal.ZERO);
                     registrationTree = registrationTreeRepository.save(registrationTree);
-                    registrationTree.setRegistrationTree(registrationTreeRepository.getRegistrationTreeById(registrationTree.getId() - 1).orElseThrow()); // TODO random parent (between 1 and existing num of nodes)
+                    registrationTree.setParent(registrationTreeRepository.getRegistrationTreeById(registrationTree.getId() - 1).orElseThrow()); // TODO random parent (between 1 and existing num of nodes)
                     registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(ThreadLocalRandom.current().nextLong(1, 4)).orElseThrow());
                     registrationTree = registrationTreeRepository.save(registrationTree);
                     return registrationTree;

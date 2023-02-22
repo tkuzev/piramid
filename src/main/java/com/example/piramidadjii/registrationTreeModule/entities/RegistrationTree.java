@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "registration_tree")
 @Getter
@@ -15,5 +18,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RegistrationTree extends Person {
     @ManyToOne
-    private RegistrationTree registrationTree;
+    private RegistrationTree parent;
+    @ManyToOne
+    private SubscriptionPlan subscriptionPlan;
+    private BigDecimal balance;
+
+    private LocalDate subscriptionExpirationDate;
+
+    private boolean isSubscriptionEnabled;
 }

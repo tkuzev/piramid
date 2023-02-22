@@ -19,10 +19,7 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
         newSubscriptionPlan.setName(subscriptionPlan.getName());
         newSubscriptionPlan.setPercents(subscriptionPlan.getPercents());
         newSubscriptionPlan.setRegistrationFee(subscriptionPlan.getRegistrationFee());
-
         subscriptionPlanRepository.save(newSubscriptionPlan);
     }
-
-
 
 }

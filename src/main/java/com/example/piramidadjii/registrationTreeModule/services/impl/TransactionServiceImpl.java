@@ -2,15 +2,12 @@ package com.example.piramidadjii.registrationTreeModule.services.impl;
 
 import com.example.piramidadjii.baseEntities.Transaction;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
-import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.enums.OperationType;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.TransactionRepository;
-import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
 import com.example.piramidadjii.registrationTreeModule.services.TransactionService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -78,11 +75,10 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     public Stream<RegistrationTree> traverseFromNodeToRoot(RegistrationTree node) {
-        if (/* Stop */ Objects.isNull(node) || /* skip company */ Objects.isNull(node.getRegistrationTree())) {
+        if (/* Stop */ Objects.isNull(node) || /* skip company */ Objects.isNull(node.getParent())) {
             return Stream.empty();
         }
-
-        return Stream.concat(Stream.of(node), traverseFromNodeToRoot(node.getRegistrationTree()));
+        return Stream.concat(Stream.of(node), traverseFromNodeToRoot(node.getParent()));
     }
 
     private static BigDecimal calculatePrice(Long percent, BigDecimal price) {

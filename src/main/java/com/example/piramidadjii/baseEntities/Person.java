@@ -18,15 +18,6 @@ public class Person extends BaseEntity {
 
     private String name;
 
-    @ManyToOne
-    private SubscriptionPlan subscriptionPlan;
-
-    private BigDecimal balance;
-
     private String email;
-
-    private LocalDate subscriptionExpirationDate;
-
-    private boolean isSubscriptionEnabled;
 
 }
