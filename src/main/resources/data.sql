@@ -2,7 +2,7 @@ create table registration_tree (
        id bigint not null auto_increment,
         balance decimal(38,2),
         name varchar(255),
-        email varchar(255),
+        email varchar(255) unique,
         subscription_expiration_date date,
         subscription_plan_id bigint,
         is_subscription_enabled bit,
@@ -14,7 +14,7 @@ create table binary_tree(
        left_container decimal(38,2),
        right_container decimal(38,2),
        name varchar(255),
-       email varchar(255),
+       email varchar(255) unique,
        primary key (id)
 );
 

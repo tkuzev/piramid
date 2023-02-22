@@ -59,7 +59,12 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
     private RegistrationTree setPersonDetails(String name, String email, BigDecimal balance, Long parentId) {
         RegistrationTree registrationTree = new RegistrationTree();
         registrationTree.setName(name);
-        registrationTree.setEmail(email);
+
+        if (registrationTreeRepository.getFirstByEmail(email).isPresent()){
+            throw new RuntimeException("emaila trqq da e unique pich");
+        }else {
+            registrationTree.setEmail(email);
+        }
         registrationTree.setBalance(balance);
 
         registrationTree.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
