@@ -5,13 +5,14 @@ import com.example.piramidadjii.binaryTreeModule.repositories.BinaryTreeReposito
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Stream;
 
-
+@Service
 public class BinaryRegistrationServiceImpl implements BinaryRegistrationService {
     @Autowired
     private BinaryTreeRepository binaryTreeRepository;
@@ -67,7 +68,3 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         return new Random().nextBoolean();
     }
 }
-
-//TODO proverqvamae rekutsivno dali person ima nqkude parent ot reg durvoto det e zapisan v binarnoto durvo,
-// sled tova namirame v binarnotot durvo tozi parent po email,
-// sled tova tursim na parenta v binarnotot durvo kude da zalepim persona pak rekursivno!

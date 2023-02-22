@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
-@Service
+
 public interface TransactionService {
 
     void createTransaction(RegistrationTree registrationTree, BigDecimal price);
