@@ -46,22 +46,22 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
 
     private BinaryTree binParent(RegistrationTree parent) {
         return binaryTreeRepository.findByEmail(parent.getEmail()).orElseThrow();
-
     }
 
     private void addBinaryPerson(BinaryTree binParent, BinaryTree binChild) {
         if (binParent.isPreferredDirection()/*right*/) {
-            if (!Objects.isNull(binParent.getRightChild())) {
+            if (Objects.isNull(binParent.getRightChild())) {
+                binParent.setRightChild(binChild);
+            } else {
                 addBinaryPerson(binParent.getRightChild(), binChild);
             }
-            binParent.setRightChild(binChild);
-            binaryTreeRepository.save(binParent);
+        } else { // AKO NQMA ELSE ADD BINARY PERSON SE VIKA AMA POSLE SE VRUSHTA DA DOVURSHVA I STAVA STACK OVERFLOW
+            if (Objects.isNull(binParent.getLeftChild())) {
+                binParent.setLeftChild(binChild);
+            } else {
+                addBinaryPerson(binParent.getLeftChild(), binChild);
+            }
         }
-        /*left*/
-        if (!Objects.isNull(binParent.getLeftChild())) {
-            addBinaryPerson(binParent.getLeftChild(), binChild);
-        }
-        binParent.setLeftChild(binChild);
         binaryTreeRepository.save(binParent);
     }
 }

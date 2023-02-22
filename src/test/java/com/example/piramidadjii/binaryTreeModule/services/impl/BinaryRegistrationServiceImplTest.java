@@ -46,24 +46,24 @@ class BinaryRegistrationServiceImplTest {
 
     @Test
     void method(){
-        registrationTreeService.registerPerson("Person1", "email@person1.com", new BigDecimal("250"), 1L);
-        registrationTreeService.registerPerson("Person2", "email@person2.com", new BigDecimal("500"), 1L); // STACKOVERFLOW EXCEPTION HAHAHAH BEZKRAINA REKURSIIKAAAAA MMMMMMMMMM
-        registrationTreeService.registerPerson("Person3", "email@person3.com", new BigDecimal("500"), 1L);
-        registrationTreeService.registerPerson("Person4", "email@person4.com", new BigDecimal("500"), 3L); // gurmi samo s parent id 2 S DRUGITE NE???????????
+        registrationTreeService.registerPerson("Person1", "1.com", new BigDecimal("250"), 1L);
+        registrationTreeService.registerPerson("Person2", "2.com", new BigDecimal("500"), 1L); // ponqkoga ima stack overflow v addBinaryPerson ako ima mn hora v durvoto
+        registrationTreeService.registerPerson("Person3", "3.com", new BigDecimal("500"), 1L);
+        registrationTreeService.registerPerson("Person4", "4.com", new BigDecimal("500"), 3L); // gurmi samo s parent id 2 S DRUGITE NE???????????
 
-        BinaryTree binPerson2 = binaryTreeRepository.findByEmail("email@person2.com").orElseThrow();
-        BinaryTree binPerson3 = binaryTreeRepository.findByEmail("email@person3.com").orElseThrow();
-        BinaryTree binPerson4 = binaryTreeRepository.findByEmail("email@person4.com").orElseThrow();
+        BinaryTree binPerson2 = binaryTreeRepository.findByEmail("2.com").orElseThrow();
+        BinaryTree binPerson3 = binaryTreeRepository.findByEmail("3.com").orElseThrow();
+        BinaryTree binPerson4 = binaryTreeRepository.findByEmail("4.com").orElseThrow();
 
         binPerson2.setPreferredDirection(false);
         binPerson3.setPreferredDirection(true);
         binaryTreeRepository.save(binPerson2);
         binaryTreeRepository.save(binPerson3);
 
-        assertEquals(binPerson2, binaryTreeRepository.findById(1L).get().getRightChild());
-        assertEquals(binPerson3, binPerson2.getLeftChild());
-        assertEquals(binPerson4, binPerson3.getRightChild());
+        assertEquals(binPerson2.getId(), binaryTreeRepository.findById(1L).get().getRightChild().getId());
+        assertEquals(binPerson3.getId(), binPerson2.getLeftChild().getId());
+        assertEquals(binPerson4.getId(), binPerson3.getLeftChild().getId());
 
-        assertFalse(binaryTreeRepository.findByEmail("email@person1.com").isPresent());
+        assertFalse(binaryTreeRepository.findByEmail("1.com").isPresent());
     }
 }

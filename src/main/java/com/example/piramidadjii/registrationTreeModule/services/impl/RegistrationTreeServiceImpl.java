@@ -82,7 +82,6 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
 
     @Override
     public void upgradeSubscriptionPlan(RegistrationTree registrationTree,SubscriptionPlan subscriptionPlan){
-
         if (isUpdateUnavailable(registrationTree, subscriptionPlan)){
             return;
         }
