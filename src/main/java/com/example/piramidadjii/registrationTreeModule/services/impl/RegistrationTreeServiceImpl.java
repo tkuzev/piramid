@@ -6,7 +6,6 @@ import com.example.piramidadjii.registrationTreeModule.repositories.Registration
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationTreeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -48,7 +47,8 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
         return balance.compareTo(subscriptionPlanRepository.getSubscriptionPlanById(planId).orElseThrow().getRegistrationFee());
     }
 
-    private void setSubscription(RegistrationTree registrationTree, long id) {
+    @Override
+    public void setSubscription(RegistrationTree registrationTree, long id) {
         registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(id).orElseThrow());
         BigDecimal balance = registrationTree.getBalance();
         BigDecimal fee = subscriptionPlanRepository.getSubscriptionPlanById(id).orElseThrow().getRegistrationFee();

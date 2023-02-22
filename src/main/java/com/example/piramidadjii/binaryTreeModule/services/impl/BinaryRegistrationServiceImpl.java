@@ -25,7 +25,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         if (Objects.isNull(node)) {
             throw new RuntimeException("nema node");
         }
-        if (node.getParent().getSubscriptionPlan().isEligibleForBinary() || Objects.isNull(/*root*/node.getParent().getParent())) {
+        if (Objects.isNull(/*root*/node.getParent().getParent()) || node.getParent().getSubscriptionPlan().isEligibleForBinary()) {
             return node.getParent();
         }
         findParent(node.getParent());
