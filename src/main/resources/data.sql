@@ -2,10 +2,20 @@ create table registration_tree (
        id bigint not null auto_increment,
         balance decimal(38,2),
         name varchar(255),
+        email varchar(255),
         subscription_expiration_date date,
         subscription_plan_id bigint,
         is_subscription_enabled bit,
         primary key (id)
+);
+
+create table binary_tree(
+       id bigint not null auto_increment,
+       left_container decimal(38,2),
+       right_container decimal(38,2),
+       name varchar(255),
+       email varchar(255),
+       primary key (id)
 );
 
 
@@ -26,15 +36,11 @@ create table transaction (
         primary key (id)
     );
 
---
---    create table transaction_registration_tree (
---       transaction_id bigint not null,
---        registration_tree_id bigint not null,
---        primary key (transaction_id, registration_tree_id)
---    );
-
 insert into registration_tree (id,balance,name)
 values (1,0,'Boss');
+
+insert into binary_tree (id,left_container, right_container,name)
+values (1,0,0,'Boss');
 
 insert into subscription_plan (id,name,percents,registration_fee,is_eligible_for_binary)
 values (1,'Bronze','2',200, false);
