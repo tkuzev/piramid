@@ -13,6 +13,8 @@ public interface RegistrationTreeRepository extends JpaRepository<RegistrationTr
 
     Optional<RegistrationTree> getRegistrationTreeById(Long id);
 
+    Optional<RegistrationTree> getFirstByEmail(String email);
+
     List<RegistrationTree> getAllBySubscriptionExpirationDate(LocalDate date);
 
 

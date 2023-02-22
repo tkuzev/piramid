@@ -50,7 +50,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     private void setNewTransactions(RegistrationTree person, BigDecimal price, Long[] percent, AtomicInteger counter, RegistrationTree node, OperationType[] operationType) {
         checkPercent(person, percent, counter, node, operationType);
-        percentages+=percent[0];
+        percentages += percent[0];
         counter.getAndAdd(1);
         transactionDetails(node, price, percent[0], operationType[0]);
     }
@@ -58,7 +58,7 @@ public class TransactionServiceImpl implements TransactionService {
     private void checkPercent(RegistrationTree registrationTree, Long[] percent, AtomicInteger counter, RegistrationTree node, OperationType[] operationType) {
         List<Long> percents = mapFromStringToLong(node.getSubscriptionPlan().getPercents());
 
-        if (!LocalDate.now().isAfter(registrationTree.getSubscriptionExpirationDate())){
+        if (LocalDate.now().isAfter(registrationTree.getSubscriptionExpirationDate())) {
             //todo: dali da zapisvame tranzakciq ili da mu eba maikata?1?1?
             return;
         }
@@ -98,6 +98,7 @@ public class TransactionServiceImpl implements TransactionService {
         registrationTreeRepository.save(registrationTree);
         transactionRepository.save(transaction);
     }
+
     public List<Long> mapFromStringToLong(String percents) {
 
         List<Long> list = new ArrayList<>();

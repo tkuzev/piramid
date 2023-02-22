@@ -1,17 +1,18 @@
-package com.example.piramidadjii.services.impl;
+package com.example.piramidadjii.registrationTreeModule.services.impl;
 
 import com.example.piramidadjii.baseEntities.Transaction;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.TransactionRepository;
-import com.example.piramidadjii.registrationTreeModule.services.impl.TransactionServiceImpl;
+import com.example.piramidadjii.registrationTreeModule.services.TransactionService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -26,7 +27,7 @@ class TransactionServiceImplTest {
     @Autowired
     SubscriptionPlanRepository subscriptionPlanRepository;
     @Autowired
-    TransactionServiceImpl transactionService;
+    TransactionService transactionService;
     @Autowired
     RegistrationTreeRepository registrationTreeRepository;
     @Autowired
@@ -57,8 +58,6 @@ class TransactionServiceImplTest {
         assertEquals("BONUS",transactionRepository.findByRegistrationTree(streamList.get(2)).get().getOperationType().toString());
     }
 
-
-
     @Test
     void createTransactionWithOnePerson() {
         RegistrationTree registrationTree = createPerson();
@@ -82,6 +81,7 @@ class TransactionServiceImplTest {
         registrationTree.setBalance(BigDecimal.ZERO);
         registrationTree.setParent(registrationTreeRepository.getRegistrationTreeById(1L).orElseThrow());
         registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(1L).orElseThrow());
+        registrationTree.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
         registrationTree = registrationTreeRepository.save(registrationTree);
         return registrationTree;
     }
@@ -97,6 +97,7 @@ class TransactionServiceImplTest {
                     registrationTree = registrationTreeRepository.save(registrationTree);
                     registrationTree.setParent(registrationTreeRepository.getRegistrationTreeById(registrationTree.getId() - 1).orElseThrow()); // TODO random parent (between 1 and existing num of nodes)
                     registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(ThreadLocalRandom.current().nextLong(1, 4)).orElseThrow());
+                    registrationTree.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
                     registrationTree = registrationTreeRepository.save(registrationTree);
                     return registrationTree;
                 }).collect(Collectors.toList());

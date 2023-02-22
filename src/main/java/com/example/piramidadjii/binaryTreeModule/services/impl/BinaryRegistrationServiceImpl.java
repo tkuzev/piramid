@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Random;
-import java.util.stream.Stream;
 
 @Service
 public class BinaryRegistrationServiceImpl implements BinaryRegistrationService {
@@ -45,7 +44,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         return binPerson;
     }
 
-    private BinaryTree binParent(RegistrationTree parent){
+    private BinaryTree binParent(RegistrationTree parent) {
         return binaryTreeRepository.findByEmail(parent.getEmail()).orElseThrow();
 
     }
@@ -64,6 +63,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         binParent.setLeftChild(binChild);
 
     }
+
     private boolean Direction() {
         return new Random().nextBoolean();
     }

@@ -25,5 +25,5 @@ public class RegistrationTree extends Person {
 
     private LocalDate subscriptionExpirationDate;
 
-    private boolean isSubscriptionEnabled;
+    private Boolean isSubscriptionEnabled;
 }

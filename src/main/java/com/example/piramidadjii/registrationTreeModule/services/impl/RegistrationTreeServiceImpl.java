@@ -5,7 +5,6 @@ import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationTreeService;
-import com.example.piramidadjii.registrationTreeModule.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,6 @@ import java.util.List;
 
 @Service
 public class RegistrationTreeServiceImpl implements RegistrationTreeService {
-
     @Autowired
     private RegistrationTreeRepository registrationTreeRepository;
 
@@ -28,16 +26,14 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
     List<SubscriptionPlan> subscriptionPlans = new ArrayList<>();
 
     @Override
-    public void registerPerson(RegistrationTree registrationTree) {
-
+    public void registerPerson(String name, String email, BigDecimal balance, Long parentId) {
         subscriptionPlans.addAll(subscriptionPlanRepository.findAll());
         Collections.reverse(subscriptionPlans);
+        RegistrationTree registrationTree = setPersonDetails(name, email, balance, parentId);
 
         for (SubscriptionPlan subscriptionPlan : subscriptionPlans) {
-            if (checkBalance(registrationTree, subscriptionPlan.getId()) > 0) {
+            if (checkBalance(balance, subscriptionPlan.getId()) >= 0) {
                 setSubscription(registrationTree, subscriptionPlan.getId());
-                registrationTree.setSubscriptionExpirationDate(LocalDate.now());
-                registrationTree.setSubscriptionEnabled(true);
                 break;
             } else if (subscriptionPlan.getId() == 1) {
                 throw new RuntimeException();
@@ -48,8 +44,8 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
     }
 
     //Helper methods
-    private int checkBalance(RegistrationTree registrationTree, long planId) {
-        return registrationTree.getBalance().compareTo(subscriptionPlanRepository.getSubscriptionPlanById(planId).orElseThrow().getRegistrationFee());
+    private int checkBalance(BigDecimal balance, long planId) {
+        return balance.compareTo(subscriptionPlanRepository.getSubscriptionPlanById(planId).orElseThrow().getRegistrationFee());
     }
 
     private void setSubscription(RegistrationTree registrationTree, long id) {
@@ -60,4 +56,15 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
         registrationTree.setBalance(newBalance);
     }
 
+    private RegistrationTree setPersonDetails(String name, String email, BigDecimal balance, Long parentId) {
+        RegistrationTree registrationTree = new RegistrationTree();
+        registrationTree.setName(name);
+        registrationTree.setEmail(email);
+        registrationTree.setBalance(balance);
+
+        registrationTree.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
+        registrationTree.setParent(registrationTreeRepository.findById(parentId).orElseThrow());
+
+        return registrationTree;
+    }
 }
