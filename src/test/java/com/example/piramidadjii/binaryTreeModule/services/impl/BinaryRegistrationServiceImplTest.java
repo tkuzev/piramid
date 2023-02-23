@@ -56,13 +56,11 @@ class BinaryRegistrationServiceImplTest {
         BinaryTree binPerson4 = binaryRegistrationService.registerNewPerson(person4, true);
         BinaryTree binPerson6 = binaryRegistrationService.registerNewPerson(person6, true);
 
-        System.out.println(binPerson4.getEmail());
-        System.out.println(binPerson3.getLeftChild());
 
         assertFalse(binaryTreeRepository.findByEmail("2.com").isPresent());
         assertEquals(binPerson3.getId(), binaryTreeRepository.findById(1L).get().getRightChild().getId());
-        assertEquals(binPerson4.getEmail(), binPerson3.getLeftChild().getEmail());
-//        assertFalse(binaryTreeRepository.findByEmail("5.com").isPresent());
-//        assertEquals(binPerson6.getId(), binPerson4.getRightChild().getId());
+        assertEquals(binPerson4.getEmail(), binaryTreeRepository.findByEmail("3.com").get().getLeftChild().getEmail());
+        assertFalse(binaryTreeRepository.findByEmail("5.com").isPresent());
+        assertEquals(binPerson6.getEmail(), binaryTreeRepository.findByEmail("4.com").get().getRightChild().getEmail());
     }
 }
