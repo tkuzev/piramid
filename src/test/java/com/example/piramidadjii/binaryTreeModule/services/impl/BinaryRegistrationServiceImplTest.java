@@ -47,13 +47,16 @@ class BinaryRegistrationServiceImplTest {
     @Test
     void method(){
         registrationTreeService.registerPerson("Person1", "1.com", new BigDecimal("250"), 1L);
+        registrationTreeService.registerPerson("Person5", "5.com", new BigDecimal("500"), 2L);
         registrationTreeService.registerPerson("Person2", "2.com", new BigDecimal("500"), 1L); // ponqkoga ima stack overflow v addBinaryPerson ako ima mn hora v durvoto
         registrationTreeService.registerPerson("Person3", "3.com", new BigDecimal("500"), 1L);
         registrationTreeService.registerPerson("Person4", "4.com", new BigDecimal("500"), 3L); // gurmi samo s parent id 2 S DRUGITE NE???????????
+         // gurmi samo s parent id 2 S DRUGITE NE???????????
 
-        BinaryTree binPerson2 = binaryTreeRepository.findByEmail("2.com").orElseThrow();
+        BinaryTree binPerson2 = binaryTreeRepository.findByEmail("5.com").orElseThrow();
         BinaryTree binPerson3 = binaryTreeRepository.findByEmail("3.com").orElseThrow();
         BinaryTree binPerson4 = binaryTreeRepository.findByEmail("4.com").orElseThrow();
+        BinaryTree binPerson5 = binaryTreeRepository.findByEmail("2.com").orElseThrow();
 
         binPerson2.setPreferredDirection(false);
         binPerson3.setPreferredDirection(true);
@@ -63,7 +66,6 @@ class BinaryRegistrationServiceImplTest {
         assertEquals(binPerson2.getId(), binaryTreeRepository.findById(1L).get().getRightChild().getId());
         assertEquals(binPerson3.getId(), binPerson2.getLeftChild().getId());
         assertEquals(binPerson4.getId(), binPerson3.getLeftChild().getId());
-
         assertFalse(binaryTreeRepository.findByEmail("1.com").isPresent());
     }
 }

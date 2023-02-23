@@ -21,15 +21,16 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         addBinaryPerson(binParent(findParent(person)), createBinaryPerson(person));
     }
 
-    public RegistrationTree findParent(RegistrationTree node) {
-        if (Objects.isNull(node)) {
-            throw new RuntimeException("nema node");
-        }
-        if (Objects.isNull(/*root*/node.getParent().getParent()) || node.getParent().getSubscriptionPlan().isEligibleForBinary()) {
+    private RegistrationTree findParent(RegistrationTree node) {
+
+        if (/*root*/node.getParent().getId()==1){
             return node.getParent();
         }
-        findParent(node.getParent());
-        throw new RuntimeException("Na maika ti");
+        if (!node.getParent().getSubscriptionPlan().isEligibleForBinary()){
+            findParent(node.getParent());
+        }
+
+        return node.getParent();
     }
 
 
