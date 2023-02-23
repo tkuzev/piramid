@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.Random;
 
 @Service
 public class BinaryRegistrationServiceImpl implements BinaryRegistrationService {
@@ -17,8 +16,8 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     private BinaryTreeRepository binaryTreeRepository;
 
     @Override
-    public void registerNewPerson(RegistrationTree person) {
-        addBinaryPerson(binParent(findParent(person)), createBinaryPerson(person));
+    public BinaryTree registerNewPerson(RegistrationTree person, boolean preferredDirection) {
+        return addBinaryPerson(binParent(findParent(person)), createBinaryPerson(person, preferredDirection));
     }
 
     public RegistrationTree findParent(RegistrationTree node) {
@@ -35,13 +34,13 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
 
 
     //helper methods
-    private BinaryTree createBinaryPerson(RegistrationTree person) {
+    private BinaryTree createBinaryPerson(RegistrationTree person, boolean preferredDirection) {
         BinaryTree binPerson = new BinaryTree();
         binPerson.setName(person.getName());
         binPerson.setEmail(person.getEmail());
         binPerson.setRightContainer(BigDecimal.ZERO);
         binPerson.setLeftContainer(BigDecimal.ZERO);
-
+        binPerson.setPreferredDirection(preferredDirection);
         binaryTreeRepository.save(binPerson);
         return binPerson;
     }
@@ -50,20 +49,26 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         return binaryTreeRepository.findByEmail(parent.getEmail()).orElseThrow();
     }
 
-    private void addBinaryPerson(BinaryTree binParent, BinaryTree binChild) {
+    private BinaryTree addBinaryPerson(BinaryTree binParent, BinaryTree binChild) {
         if (binParent.isPreferredDirection()/*right*/) {
             if (Objects.isNull(binParent.getRightChild())) {
                 binParent.setRightChild(binChild);
+                binChild.setParent(binParent);
+                binaryTreeRepository.save(binParent);
             } else {
                 addBinaryPerson(binParent.getRightChild(), binChild);
             }
-        } else { // AKO NQMA ELSE ADD BINARY PERSON SE VIKA AMA POSLE SE VRUSHTA DA DOVURSHVA I STAVA STACK OVERFLOW
+        } else {
             if (Objects.isNull(binParent.getLeftChild())) {
                 binParent.setLeftChild(binChild);
+                binChild.setParent(binParent);
+                binaryTreeRepository.save(binParent);
             } else {
                 addBinaryPerson(binParent.getLeftChild(), binChild);
             }
         }
-        binaryTreeRepository.save(binParent);
+
+        binaryTreeRepository.save(binChild);
+        return binChild;
     }
 }

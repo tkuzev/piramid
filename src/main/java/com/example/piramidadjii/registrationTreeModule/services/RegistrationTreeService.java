@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 public interface RegistrationTreeService {
 
-    void registerPerson(String name, String email, BigDecimal balance, Long parentId);
+    RegistrationTree registerPerson(String name, String email, BigDecimal balance, Long parentId);
 
 
     void setSubscription(RegistrationTree registrationTree, long id);

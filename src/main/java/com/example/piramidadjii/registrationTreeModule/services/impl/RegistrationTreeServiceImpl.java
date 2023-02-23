@@ -29,7 +29,7 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
     List<SubscriptionPlan> subscriptionPlans = new ArrayList<>();
 
     @Override
-    public void registerPerson(String name, String email, BigDecimal balance, Long parentId) {
+    public RegistrationTree registerPerson(String name, String email, BigDecimal balance, Long parentId) {
         subscriptionPlans.addAll(subscriptionPlanRepository.findAll());
         Collections.reverse(subscriptionPlans);
         RegistrationTree registrationTree = setPersonDetails(name, email, balance, parentId);
@@ -42,11 +42,10 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
                 throw new RuntimeException();
             }
         }
-        registrationTreeRepository.save(registrationTree);
-        if(registrationTree.getSubscriptionPlan().isEligibleForBinary()){
-            binaryRegistrationService.registerNewPerson(registrationTree);
-        }
 
+        registrationTreeRepository.save(registrationTree);
+
+        return registrationTree;
     }
 
     //Helper methods
