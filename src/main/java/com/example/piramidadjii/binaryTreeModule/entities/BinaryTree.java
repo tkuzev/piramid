@@ -2,6 +2,7 @@ package com.example.piramidadjii.binaryTreeModule.entities;
 
 import com.example.piramidadjii.baseEntities.Person;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -27,5 +28,8 @@ public class BinaryTree extends Person {
     private BigDecimal rightContainer;
 
     private boolean preferredDirection;
+
+    @ManyToOne
+    private BinaryTree parent;
 
 }

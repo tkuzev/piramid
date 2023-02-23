@@ -28,8 +28,9 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         if (Objects.isNull(/*root*/node.getParent().getParent()) || node.getParent().getSubscriptionPlan().isEligibleForBinary()) {
             return node.getParent();
         }
-        findParent(node.getParent());
-        throw new RuntimeException("Na maika ti");
+        else {
+            return findParent(node.getParent());
+        }
     }
 
 
@@ -40,6 +41,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         binPerson.setEmail(person.getEmail());
         binPerson.setRightContainer(BigDecimal.ZERO);
         binPerson.setLeftContainer(BigDecimal.ZERO);
+
         binaryTreeRepository.save(binPerson);
         return binPerson;
     }
