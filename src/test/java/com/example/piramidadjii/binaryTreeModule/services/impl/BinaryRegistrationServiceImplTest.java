@@ -56,7 +56,6 @@ class BinaryRegistrationServiceImplTest {
         BinaryTree binPerson4 = binaryRegistrationService.registerNewPerson(person4, true);
         BinaryTree binPerson6 = binaryRegistrationService.registerNewPerson(person6, true);
 
-
         assertFalse(binaryTreeRepository.findByEmail("2.com").isPresent());
         assertEquals(binPerson3.getId(), binaryTreeRepository.findById(1L).get().getRightChild().getId());
         assertEquals(binPerson4.getEmail(), binaryTreeRepository.findByEmail("3.com").get().getLeftChild().getEmail());
