@@ -4,18 +4,12 @@ import com.example.piramidadjii.binaryTreeModule.entities.BinaryTree;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryTreeRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
-import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
-import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationTreeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.Assert;
-
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
@@ -30,8 +24,7 @@ class BinaryRegistrationServiceImplTest {
     private BinaryRegistrationService binaryRegistrationService;
     @Autowired
     private RegistrationTreeRepository registrationTreeRepository;
-    @Autowired
-    private SubscriptionPlanRepository subscriptionPlanRepository;
+
     @Test
     void registerNewPerson() {
         registrationTreeService.registerPerson("Person", "email@person.com", new BigDecimal("500"), 1L);
@@ -45,7 +38,7 @@ class BinaryRegistrationServiceImplTest {
     }
 
     @Test
-    void method(){
+    void testBinaryPersonRegistration(){
         RegistrationTree person2 = registrationTreeService.registerPerson("Person2", "2.com", new BigDecimal("250"), 1L);
         RegistrationTree person3 = registrationTreeService.registerPerson("Person3", "3.com", new BigDecimal("500"), 1L);
         RegistrationTree person4 = registrationTreeService.registerPerson("Person4", "4.com", new BigDecimal("500"), 1L);
