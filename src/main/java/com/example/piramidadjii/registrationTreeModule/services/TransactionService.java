@@ -7,8 +7,5 @@ import java.math.BigDecimal;
 
 
 public interface TransactionService {
-
     void createTransaction(RegistrationTree registrationTree, BigDecimal price);
-
-
 }
