@@ -86,6 +86,9 @@ public class PiramidadjiiApplication {
             binaryTransaction.setPrice(binaryTree.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
         }
 
+        binaryTree.setRightContainer(BigDecimal.ZERO);
+        binaryTree.setLeftContainer(BigDecimal.ZERO);
+
         binaryTransaction.setBinaryTree(binaryTree);
         binaryTransaction.setOperationType(OperationType.MONTHLY_BINARY_PERCENTAGE);
         binaryTransactionRepository.save(binaryTransaction);
