@@ -15,6 +15,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     @Autowired
     private BinaryTreeRepository binaryTreeRepository;
 
+    //main methods
     @Override
     public BinaryTree registerNewPerson(RegistrationTree person, boolean preferredDirection) {
         return addBinaryPerson(binParent(findParent(person)), createBinaryPerson(person, preferredDirection));
