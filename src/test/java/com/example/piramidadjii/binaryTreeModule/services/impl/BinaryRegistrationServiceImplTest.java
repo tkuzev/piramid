@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
@@ -61,6 +62,10 @@ class BinaryRegistrationServiceImplTest {
 
     @Test  //ako she go testvash vzemi promeni crona ili izchakai da stane 1vi den ot meseca oligofren prost
     void scheduledMethod(){
+        BinaryTree boss = binaryTreeRepository.findById(1L).orElseThrow();
+        boss.setLeftContainer(BigDecimal.valueOf(0));
+        boss.setRightContainer(BigDecimal.valueOf(700));
+        binaryTreeRepository.save(boss);
         RegistrationTree person1 = registrationTreeService.registerPerson("Person3", "3.com", new BigDecimal("500"), 1L);
         RegistrationTree person2 = registrationTreeService.registerPerson("Person4", "4.com", new BigDecimal("500"), 1L);
         RegistrationTree person3 = registrationTreeService.registerPerson("Person6", "6.com", new BigDecimal("500"), 2L);
@@ -70,16 +75,16 @@ class BinaryRegistrationServiceImplTest {
         BinaryTree binPerson3 = binaryRegistrationService.registerNewPerson(person3, true);
 
         binPerson1.setBalance(BigDecimal.ZERO);
-        binPerson1.setLeftContainer(BigDecimal.valueOf(1000L));
-        binPerson1.setRightContainer(BigDecimal.valueOf(100L));
+        binPerson1.setLeftContainer(BigDecimal.valueOf(700));
+        binPerson1.setRightContainer(BigDecimal.valueOf(0));
 
         binPerson2.setBalance(BigDecimal.ZERO);
-        binPerson2.setLeftContainer(BigDecimal.valueOf(500L));
-        binPerson2.setRightContainer(BigDecimal.valueOf(1000L));
+        binPerson2.setLeftContainer(BigDecimal.valueOf(400));
+        binPerson2.setRightContainer(BigDecimal.valueOf(300));
 
         binPerson3.setBalance(BigDecimal.ZERO);
-        binPerson3.setLeftContainer(BigDecimal.valueOf(100000L));
-        binPerson3.setRightContainer(BigDecimal.valueOf(8000L));
+        binPerson3.setLeftContainer(BigDecimal.valueOf(0));
+        binPerson3.setRightContainer(BigDecimal.valueOf(0));
 
         binaryTreeRepository.save(binPerson1);
         binaryTreeRepository.save(binPerson2);

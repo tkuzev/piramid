@@ -33,6 +33,8 @@ class DistributeMoneyServiceImplTest {
         BinaryTree binPerson3 = binaryRegistrationService.registerNewPerson(person3, false);
         BinaryTree binPerson4 = binaryRegistrationService.registerNewPerson(person4, true);
         BinaryTree binPerson6 = binaryRegistrationService.registerNewPerson(person6, true);
+        binPerson4.setLeftContainer(BigDecimal.valueOf(400L));
+        binaryTreeRepository.save(binPerson4);
 
         distributeMoneyService.distributeMoney(binPerson6, BigDecimal.valueOf(300));
 

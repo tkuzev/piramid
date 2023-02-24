@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 @EnableScheduling
@@ -32,15 +33,61 @@ public class PiramidadjiiApplication {
     @Autowired
     private BinaryTransactionRepository binaryTransactionRepository;
 
+    private BigDecimal moneyToGive=BigDecimal.ZERO;
+
     public static void main(String[] args) {
         SpringApplication.run(PiramidadjiiApplication.class, args);
     }
 
-    @Scheduled(cron = "00 00 00 1 * *", zone = "Europe/Sofia")
+    @Scheduled(cron = "00 20 16 * * *", zone = "Europe/Sofia")
     public void binaryTree() {
+
         List<BinaryTree> binaryTreeList = binaryTreeRepository.findAll();
         binaryTreeList.forEach(this::updateMoney);
+        updateBossMoney(binaryTreeRepository.findById(1L).orElseThrow());
+        System.out.println(moneyToGive);
+        moneyToGive=BigDecimal.ZERO;
     }
+
+    private void updateBossMoney(BinaryTree binaryTree){
+        binaryTree.setBalance(binaryTree.getBalance().add(binaryTree.getRightContainer().add(binaryTree.getLeftContainer())));
+        binaryTree.setBalance(binaryTree.getBalance().subtract(moneyToGive));
+        binaryTree.setLeftContainer(BigDecimal.ZERO);
+        binaryTree.setRightContainer(BigDecimal.ZERO);
+        binaryTreeRepository.save(binaryTree);
+    }
+
+    private void updateMoney(BinaryTree binaryTree) {
+        if (binaryTree.getId()==1){
+            return;
+        }
+
+        BigDecimal oldBalance = binaryTree.getBalance();
+        BinaryTransaction binaryTransaction = new BinaryTransaction();
+
+        if (binaryTree.getLeftContainer().compareTo(binaryTree.getRightContainer()) < 0) {
+            BigDecimal newBalance = oldBalance.add(binaryTree.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
+            binaryTree.setBalance(newBalance);
+            moneyToGive = moneyToGive.add(binaryTree.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
+            binaryTransaction.setPrice(binaryTree.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
+        } else {
+            BigDecimal newBalance = oldBalance.add(binaryTree.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
+            binaryTree.setBalance(newBalance);
+            binaryTransaction.setPrice(binaryTree.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
+            moneyToGive=moneyToGive.add(binaryTree.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
+        }
+
+        binaryTree.setRightContainer(BigDecimal.ZERO);
+        binaryTree.setLeftContainer(BigDecimal.ZERO);
+        binaryTreeRepository.save(binaryTree);
+
+        binaryTransaction.setBinaryTree(binaryTree);
+        binaryTransaction.setOperationType(OperationType.MONTHLY_BINARY_PERCENTAGE);
+        binaryTransactionRepository.save(binaryTransaction);
+        System.out.println(moneyToGive);
+    }
+
+
 
 
     @Scheduled(cron = "00 00 00 * * *", zone = "Europe/Sofia")
@@ -49,6 +96,7 @@ public class PiramidadjiiApplication {
                 registrationTreeRepository.getAllBySubscriptionExpirationDate(LocalDate.now());
 
         allBySubscriptionExpirationDateFalse.forEach(this::getTax);
+
     }
 
     private void getTax(RegistrationTree registrationTree) {
@@ -65,34 +113,6 @@ public class PiramidadjiiApplication {
             registrationTreeRepository.save(registrationTree);
         }
 
-    }
-
-    private void updateMoney(BinaryTree binaryTree) {
-
-        if (binaryTree.getId() == 1) {
-            return;
-        }
-
-        BigDecimal oldBalance = binaryTree.getBalance();
-        BinaryTransaction binaryTransaction = new BinaryTransaction();
-
-        if (binaryTree.getLeftContainer().compareTo(binaryTree.getRightContainer()) < 0) {
-            BigDecimal newBalance = oldBalance.add(binaryTree.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
-            binaryTree.setBalance(newBalance);
-            binaryTransaction.setPrice(binaryTree.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
-        } else {
-            BigDecimal newBalance = oldBalance.add(binaryTree.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
-            binaryTree.setBalance(newBalance);
-            binaryTransaction.setPrice(binaryTree.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
-        }
-
-        binaryTree.setRightContainer(BigDecimal.ZERO);
-        binaryTree.setLeftContainer(BigDecimal.ZERO);
-
-        binaryTransaction.setBinaryTree(binaryTree);
-        binaryTransaction.setOperationType(OperationType.MONTHLY_BINARY_PERCENTAGE);
-        binaryTransactionRepository.save(binaryTransaction);
-        binaryTreeRepository.save(binaryTree);
     }
 
 }

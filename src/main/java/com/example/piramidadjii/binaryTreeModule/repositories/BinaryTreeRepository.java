@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface BinaryTreeRepository extends JpaRepository<BinaryTree, Long> {
     Optional<BinaryTree> findByEmail(String email);
+
+    Optional<BinaryTree> findById(Long id);
 }
