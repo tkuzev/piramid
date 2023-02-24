@@ -8,4 +8,6 @@ import java.math.BigDecimal;
 
 public interface BinaryRegistrationService {
     BinaryTree registerNewPerson(RegistrationTree person, boolean preferredDirection);
+
+    void changePreferredDirection(BinaryTree binaryTree, boolean direction);
 }

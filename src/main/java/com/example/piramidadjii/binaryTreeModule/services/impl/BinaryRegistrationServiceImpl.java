@@ -21,6 +21,13 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         return addBinaryPerson(binParent(findParent(person)), createBinaryPerson(person, preferredDirection));
     }
 
+    @Override
+    public void changePreferredDirection(BinaryTree binaryTree, boolean direction) {
+        binaryTree.setPreferredDirection(direction);
+        binaryTreeRepository.save(binaryTree);
+    }
+
+
     public RegistrationTree findParent(RegistrationTree node) {
         if (Objects.isNull(node)) {
             throw new RuntimeException("nema node");
@@ -72,4 +79,5 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         binaryTreeRepository.save(binChild);
         return binChild;
     }
+
 }

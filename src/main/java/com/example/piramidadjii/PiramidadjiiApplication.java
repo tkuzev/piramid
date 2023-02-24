@@ -37,8 +37,8 @@ public class PiramidadjiiApplication {
     }
 
     @Scheduled(cron = "00 00 00 1 * *", zone = "Europe/Sofia")
-    public void binaryTree(){
-        List<BinaryTree> binaryTreeList=binaryTreeRepository.findAll();
+    public void binaryTree() {
+        List<BinaryTree> binaryTreeList = binaryTreeRepository.findAll();
         binaryTreeList.forEach(this::updateMoney);
     }
 
@@ -69,19 +69,19 @@ public class PiramidadjiiApplication {
 
     private void updateMoney(BinaryTree binaryTree) {
 
-        if (binaryTree.getId()==1){
+        if (binaryTree.getId() == 1) {
             return;
         }
 
-        BigDecimal oldBalance=binaryTree.getBalance();
-        BinaryTransaction binaryTransaction=new BinaryTransaction();
+        BigDecimal oldBalance = binaryTree.getBalance();
+        BinaryTransaction binaryTransaction = new BinaryTransaction();
 
-        if (binaryTree.getLeftContainer().compareTo(binaryTree.getRightContainer())<0){
-            BigDecimal newBalance=oldBalance.add(binaryTree.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
+        if (binaryTree.getLeftContainer().compareTo(binaryTree.getRightContainer()) < 0) {
+            BigDecimal newBalance = oldBalance.add(binaryTree.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
             binaryTree.setBalance(newBalance);
             binaryTransaction.setPrice(binaryTree.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
-        }else {
-            BigDecimal newBalance=oldBalance.add(binaryTree.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
+        } else {
+            BigDecimal newBalance = oldBalance.add(binaryTree.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
             binaryTree.setBalance(newBalance);
             binaryTransaction.setPrice(binaryTree.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
         }
