@@ -27,12 +27,12 @@ public class DistributeMoneyServiceImpl implements DistributeMoneyService {
     private void fillingContainer(BinaryTree person, BigDecimal money) {
         if(person.getParent().getRightChild() == person){
             person.getParent().setRightContainer(person.getParent().getRightContainer().add(money));
-            binaryTreeRepository.save(person);
+            binaryTreeRepository.save(person.getParent());
         }
 
         else if(person.getParent().getLeftChild() == person){
             person.getParent().setLeftContainer(person.getParent().getLeftContainer().add(money));
-            binaryTreeRepository.save(person);
+            binaryTreeRepository.save(person.getParent());
         }
     }
 }
