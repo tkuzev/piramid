@@ -47,5 +47,9 @@ class DistributeMoneyServiceImplTest {
         //person3
         assertEquals(BigDecimal.valueOf(300).setScale(2), binaryTreeRepository.findByEmail("3.com").get().getLeftContainer());
         assertEquals(BigDecimal.ZERO.setScale(2), binaryTreeRepository.findByEmail("3.com").get().getRightContainer());
+
+        //Boss
+        assertEquals(BigDecimal.ZERO.setScale(2), binaryTreeRepository.findById(1L).get().getLeftContainer());
+        assertEquals(BigDecimal.valueOf(300).setScale(2), binaryTreeRepository.findById(1L).get().getRightContainer());
     }
 }
