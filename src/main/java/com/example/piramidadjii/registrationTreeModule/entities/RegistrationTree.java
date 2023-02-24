@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -21,7 +20,7 @@ public class RegistrationTree extends Person {
     private RegistrationTree parent;
     @ManyToOne
     private SubscriptionPlan subscriptionPlan;
-    private BigDecimal balance;
+
 
     private LocalDate subscriptionExpirationDate;
 

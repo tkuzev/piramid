@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @MappedSuperclass
 @Getter
 @Setter
@@ -16,5 +18,7 @@ public class Person extends BaseEntity {
 
     @Column(unique = true)
     private String email;
+
+    private BigDecimal balance;
 
 }
