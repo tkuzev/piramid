@@ -50,8 +50,8 @@ public class PiramidadjiiApplication {
     }
 
     private void updateBossMoney(BinaryTree binaryTree){
-        binaryTree.setBalance(binaryTree.getBalance().add(binaryTree.getRightContainer().add(binaryTree.getLeftContainer())));
-        binaryTree.setBalance(binaryTree.getBalance().subtract(moneyToGive));
+        binaryTree.getBankAccount().setBalance(binaryTree.getBankAccount().getBalance().add(binaryTree.getRightContainer().add(binaryTree.getLeftContainer())));
+        binaryTree.getBankAccount().setBalance(binaryTree.getBankAccount().getBalance().subtract(moneyToGive));
         binaryTree.setLeftContainer(BigDecimal.ZERO);
         binaryTree.setRightContainer(BigDecimal.ZERO);
         binaryTreeRepository.save(binaryTree);
@@ -62,17 +62,17 @@ public class PiramidadjiiApplication {
             return;
         }
 
-        BigDecimal oldBalance = binaryTree.getBalance();
+        BigDecimal oldBalance = binaryTree.getBankAccount().getBalance();
         BinaryTransaction binaryTransaction = new BinaryTransaction();
 
         if (binaryTree.getLeftContainer().compareTo(binaryTree.getRightContainer()) < 0) {
             BigDecimal newBalance = oldBalance.add(binaryTree.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
-            binaryTree.setBalance(newBalance);
+            binaryTree.getBankAccount().setBalance(newBalance);
             moneyToGive = moneyToGive.add(binaryTree.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
             binaryTransaction.setPrice(binaryTree.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
         } else {
             BigDecimal newBalance = oldBalance.add(binaryTree.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
-            binaryTree.setBalance(newBalance);
+            binaryTree.getBankAccount().setBalance(newBalance);
             binaryTransaction.setPrice(binaryTree.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
             moneyToGive=moneyToGive.add(binaryTree.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
         }
@@ -101,11 +101,11 @@ public class PiramidadjiiApplication {
 
     private void getTax(RegistrationTree registrationTree) {
 
-        BigDecimal newBalance = registrationTree.getBalance()
+        BigDecimal newBalance = registrationTree.getBankAccount().getBalance()
                 .subtract(registrationTree.getSubscriptionPlan().getRegistrationFee());
 
         if (registrationTree.getIsSubscriptionEnabled() && newBalance.compareTo(BigDecimal.ZERO) >= 0) {
-            registrationTree.setBalance(newBalance);
+            registrationTree.getBankAccount().setBalance(newBalance);
             registrationTree.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
             registrationTreeRepository.save(registrationTree);
         } else {

@@ -1,5 +1,7 @@
 package com.example.piramidadjii.registrationTreeModule.services.impl;
 
+import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
+import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
 import com.example.piramidadjii.baseEntities.Transaction;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
@@ -32,12 +34,14 @@ class TransactionServiceImplTest {
     RegistrationTreeRepository registrationTreeRepository;
     @Autowired
     TransactionRepository transactionRepository;
+    @Autowired
+    BankAccountRepository bankAccountRepository;
 
-    @AfterEach
-    void tearDown() {
-//        registrationTreeRepository.deleteAll(registrationTreeListToDelete);
-        transactionRepository.deleteAll(transactionList);
-    }
+//    @AfterEach
+//    void tearDown() {
+////        registrationTreeRepository.deleteAll(registrationTreeListToDelete);
+//        transactionRepository.deleteAll(transactionList);
+//    }
 
     @Test
     void createTransactionWithSixPeople() {
@@ -78,22 +82,34 @@ class TransactionServiceImplTest {
 
     private RegistrationTree createPerson() {
         RegistrationTree registrationTree = new RegistrationTree();
-        registrationTree.setBalance(BigDecimal.ZERO);
+        BankAccount newBankAccount = new BankAccount();
+        newBankAccount.setEmail("baiHui@bank.com");
+        bankAccountRepository.save(newBankAccount);
+        registrationTree.setBankAccount(newBankAccount);
+        registrationTree.setEmail("baiHui@bank.com");
+        registrationTree.getBankAccount().setEmail("baiHui@bank.com");
+        registrationTree.getBankAccount().setBalance(BigDecimal.ZERO);
         registrationTree.setParent(registrationTreeRepository.getRegistrationTreeById(1L).orElseThrow());
         registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(1L).orElseThrow());
         registrationTree.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
         registrationTree = registrationTreeRepository.save(registrationTree);
+        bankAccountRepository.save(newBankAccount);
         return registrationTree;
     }
 
-    private List<RegistrationTree> createRegistrationTree( int numOfNodes) {
+    private List<RegistrationTree> createRegistrationTree(int numOfNodes) {
         int n = numOfNodes + 2;
 
-        List<RegistrationTree> streamList = IntStream.range(2, n)
+        return IntStream.range(2, n)
                 .mapToObj(i -> {
                     RegistrationTree registrationTree = new RegistrationTree();
+                    BankAccount newBankAccount = new BankAccount();
+                    newBankAccount.setEmail("baiHui@bank.com");
+                    newBankAccount.setBalance(BigDecimal.valueOf(300));
+                    bankAccountRepository.save(newBankAccount);
                     registrationTree.setName(String.valueOf(i));
-                    registrationTree.setBalance(BigDecimal.ZERO);
+                    registrationTree.setBankAccount(newBankAccount);
+                    registrationTree.getBankAccount().setBalance(BigDecimal.ZERO);
                     registrationTree = registrationTreeRepository.save(registrationTree);
                     registrationTree.setParent(registrationTreeRepository.getRegistrationTreeById(registrationTree.getId() - 1).orElseThrow()); // TODO random parent (between 1 and existing num of nodes)
                     registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(ThreadLocalRandom.current().nextLong(1, 4)).orElseThrow());
@@ -101,6 +117,5 @@ class TransactionServiceImplTest {
                     registrationTree = registrationTreeRepository.save(registrationTree);
                     return registrationTree;
                 }).collect(Collectors.toList());
-        return streamList;
     }
 }

@@ -1,9 +1,8 @@
 package com.example.piramidadjii.registrationTreeModule.entities;
 
+import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.baseEntities.Person;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +20,8 @@ public class RegistrationTree extends Person {
     @ManyToOne
     private SubscriptionPlan subscriptionPlan;
 
+    @OneToOne
+    private BankAccount bankAccount;
 
     private LocalDate subscriptionExpirationDate;
 

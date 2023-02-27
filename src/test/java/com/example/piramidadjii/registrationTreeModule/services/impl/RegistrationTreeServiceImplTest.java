@@ -65,12 +65,12 @@ class RegistrationTreeServiceImplTest {
     void upgradePlanTest(){
         registrationTreeService.registerPerson("Person", "email@puhi.com", new BigDecimal("250"), 1L);
         RegistrationTree registrationTree = registrationTreeRepository.getFirstByEmail("email@puhi.com").orElseThrow();
-        registrationTree.setBalance(registrationTree.getBalance().add(BigDecimal.valueOf(500L)));
+        registrationTree.getBankAccount().setBalance(registrationTree.getBankAccount().getBalance().add(BigDecimal.valueOf(500L)));
 
         registrationTreeService.upgradeSubscriptionPlan(registrationTree,subscriptionPlanRepository.getSubscriptionPlanById(3L).orElseThrow());
 
         assertEquals(3L,registrationTree.getSubscriptionPlan().getId());
-        assertEquals(BigDecimal.valueOf(150).setScale(2), registrationTree.getBalance());
+        assertEquals(BigDecimal.valueOf(150).setScale(2), registrationTree.getBankAccount().getBalance());
     }
 }
 

@@ -1,23 +1,34 @@
+create table bank_account (
+                              id bigint not null auto_increment,
+                              balance decimal(38,2),
+                              email varchar(255),
+                              primary key (id)
+);
+
 create table registration_tree (
-       id bigint not null auto_increment,
-        balance decimal(38,2),
-        name varchar(255),
-        email varchar(255) unique,
-        subscription_expiration_date date,
-        subscription_plan_id bigint,
-        is_subscription_enabled bit,
-        primary key (id)
+                                   id bigint not null auto_increment,
+                                   email varchar(255),
+                                   name varchar(255),
+                                   is_subscription_enabled bit,
+                                   subscription_expiration_date date,
+                                   bank_account_id bigint,
+                                   parent_id bigint,
+                                   subscription_plan_id bigint,
+                                   primary key (id)
 );
 
 create table binary_tree(
-       id bigint not null auto_increment,
-       left_container decimal(38,2),
-       right_container decimal(38,2),
-       name varchar(255),
-       email varchar(255) unique,
-       preferred_direction bit,
-       balance decimal(38,2),
-       primary key (id)
+                            id bigint not null auto_increment,
+                            email varchar(255),
+                            name varchar(255),
+                            left_container decimal(38,2),
+                            preferred_direction bit not null,
+                            right_container decimal(38,2),
+                            bank_account_id bigint,
+                            left_child_id bigint,
+                            parent_id bigint,
+                            right_child_id bigint,
+                            primary key (id)
 );
 
 
@@ -38,11 +49,14 @@ create table transaction (
         primary key (id)
     );
 
-insert into registration_tree (id,balance,name)
-values (1,0,'Boss');
+insert into registration_tree (id,email,name,bank_account_id)
+values (1,'boss@shefa.com','Boss',1);
 
-insert into binary_tree (id,left_container, right_container,name, preferred_direction,balance)
-values (1,0,0,'Boss',1,0);
+insert into bank_account(id, email, balance)
+values (1,'boss@shefa.com',0);
+
+insert into binary_tree (id,left_container, right_container,name, preferred_direction,bank_account_id)
+values (1,0,0,'Boss',1,1);
 
 insert into subscription_plan (id,name,percents,registration_fee,is_eligible_for_binary)
 values (1,'Bronze','2',200, false);

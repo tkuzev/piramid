@@ -1,5 +1,8 @@
 package com.example.piramidadjii.registrationTreeModule.services.impl;
 
+import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
+import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
+import com.example.piramidadjii.bankAccountModule.services.BankAccountService;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
@@ -26,25 +29,32 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
     @Autowired
     private BinaryRegistrationService binaryRegistrationService;
 
+    @Autowired
+    private BankAccountRepository bankAccountRepository;
+
     List<SubscriptionPlan> subscriptionPlans = new ArrayList<>();
 
+
     @Override
-    public RegistrationTree registerPerson(String name, String email, BigDecimal balance, Long parentId) {
+    public RegistrationTree registerPerson(String name,  String email, BigDecimal money, Long parentId) {
         subscriptionPlans.addAll(subscriptionPlanRepository.findAll());
         Collections.reverse(subscriptionPlans);
-        RegistrationTree registrationTree = setPersonDetails(name, email, balance, parentId);
-
+        RegistrationTree registrationTree = setPersonDetails(name,email, parentId);
+        BankAccount bankAccount = new BankAccount();
+        bankAccount.setEmail(registrationTree.getEmail());
+        bankAccount.setBalance(money);
+        bankAccountRepository.save(bankAccount);
+        registrationTree.setBankAccount(bankAccount);
+        registrationTreeRepository.save(registrationTree);
         for (SubscriptionPlan subscriptionPlan : subscriptionPlans) {
-            if (checkBalance(balance, subscriptionPlan.getId()) >= 0) {
+            if (checkBalance(registrationTree.getBankAccount().getBalance(), subscriptionPlan.getId()) >= 0) {
                 setSubscription(registrationTree, subscriptionPlan.getId());
                 break;
             } else if (subscriptionPlan.getId() == 1) {
                 throw new RuntimeException();
             }
         }
-
         registrationTreeRepository.save(registrationTree);
-
         return registrationTree;
     }
 
@@ -55,14 +65,16 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
 
     @Override
     public void setSubscription(RegistrationTree registrationTree, long id) {
+        BankAccount bank = bankAccountRepository.findByEmail(registrationTree.getEmail()).orElseThrow();
         registrationTree.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(id).orElseThrow());
-        BigDecimal balance = registrationTree.getBalance();
+        BigDecimal balance = bank.getBalance();
         BigDecimal fee = subscriptionPlanRepository.getSubscriptionPlanById(id).orElseThrow().getRegistrationFee();
         BigDecimal newBalance = balance.subtract(fee);
-        registrationTree.setBalance(newBalance);
+        bank.setBalance(newBalance);
+        bankAccountRepository.save(bank);
     }
 
-    private RegistrationTree setPersonDetails(String name, String email, BigDecimal balance, Long parentId) {
+    private RegistrationTree setPersonDetails(String name, String email, Long parentId) {
         RegistrationTree registrationTree = new RegistrationTree();
         registrationTree.setName(name);
 
@@ -71,11 +83,9 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
         }else {
             registrationTree.setEmail(email);
         }
-        registrationTree.setBalance(balance);
-
         registrationTree.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
         registrationTree.setParent(registrationTreeRepository.findById(parentId).orElseThrow());
-
+        //registrationTreeRepository.save(registrationTree);
         return registrationTree;
     }
 
@@ -84,13 +94,12 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
         if (isUpdateUnavailable(registrationTree, subscriptionPlan)){
             return;
         }
-
-        registrationTree.setBalance(registrationTree.getBalance().subtract(subscriptionPlan.getRegistrationFee()));
+        registrationTree.getBankAccount().setBalance(registrationTree.getBankAccount().getBalance().subtract(subscriptionPlan.getRegistrationFee()));
         registrationTree.setSubscriptionPlan(subscriptionPlan);
     }
 
     private static boolean isUpdateUnavailable(RegistrationTree registrationTree, SubscriptionPlan subscriptionPlan) {
         return registrationTree.getSubscriptionPlan().getPercents().length() > subscriptionPlan.getPercents().length()
-                || registrationTree.getBalance().compareTo(subscriptionPlan.getRegistrationFee().subtract(registrationTree.getSubscriptionPlan().getRegistrationFee())) < 0;
+                || registrationTree.getBankAccount().getBalance().compareTo(subscriptionPlan.getRegistrationFee().subtract(registrationTree.getSubscriptionPlan().getRegistrationFee())) < 0;
     }
 }

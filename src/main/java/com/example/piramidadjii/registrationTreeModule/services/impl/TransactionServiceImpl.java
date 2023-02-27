@@ -1,5 +1,7 @@
 package com.example.piramidadjii.registrationTreeModule.services.impl;
 
+import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
+import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
 import com.example.piramidadjii.baseEntities.Transaction;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
 import com.example.piramidadjii.registrationTreeModule.enums.OperationType;
@@ -28,6 +30,9 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     private RegistrationTreeRepository registrationTreeRepository;
+
+    @Autowired
+    private BankAccountRepository bankAccountRepository;
 
     @Override
     @Transactional
@@ -88,13 +93,15 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private void transactionDetails(RegistrationTree registrationTree, BigDecimal price, Long percent, OperationType operationType) {
+        BankAccount bank = registrationTree.getBankAccount();
         Transaction transaction = new Transaction();
         transaction.setPercent(percent);
         transaction.setPrice(calculatePrice(percent, price));
         transaction.setRegistrationTree(registrationTree);
         transaction.setOperationType(operationType);
-        BigDecimal newBalance = registrationTree.getBalance().add(transaction.getPrice());
-        registrationTree.setBalance(newBalance);
+        BigDecimal newBalance = bank.getBalance().add(transaction.getPrice());
+        bank.setBalance(newBalance);
+        bankAccountRepository.save(bank);
         registrationTreeRepository.save(registrationTree);
         transactionRepository.save(transaction);
     }

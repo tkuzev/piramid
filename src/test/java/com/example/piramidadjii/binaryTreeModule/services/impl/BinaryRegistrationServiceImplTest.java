@@ -74,15 +74,15 @@ class BinaryRegistrationServiceImplTest {
         BinaryTree binPerson2 = binaryRegistrationService.registerNewPerson(person2, true);
         BinaryTree binPerson3 = binaryRegistrationService.registerNewPerson(person3, true);
 
-        binPerson1.setBalance(BigDecimal.ZERO);
+        binPerson1.getBankAccount().setBalance(BigDecimal.ZERO);
         binPerson1.setLeftContainer(BigDecimal.valueOf(700));
         binPerson1.setRightContainer(BigDecimal.valueOf(0));
 
-        binPerson2.setBalance(BigDecimal.ZERO);
+        binPerson2.getBankAccount().setBalance(BigDecimal.ZERO);
         binPerson2.setLeftContainer(BigDecimal.valueOf(400));
         binPerson2.setRightContainer(BigDecimal.valueOf(300));
 
-        binPerson3.setBalance(BigDecimal.ZERO);
+        binPerson3.getBankAccount().setBalance(BigDecimal.ZERO);
         binPerson3.setLeftContainer(BigDecimal.valueOf(0));
         binPerson3.setRightContainer(BigDecimal.valueOf(0));
 
