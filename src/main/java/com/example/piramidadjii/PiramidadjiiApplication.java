@@ -1,5 +1,6 @@
 package com.example.piramidadjii;
 
+import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
 import com.example.piramidadjii.baseEntities.Transaction;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryTransaction;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryTree;
@@ -33,28 +34,42 @@ public class PiramidadjiiApplication {
     @Autowired
     private BinaryTransactionRepository binaryTransactionRepository;
 
+    @Autowired
+    private BankAccountRepository bankAccountRepository;
+
     private BigDecimal moneyToGive=BigDecimal.ZERO;
 
     public static void main(String[] args) {
         SpringApplication.run(PiramidadjiiApplication.class, args);
     }
 
-    @Scheduled(cron = "00 20 16 * * *", zone = "Europe/Sofia")
+    @Scheduled(cron = "00 00 00 1 * *", zone = "Europe/Sofia")
     public void binaryTree() {
 
         List<BinaryTree> binaryTreeList = binaryTreeRepository.findAll();
         binaryTreeList.forEach(this::updateMoney);
         updateBossMoney(binaryTreeRepository.findById(1L).orElseThrow());
-        System.out.println(moneyToGive);
         moneyToGive=BigDecimal.ZERO;
     }
 
     private void updateBossMoney(BinaryTree binaryTree){
+
         binaryTree.getBankAccount().setBalance(binaryTree.getBankAccount().getBalance().add(binaryTree.getRightContainer().add(binaryTree.getLeftContainer())));
+        BinaryTransaction winning=new BinaryTransaction();
+        winning.setBinaryTree(binaryTree);
+        winning.setPrice(binaryTree.getRightContainer().add(binaryTree.getLeftContainer()));
+        winning.setOperationType(OperationType.MONTHLY_BINARY_TRANSACTION);
+        BinaryTransaction lose=new BinaryTransaction();
+        lose.setBinaryTree(binaryTree);
+        lose.setPrice(moneyToGive.negate());
+        lose.setOperationType(OperationType.MONTHLY_BINARY_TRANSACTION);
         binaryTree.getBankAccount().setBalance(binaryTree.getBankAccount().getBalance().subtract(moneyToGive));
         binaryTree.setLeftContainer(BigDecimal.ZERO);
         binaryTree.setRightContainer(BigDecimal.ZERO);
         binaryTreeRepository.save(binaryTree);
+        bankAccountRepository.save(binaryTree.getBankAccount());
+        binaryTransactionRepository.save(winning);
+        binaryTransactionRepository.save(lose);
     }
 
     private void updateMoney(BinaryTree binaryTree) {
@@ -84,7 +99,7 @@ public class PiramidadjiiApplication {
         binaryTransaction.setBinaryTree(binaryTree);
         binaryTransaction.setOperationType(OperationType.MONTHLY_BINARY_PERCENTAGE);
         binaryTransactionRepository.save(binaryTransaction);
-        System.out.println(moneyToGive);
+        bankAccountRepository.save(binaryTree.getBankAccount());
     }
 
 
