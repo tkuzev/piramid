@@ -55,8 +55,8 @@ values (1,'boss@shefa.com','Boss',1);
 insert into bank_account(id, email, balance)
 values (1,'boss@shefa.com',0);
 
-insert into binary_tree (id,left_container, right_container,name, preferred_direction,bank_account_id)
-values (1,0,0,'Boss',1,1);
+insert into binary_tree (id,left_container, right_container,name, preferred_direction,bank_account_id,email)
+values (1,0,0,'Boss',1,1,'boss@shefa.com');
 
 insert into subscription_plan (id,name,percents,registration_fee,is_eligible_for_binary)
 values (1,'Bronze','2',200, false);

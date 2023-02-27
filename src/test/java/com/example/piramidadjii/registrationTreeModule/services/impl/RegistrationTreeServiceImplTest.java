@@ -14,8 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class RegistrationTreeServiceImplTest {
-    private RegistrationTree registrationTree;
-
     @Autowired
     private RegistrationTreeService registrationTreeService;
 

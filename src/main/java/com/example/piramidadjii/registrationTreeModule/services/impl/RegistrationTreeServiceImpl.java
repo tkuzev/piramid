@@ -54,6 +54,7 @@ public class RegistrationTreeServiceImpl implements RegistrationTreeService {
                 throw new RuntimeException();
             }
         }
+        registrationTree.setIsSubscriptionEnabled(true);
         registrationTreeRepository.save(registrationTree);
         return registrationTree;
     }

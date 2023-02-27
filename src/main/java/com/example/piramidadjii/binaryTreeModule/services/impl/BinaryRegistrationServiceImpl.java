@@ -1,5 +1,4 @@
 package com.example.piramidadjii.binaryTreeModule.services.impl;
-
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryTree;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryTreeRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
@@ -44,6 +43,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     //helper methods
     private BinaryTree createBinaryPerson(RegistrationTree person, boolean preferredDirection) {
         BinaryTree binPerson = new BinaryTree();
+        binPerson.setBankAccount(person.getBankAccount());
         binPerson.setName(person.getName());
         binPerson.setEmail(person.getEmail());
         binPerson.setRightContainer(BigDecimal.ZERO);

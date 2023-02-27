@@ -2,6 +2,7 @@ package com.example.piramidadjii.baseEntities;
 
 import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import jakarta.persistence.Column;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class Person extends BaseEntity {
     @Column(unique = true)
     private String email;
 
-    @OneToOne
+    @ManyToOne
     private BankAccount bankAccount;
 
 }

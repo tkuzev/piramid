@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
@@ -28,9 +27,8 @@ class BinaryRegistrationServiceImplTest {
 
     @Test
     void registerNewPerson() {
-        registrationTreeService.registerPerson("Person", "email@person.com", new BigDecimal("500"), 1L);
+        RegistrationTree registrationTree = registrationTreeService.registerPerson("Person", "email@person.com", new BigDecimal("500"), 1L);
 
-        RegistrationTree registrationTree = registrationTreeRepository.getFirstByEmail("email@person.com").orElseThrow();
         registrationTreeService.setSubscription(registrationTree,4);
         binaryRegistrationService.registerNewPerson(registrationTree, false);
         BinaryTree binaryTree = binaryTreeRepository.findByEmail("email@person.com").orElseThrow();

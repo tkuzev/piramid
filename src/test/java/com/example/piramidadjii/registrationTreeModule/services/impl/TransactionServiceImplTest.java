@@ -2,20 +2,17 @@ package com.example.piramidadjii.registrationTreeModule.services.impl;
 
 import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
-import com.example.piramidadjii.baseEntities.Transaction;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.TransactionRepository;
 import com.example.piramidadjii.registrationTreeModule.services.TransactionService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -25,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class TransactionServiceImplTest {
-    private List<Transaction> transactionList = new ArrayList<>();
     @Autowired
     SubscriptionPlanRepository subscriptionPlanRepository;
     @Autowired
@@ -37,12 +33,6 @@ class TransactionServiceImplTest {
     @Autowired
     BankAccountRepository bankAccountRepository;
 
-//    @AfterEach
-//    void tearDown() {
-////        registrationTreeRepository.deleteAll(registrationTreeListToDelete);
-//        transactionRepository.deleteAll(transactionList);
-//    }
-
     @Test
     void createTransactionWithSixPeople() {
         List<RegistrationTree> streamList = createRegistrationTree(6);
@@ -52,8 +42,6 @@ class TransactionServiceImplTest {
         transactionService.createTransaction(streamList.get(streamList.size() - 1), BigDecimal.valueOf(5000));
 
         int after = transactionRepository.findAll().size();
-
-        transactionList = transactionRepository.findAll().subList(before, after);
 
         assertEquals(before + 6, after);
         assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByRegistrationTree(streamList.get(5)).get().getPrice());
@@ -71,8 +59,6 @@ class TransactionServiceImplTest {
         transactionService.createTransaction(registrationTree, BigDecimal.valueOf(5000));
 
         int after = transactionRepository.findAll().size();
-
-        transactionList = transactionRepository.findAll().subList(before, after);
 
         assertEquals(before + 2, after);
         assertEquals(5, transactionRepository.findByRegistrationTree(registrationTree).get().getPercent()); // expected 5%
