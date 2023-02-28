@@ -38,22 +38,22 @@ class BinaryRegistrationServiceImplTest {
 
     @Test
     void testBinaryPersonRegistration(){
-        RegistrationPerson person2 = registrationPersonService.registerPerson("Person2", "2.com", new BigDecimal("250"), 1L);
-        RegistrationPerson person3 = registrationPersonService.registerPerson("Person3", "3.com", new BigDecimal("500"), 1L);
-        RegistrationPerson person4 = registrationPersonService.registerPerson("Person4", "4.com", new BigDecimal("500"), 1L);
-        RegistrationPerson person5 = registrationPersonService.registerPerson("Person5", "5.com", new BigDecimal("250"), 3L);
-        RegistrationPerson person6 = registrationPersonService.registerPerson("Person6", "6.com", new BigDecimal("500"), 5L);
+        RegistrationPerson person2 = registrationPersonService.registerPerson("Person2", "2@com", new BigDecimal("250"), 1L);
+        RegistrationPerson person3 = registrationPersonService.registerPerson("Person3", "3@com", new BigDecimal("500"), 1L);
+        RegistrationPerson person4 = registrationPersonService.registerPerson("Person4", "4@com", new BigDecimal("500"), 1L);
+        RegistrationPerson person5 = registrationPersonService.registerPerson("Person5", "5@com", new BigDecimal("250"), 3L);
+        RegistrationPerson person6 = registrationPersonService.registerPerson("Person6", "6@com", new BigDecimal("500"), 5L);
 
         BinaryPerson binPerson3 = binaryRegistrationService.registerNewPerson(person3, false);
         BinaryPerson binPerson4 = binaryRegistrationService.registerNewPerson(person4, true);
         BinaryPerson binPerson6 = binaryRegistrationService.registerNewPerson(person6, true);
 
 
-        assertFalse(binaryPersonRepository.findByEmail("2.com").isPresent());
+        assertFalse(binaryPersonRepository.findByEmail("2@com").isPresent());
         assertEquals(binPerson3.getId(), binaryPersonRepository.findById(1L).get().getRightChild().getId());
-        assertEquals(binPerson4.getEmail(), binaryPersonRepository.findByEmail("3.com").get().getLeftChild().getEmail());
-        assertFalse(binaryPersonRepository.findByEmail("5.com").isPresent());
-        assertEquals(binPerson6.getEmail(), binaryPersonRepository.findByEmail("4.com").get().getRightChild().getEmail());
+        assertEquals(binPerson4.getEmail(), binaryPersonRepository.findByEmail("3@com").get().getLeftChild().getEmail());
+        assertFalse(binaryPersonRepository.findByEmail("5@com").isPresent());
+        assertEquals(binPerson6.getEmail(), binaryPersonRepository.findByEmail("4@com").get().getRightChild().getEmail());
     }
 
 
@@ -64,9 +64,9 @@ class BinaryRegistrationServiceImplTest {
         boss.setLeftContainer(BigDecimal.valueOf(0));
         boss.setRightContainer(BigDecimal.valueOf(700));
         binaryPersonRepository.save(boss);
-        RegistrationPerson person1 = registrationPersonService.registerPerson("Person3", "3.com", new BigDecimal("500"), 1L);
-        RegistrationPerson person2 = registrationPersonService.registerPerson("Person4", "4.com", new BigDecimal("500"), 1L);
-        RegistrationPerson person3 = registrationPersonService.registerPerson("Person6", "6.com", new BigDecimal("500"), 2L);
+        RegistrationPerson person1 = registrationPersonService.registerPerson("Person3", "3@com", new BigDecimal("500"), 1L);
+        RegistrationPerson person2 = registrationPersonService.registerPerson("Person4", "4@com", new BigDecimal("500"), 1L);
+        RegistrationPerson person3 = registrationPersonService.registerPerson("Person6", "6@com", new BigDecimal("500"), 2L);
 
         BinaryPerson binPerson1 = binaryRegistrationService.registerNewPerson(person1, false);
         BinaryPerson binPerson2 = binaryRegistrationService.registerNewPerson(person2, true);

@@ -12,7 +12,7 @@
         left_container decimal(38,2),
         preferred_direction bit not null,
         right_container decimal(38,2),
-        bank_account_id bigint not null,
+        bank_account_id bigint,
         left_child_id bigint,
         parent_id bigint,
         right_child_id bigint,
@@ -33,7 +33,7 @@
         name varchar(20) not null,
         is_subscription_enabled bit,
         subscription_expiration_date date,
-        bank_account_id bigint not null,
+        bank_account_id bigint,
         parent_id bigint,
         subscription_plan_id bigint,
         primary key (id)
@@ -57,13 +57,13 @@
         primary key (id)
     );
 
-insert into registration_tree (id,email,name,bank_account_id)
+insert into registration_person (id,email,name,bank_account_id)
 values (1,'boss@shefa.com','Boss',1);
 
 insert into bank_account(id, email, balance)
 values (1,'boss@shefa.com',0);
 
-insert into binary_tree (id,left_container, right_container,name, preferred_direction,bank_account_id,email)
+insert into binary_person (id,left_container, right_container,name, preferred_direction,bank_account_id,email)
 values (1,0,0,'Boss',1,1,'boss@shefa.com');
 
 insert into subscription_plan (id,name,percents,registration_fee,is_eligible_for_binary)

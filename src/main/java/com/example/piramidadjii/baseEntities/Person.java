@@ -29,7 +29,7 @@ public class Person extends BaseEntity {
     @Email
     private String email;
 
-    @NotNull(message = "Add bank account")
+
     @ManyToOne
     private BankAccount bankAccount;
 
