@@ -1,11 +1,11 @@
 package com.example.piramidadjii.binaryTreeModule.services.impl;
 
-import com.example.piramidadjii.binaryTreeModule.entities.BinaryTree;
-import com.example.piramidadjii.binaryTreeModule.repositories.BinaryTreeRepository;
+import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
+import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
-import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
-import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
-import com.example.piramidadjii.registrationTreeModule.services.RegistrationTreeService;
+import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
+import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
+import com.example.piramidadjii.registrationTreeModule.services.RegistrationPersonService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,60 +17,60 @@ import static org.junit.jupiter.api.Assertions.*;
 class BinaryRegistrationServiceImplTest {
 
     @Autowired
-    private BinaryTreeRepository binaryTreeRepository;
+    private BinaryPersonRepository binaryPersonRepository;
     @Autowired
-    private RegistrationTreeService registrationTreeService;
+    private RegistrationPersonService registrationPersonService;
     @Autowired
     private BinaryRegistrationService binaryRegistrationService;
     @Autowired
-    private RegistrationTreeRepository registrationTreeRepository;
+    private RegistrationPersonRepository registrationPersonRepository;
 
     @Test
     void registerNewPerson() {
-        RegistrationTree registrationTree = registrationTreeService.registerPerson("Person", "email@person.com", new BigDecimal("500"), 1L);
+        RegistrationPerson registrationPerson = registrationPersonService.registerPerson("Person", "email@person.com", new BigDecimal("500"), 1L);
 
-        registrationTreeService.setSubscription(registrationTree,4);
-        binaryRegistrationService.registerNewPerson(registrationTree, false);
-        BinaryTree binaryTree = binaryTreeRepository.findByEmail("email@person.com").orElseThrow();
+        registrationPersonService.setSubscription(registrationPerson,4);
+        binaryRegistrationService.registerNewPerson(registrationPerson, false);
+        BinaryPerson binaryPerson = binaryPersonRepository.findByEmail("email@person.com").orElseThrow();
 
-        assertEquals("email@person.com", binaryTree.getEmail());
+        assertEquals("email@person.com", binaryPerson.getEmail());
     }
 
     @Test
     void testBinaryPersonRegistration(){
-        RegistrationTree person2 = registrationTreeService.registerPerson("Person2", "2.com", new BigDecimal("250"), 1L);
-        RegistrationTree person3 = registrationTreeService.registerPerson("Person3", "3.com", new BigDecimal("500"), 1L);
-        RegistrationTree person4 = registrationTreeService.registerPerson("Person4", "4.com", new BigDecimal("500"), 1L);
-        RegistrationTree person5 = registrationTreeService.registerPerson("Person5", "5.com", new BigDecimal("250"), 3L);
-        RegistrationTree person6 = registrationTreeService.registerPerson("Person6", "6.com", new BigDecimal("500"), 5L);
+        RegistrationPerson person2 = registrationPersonService.registerPerson("Person2", "2.com", new BigDecimal("250"), 1L);
+        RegistrationPerson person3 = registrationPersonService.registerPerson("Person3", "3.com", new BigDecimal("500"), 1L);
+        RegistrationPerson person4 = registrationPersonService.registerPerson("Person4", "4.com", new BigDecimal("500"), 1L);
+        RegistrationPerson person5 = registrationPersonService.registerPerson("Person5", "5.com", new BigDecimal("250"), 3L);
+        RegistrationPerson person6 = registrationPersonService.registerPerson("Person6", "6.com", new BigDecimal("500"), 5L);
 
-        BinaryTree binPerson3 = binaryRegistrationService.registerNewPerson(person3, false);
-        BinaryTree binPerson4 = binaryRegistrationService.registerNewPerson(person4, true);
-        BinaryTree binPerson6 = binaryRegistrationService.registerNewPerson(person6, true);
+        BinaryPerson binPerson3 = binaryRegistrationService.registerNewPerson(person3, false);
+        BinaryPerson binPerson4 = binaryRegistrationService.registerNewPerson(person4, true);
+        BinaryPerson binPerson6 = binaryRegistrationService.registerNewPerson(person6, true);
 
 
-        assertFalse(binaryTreeRepository.findByEmail("2.com").isPresent());
-        assertEquals(binPerson3.getId(), binaryTreeRepository.findById(1L).get().getRightChild().getId());
-        assertEquals(binPerson4.getEmail(), binaryTreeRepository.findByEmail("3.com").get().getLeftChild().getEmail());
-        assertFalse(binaryTreeRepository.findByEmail("5.com").isPresent());
-        assertEquals(binPerson6.getEmail(), binaryTreeRepository.findByEmail("4.com").get().getRightChild().getEmail());
+        assertFalse(binaryPersonRepository.findByEmail("2.com").isPresent());
+        assertEquals(binPerson3.getId(), binaryPersonRepository.findById(1L).get().getRightChild().getId());
+        assertEquals(binPerson4.getEmail(), binaryPersonRepository.findByEmail("3.com").get().getLeftChild().getEmail());
+        assertFalse(binaryPersonRepository.findByEmail("5.com").isPresent());
+        assertEquals(binPerson6.getEmail(), binaryPersonRepository.findByEmail("4.com").get().getRightChild().getEmail());
     }
 
 
 
     @Test  //ako she go testvash vzemi promeni crona ili izchakai da stane 1vi den ot meseca oligofren prost
     void scheduledMethod(){
-        BinaryTree boss = binaryTreeRepository.findById(1L).orElseThrow();
+        BinaryPerson boss = binaryPersonRepository.findById(1L).orElseThrow();
         boss.setLeftContainer(BigDecimal.valueOf(0));
         boss.setRightContainer(BigDecimal.valueOf(700));
-        binaryTreeRepository.save(boss);
-        RegistrationTree person1 = registrationTreeService.registerPerson("Person3", "3.com", new BigDecimal("500"), 1L);
-        RegistrationTree person2 = registrationTreeService.registerPerson("Person4", "4.com", new BigDecimal("500"), 1L);
-        RegistrationTree person3 = registrationTreeService.registerPerson("Person6", "6.com", new BigDecimal("500"), 2L);
+        binaryPersonRepository.save(boss);
+        RegistrationPerson person1 = registrationPersonService.registerPerson("Person3", "3.com", new BigDecimal("500"), 1L);
+        RegistrationPerson person2 = registrationPersonService.registerPerson("Person4", "4.com", new BigDecimal("500"), 1L);
+        RegistrationPerson person3 = registrationPersonService.registerPerson("Person6", "6.com", new BigDecimal("500"), 2L);
 
-        BinaryTree binPerson1 = binaryRegistrationService.registerNewPerson(person1, false);
-        BinaryTree binPerson2 = binaryRegistrationService.registerNewPerson(person2, true);
-        BinaryTree binPerson3 = binaryRegistrationService.registerNewPerson(person3, true);
+        BinaryPerson binPerson1 = binaryRegistrationService.registerNewPerson(person1, false);
+        BinaryPerson binPerson2 = binaryRegistrationService.registerNewPerson(person2, true);
+        BinaryPerson binPerson3 = binaryRegistrationService.registerNewPerson(person3, true);
 
         binPerson1.getBankAccount().setBalance(BigDecimal.ZERO);
         binPerson1.setLeftContainer(BigDecimal.valueOf(700));
@@ -84,8 +84,8 @@ class BinaryRegistrationServiceImplTest {
         binPerson3.setLeftContainer(BigDecimal.valueOf(0));
         binPerson3.setRightContainer(BigDecimal.valueOf(0));
 
-        binaryTreeRepository.save(binPerson1);
-        binaryTreeRepository.save(binPerson2);
-        binaryTreeRepository.save(binPerson3);
+        binaryPersonRepository.save(binPerson1);
+        binaryPersonRepository.save(binPerson2);
+        binaryPersonRepository.save(binPerson3);
     }
 }

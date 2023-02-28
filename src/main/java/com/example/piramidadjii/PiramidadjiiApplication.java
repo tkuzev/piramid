@@ -1,15 +1,13 @@
 package com.example.piramidadjii;
 
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
-import com.example.piramidadjii.baseEntities.Transaction;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryTransaction;
-import com.example.piramidadjii.binaryTreeModule.entities.BinaryTree;
+import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryTransactionRepository;
-import com.example.piramidadjii.binaryTreeModule.repositories.BinaryTreeRepository;
-import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
+import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
+import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.enums.OperationType;
-import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationTreeRepository;
-import com.example.piramidadjii.registrationTreeModule.repositories.TransactionRepository;
+import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,17 +17,16 @@ import org.springframework.scheduling.annotation.Scheduled;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootApplication
 @EnableScheduling
 public class PiramidadjiiApplication {
 
     @Autowired
-    private RegistrationTreeRepository registrationTreeRepository;
+    private RegistrationPersonRepository registrationPersonRepository;
 
     @Autowired
-    private BinaryTreeRepository binaryTreeRepository;
+    private BinaryPersonRepository binaryPersonRepository;
 
     @Autowired
     private BinaryTransactionRepository binaryTransactionRepository;
@@ -46,60 +43,60 @@ public class PiramidadjiiApplication {
     @Scheduled(cron = "00 00 00 1 * *", zone = "Europe/Sofia")
     public void binaryTree() {
 
-        List<BinaryTree> binaryTreeList = binaryTreeRepository.findAll();
-        binaryTreeList.forEach(this::updateMoney);
-        updateBossMoney(binaryTreeRepository.findById(1L).orElseThrow());
+        List<BinaryPerson> binaryPersonList = binaryPersonRepository.findAll();
+        binaryPersonList.forEach(this::updateMoney);
+        updateBossMoney(binaryPersonRepository.findById(1L).orElseThrow());
         moneyToGive=BigDecimal.ZERO;
     }
 
-    private void updateBossMoney(BinaryTree binaryTree){
+    private void updateBossMoney(BinaryPerson binaryPerson){
 
-        binaryTree.getBankAccount().setBalance(binaryTree.getBankAccount().getBalance().add(binaryTree.getRightContainer().add(binaryTree.getLeftContainer())));
+        binaryPerson.getBankAccount().setBalance(binaryPerson.getBankAccount().getBalance().add(binaryPerson.getRightContainer().add(binaryPerson.getLeftContainer())));
         BinaryTransaction winning=new BinaryTransaction();
-        winning.setBinaryTree(binaryTree);
-        winning.setPrice(binaryTree.getRightContainer().add(binaryTree.getLeftContainer()));
+        winning.setBinaryPerson(binaryPerson);
+        winning.setPrice(binaryPerson.getRightContainer().add(binaryPerson.getLeftContainer()));
         winning.setOperationType(OperationType.MONTHLY_BINARY_TRANSACTION);
         BinaryTransaction lose=new BinaryTransaction();
-        lose.setBinaryTree(binaryTree);
+        lose.setBinaryPerson(binaryPerson);
         lose.setPrice(moneyToGive.negate());
         lose.setOperationType(OperationType.MONTHLY_BINARY_TRANSACTION);
-        binaryTree.getBankAccount().setBalance(binaryTree.getBankAccount().getBalance().subtract(moneyToGive));
-        binaryTree.setLeftContainer(BigDecimal.ZERO);
-        binaryTree.setRightContainer(BigDecimal.ZERO);
-        binaryTreeRepository.save(binaryTree);
-        bankAccountRepository.save(binaryTree.getBankAccount());
+        binaryPerson.getBankAccount().setBalance(binaryPerson.getBankAccount().getBalance().subtract(moneyToGive));
+        binaryPerson.setLeftContainer(BigDecimal.ZERO);
+        binaryPerson.setRightContainer(BigDecimal.ZERO);
+        binaryPersonRepository.save(binaryPerson);
+        bankAccountRepository.save(binaryPerson.getBankAccount());
         binaryTransactionRepository.save(winning);
         binaryTransactionRepository.save(lose);
     }
 
-    private void updateMoney(BinaryTree binaryTree) {
-        if (binaryTree.getId()==1){
+    private void updateMoney(BinaryPerson binaryPerson) {
+        if (binaryPerson.getId()==1){
             return;
         }
 
-        BigDecimal oldBalance = binaryTree.getBankAccount().getBalance();
+        BigDecimal oldBalance = binaryPerson.getBankAccount().getBalance();
         BinaryTransaction binaryTransaction = new BinaryTransaction();
 
-        if (binaryTree.getLeftContainer().compareTo(binaryTree.getRightContainer()) < 0) {
-            BigDecimal newBalance = oldBalance.add(binaryTree.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
-            binaryTree.getBankAccount().setBalance(newBalance);
-            moneyToGive = moneyToGive.add(binaryTree.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
-            binaryTransaction.setPrice(binaryTree.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
+        if (binaryPerson.getLeftContainer().compareTo(binaryPerson.getRightContainer()) < 0) {
+            BigDecimal newBalance = oldBalance.add(binaryPerson.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
+            binaryPerson.getBankAccount().setBalance(newBalance);
+            moneyToGive = moneyToGive.add(binaryPerson.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
+            binaryTransaction.setPrice(binaryPerson.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
         } else {
-            BigDecimal newBalance = oldBalance.add(binaryTree.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
-            binaryTree.getBankAccount().setBalance(newBalance);
-            binaryTransaction.setPrice(binaryTree.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
-            moneyToGive=moneyToGive.add(binaryTree.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
+            BigDecimal newBalance = oldBalance.add(binaryPerson.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
+            binaryPerson.getBankAccount().setBalance(newBalance);
+            binaryTransaction.setPrice(binaryPerson.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
+            moneyToGive=moneyToGive.add(binaryPerson.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
         }
 
-        binaryTree.setRightContainer(BigDecimal.ZERO);
-        binaryTree.setLeftContainer(BigDecimal.ZERO);
-        binaryTreeRepository.save(binaryTree);
+        binaryPerson.setRightContainer(BigDecimal.ZERO);
+        binaryPerson.setLeftContainer(BigDecimal.ZERO);
+        binaryPersonRepository.save(binaryPerson);
 
-        binaryTransaction.setBinaryTree(binaryTree);
+        binaryTransaction.setBinaryPerson(binaryPerson);
         binaryTransaction.setOperationType(OperationType.MONTHLY_BINARY_PERCENTAGE);
         binaryTransactionRepository.save(binaryTransaction);
-        bankAccountRepository.save(binaryTree.getBankAccount());
+        bankAccountRepository.save(binaryPerson.getBankAccount());
     }
 
 
@@ -107,25 +104,25 @@ public class PiramidadjiiApplication {
 
     @Scheduled(cron = "00 00 00 * * *", zone = "Europe/Sofia")
     public void getTax() {
-        List<RegistrationTree> allBySubscriptionExpirationDateFalse =
-                registrationTreeRepository.getAllBySubscriptionExpirationDate(LocalDate.now());
+        List<RegistrationPerson> allBySubscriptionExpirationDateFalse =
+                registrationPersonRepository.getAllBySubscriptionExpirationDate(LocalDate.now());
 
         allBySubscriptionExpirationDateFalse.forEach(this::getTax);
 
     }
 
-    private void getTax(RegistrationTree registrationTree) {
+    private void getTax(RegistrationPerson registrationPerson) {
 
-        BigDecimal newBalance = registrationTree.getBankAccount().getBalance()
-                .subtract(registrationTree.getSubscriptionPlan().getRegistrationFee());
+        BigDecimal newBalance = registrationPerson.getBankAccount().getBalance()
+                .subtract(registrationPerson.getSubscriptionPlan().getRegistrationFee());
 
-        if (registrationTree.getIsSubscriptionEnabled() && newBalance.compareTo(BigDecimal.ZERO) >= 0) {
-            registrationTree.getBankAccount().setBalance(newBalance);
-            registrationTree.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
-            registrationTreeRepository.save(registrationTree);
+        if (registrationPerson.getIsSubscriptionEnabled() && newBalance.compareTo(BigDecimal.ZERO) >= 0) {
+            registrationPerson.getBankAccount().setBalance(newBalance);
+            registrationPerson.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
+            registrationPersonRepository.save(registrationPerson);
         } else {
-            registrationTree.setIsSubscriptionEnabled(false);
-            registrationTreeRepository.save(registrationTree);
+            registrationPerson.setIsSubscriptionEnabled(false);
+            registrationPersonRepository.save(registrationPerson);
         }
 
     }

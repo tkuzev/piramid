@@ -1,51 +1,59 @@
-create table bank_account (
-                              id bigint not null auto_increment,
-                              balance decimal(38,2),
-                              email varchar(255),
-                              primary key (id)
-);
-
-create table registration_tree (
-                                   id bigint not null auto_increment,
-                                   email varchar(255),
-                                   name varchar(255),
-                                   is_subscription_enabled bit,
-                                   subscription_expiration_date date,
-                                   bank_account_id bigint,
-                                   parent_id bigint,
-                                   subscription_plan_id bigint,
-                                   primary key (id)
-);
-
-create table binary_tree(
-                            id bigint not null auto_increment,
-                            email varchar(255),
-                            name varchar(255),
-                            left_container decimal(38,2),
-                            preferred_direction bit not null,
-                            right_container decimal(38,2),
-                            bank_account_id bigint,
-                            left_child_id bigint,
-                            parent_id bigint,
-                            right_child_id bigint,
-                            primary key (id)
-);
-
-
-    create table subscription_plan (
+    create table bank_account (
        id bigint not null auto_increment,
-       is_eligible_for_binary bit not null,
-       name varchar(255),
-        percents varchar(255),
-        registration_fee decimal(38,2),
+        balance decimal(38,2) not null,
+        email varchar(255) not null,
         primary key (id)
     );
 
-create table transaction (
+    create table binary_person (
+       id bigint not null auto_increment,
+        email varchar(255) not null,
+        name varchar(20) not null,
+        left_container decimal(38,2),
+        preferred_direction bit not null,
+        right_container decimal(38,2),
+        bank_account_id bigint not null,
+        left_child_id bigint,
+        parent_id bigint,
+        right_child_id bigint,
+        primary key (id)
+    );
+
+    create table binary_transaction (
+       id bigint not null auto_increment,
+        operation_type varchar(255),
+        price decimal(38,2) not null,
+        binary_person_id bigint not null,
+        primary key (id)
+    );
+
+    create table registration_person (
+       id bigint not null auto_increment,
+        email varchar(255) not null,
+        name varchar(20) not null,
+        is_subscription_enabled bit,
+        subscription_expiration_date date,
+        bank_account_id bigint not null,
+        parent_id bigint,
+        subscription_plan_id bigint,
+        primary key (id)
+    );
+
+    create table registration_transaction (
        id bigint not null auto_increment,
         operation_type varchar(255),
         percent bigint not null,
         price decimal(38,2) not null,
+        registration_person_id bigint,
+        primary key (id)
+    );
+
+    create table subscription_plan (
+       id bigint not null auto_increment,
+        is_eligible_for_binary bit not null,
+        name varchar(255) not null,
+        percents varchar(255) not null,
+        registration_fee decimal(38,2) not null,
         primary key (id)
     );
 

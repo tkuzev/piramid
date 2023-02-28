@@ -1,10 +1,8 @@
 package com.example.piramidadjii.binaryTreeModule.entities;
 
 import com.example.piramidadjii.baseEntities.Person;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,23 +11,26 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "binary_tree")
+@Table(name = "binary_person")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BinaryTree extends Person {
+public class BinaryPerson extends Person {
 
     @OneToOne
-    private BinaryTree leftChild;
+    private BinaryPerson leftChild;
     @OneToOne
-    private BinaryTree rightChild;
+    private BinaryPerson rightChild;
     private BigDecimal leftContainer;
     private BigDecimal rightContainer;
 
+    @NotNull(message = "direction cannot be null")
+    @Column(nullable = false)
     private boolean preferredDirection;
 
+
     @ManyToOne
-    private BinaryTree parent;
+    private BinaryPerson parent;
 
 }

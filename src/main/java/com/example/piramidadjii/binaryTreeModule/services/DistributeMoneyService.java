@@ -1,8 +1,8 @@
 package com.example.piramidadjii.binaryTreeModule.services;
 
-import com.example.piramidadjii.binaryTreeModule.entities.BinaryTree;
+import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 
 import java.math.BigDecimal;
 public interface DistributeMoneyService {
-    void distributeMoney(BinaryTree person, BigDecimal money);
+    void distributeMoney(BinaryPerson person, BigDecimal money);
 }

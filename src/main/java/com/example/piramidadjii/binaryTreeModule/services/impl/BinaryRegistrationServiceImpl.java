@@ -1,8 +1,8 @@
 package com.example.piramidadjii.binaryTreeModule.services.impl;
-import com.example.piramidadjii.binaryTreeModule.entities.BinaryTree;
-import com.example.piramidadjii.binaryTreeModule.repositories.BinaryTreeRepository;
+import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
+import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
-import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTree;
+import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,22 +12,22 @@ import java.util.Objects;
 @Service
 public class BinaryRegistrationServiceImpl implements BinaryRegistrationService {
     @Autowired
-    private BinaryTreeRepository binaryTreeRepository;
+    private BinaryPersonRepository binaryPersonRepository;
 
     //main methods
     @Override
-    public BinaryTree registerNewPerson(RegistrationTree person, boolean preferredDirection) {
+    public BinaryPerson registerNewPerson(RegistrationPerson person, boolean preferredDirection) {
         return addBinaryPerson(binParent(findParent(person)), createBinaryPerson(person, preferredDirection));
     }
 
     @Override
-    public void changePreferredDirection(BinaryTree binaryTree, boolean direction) {
-        binaryTree.setPreferredDirection(direction);
-        binaryTreeRepository.save(binaryTree);
+    public void changePreferredDirection(BinaryPerson binaryPerson, boolean direction) {
+        binaryPerson.setPreferredDirection(direction);
+        binaryPersonRepository.save(binaryPerson);
     }
 
 
-    public RegistrationTree findParent(RegistrationTree node) {
+    public RegistrationPerson findParent(RegistrationPerson node) {
         if (Objects.isNull(node)) {
             throw new RuntimeException("nema node");
         }
@@ -41,28 +41,28 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
 
 
     //helper methods
-    private BinaryTree createBinaryPerson(RegistrationTree person, boolean preferredDirection) {
-        BinaryTree binPerson = new BinaryTree();
+    private BinaryPerson createBinaryPerson(RegistrationPerson person, boolean preferredDirection) {
+        BinaryPerson binPerson = new BinaryPerson();
         binPerson.setBankAccount(person.getBankAccount());
         binPerson.setName(person.getName());
         binPerson.setEmail(person.getEmail());
         binPerson.setRightContainer(BigDecimal.ZERO);
         binPerson.setLeftContainer(BigDecimal.ZERO);
         binPerson.setPreferredDirection(preferredDirection);
-        binaryTreeRepository.save(binPerson);
+        binaryPersonRepository.save(binPerson);
         return binPerson;
     }
 
-    private BinaryTree binParent(RegistrationTree parent) {
-        return binaryTreeRepository.findByEmail(parent.getEmail()).orElseThrow();
+    private BinaryPerson binParent(RegistrationPerson parent) {
+        return binaryPersonRepository.findByEmail(parent.getEmail()).orElseThrow();
     }
 
-    private BinaryTree addBinaryPerson(BinaryTree binParent, BinaryTree binChild) {
+    private BinaryPerson addBinaryPerson(BinaryPerson binParent, BinaryPerson binChild) {
         if (binParent.isPreferredDirection()/*right*/) {
             if (Objects.isNull(binParent.getRightChild())) {
                 binParent.setRightChild(binChild);
                 binChild.setParent(binParent);
-                binaryTreeRepository.save(binParent);
+                binaryPersonRepository.save(binParent);
             } else {
                 addBinaryPerson(binParent.getRightChild(), binChild);
             }
@@ -70,13 +70,13 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
             if (Objects.isNull(binParent.getLeftChild())) {
                 binParent.setLeftChild(binChild);
                 binChild.setParent(binParent);
-                binaryTreeRepository.save(binParent);
+                binaryPersonRepository.save(binParent);
             } else {
                 addBinaryPerson(binParent.getLeftChild(), binChild);
             }
         }
 
-        binaryTreeRepository.save(binChild);
+        binaryPersonRepository.save(binChild);
         return binChild;
     }
 
