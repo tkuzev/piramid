@@ -50,7 +50,6 @@ public class PiramidadjiiApplication {
     }
 
     private void updateBossMoney(BinaryPerson binaryPerson){
-
         binaryPerson.getBankAccount().setBalance(binaryPerson.getBankAccount().getBalance().add(binaryPerson.getRightContainer().add(binaryPerson.getLeftContainer())));
         BinaryTransaction winning=new BinaryTransaction();
         winning.setBinaryPerson(binaryPerson);

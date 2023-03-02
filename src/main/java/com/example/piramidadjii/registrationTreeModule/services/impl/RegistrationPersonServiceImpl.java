@@ -26,9 +26,6 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
     private SubscriptionPlanRepository subscriptionPlanRepository;
 
     @Autowired
-    private BinaryRegistrationService binaryRegistrationService;
-
-    @Autowired
     private BankAccountRepository bankAccountRepository;
 
     List<SubscriptionPlan> subscriptionPlans = new ArrayList<>();

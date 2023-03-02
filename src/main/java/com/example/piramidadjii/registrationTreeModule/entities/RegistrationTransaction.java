@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Entity
 @Table(name = "registration_transaction")
@@ -30,4 +32,10 @@ public class RegistrationTransaction extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private OperationType operationType;
+
+    private LocalDate date;
+
+    private Integer level;
+
+    private BigDecimal wholePrice;
 }

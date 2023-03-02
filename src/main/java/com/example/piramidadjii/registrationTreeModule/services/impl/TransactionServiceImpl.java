@@ -4,8 +4,10 @@ import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTransaction;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
+import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.enums.OperationType;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
+import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.TransactionRepository;
 import com.example.piramidadjii.registrationTreeModule.services.TransactionService;
 import jakarta.transaction.Transactional;
@@ -15,9 +17,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -34,6 +34,9 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private BankAccountRepository bankAccountRepository;
 
+    @Autowired
+    private SubscriptionPlanRepository subscriptionPlanRepository;
+
     @Override
     @Transactional
     public void createTransaction(RegistrationPerson registrationPerson, BigDecimal price) {
@@ -46,18 +49,21 @@ public class TransactionServiceImpl implements TransactionService {
                 .limit(5)
                 .forEach(node -> setNewTransactions(registrationPerson, price, percent, counter, node, operationType));
 
+
         transactionDetails(
                 registrationPersonRepository.getRegistrationPersonById(1L).orElseThrow(),
                 price,
                 profit - percentages,
-                OperationType.BONUS);
+                OperationType.BONUS, counter);
+        percentages=0L;
     }
+
 
     private void setNewTransactions(RegistrationPerson person, BigDecimal price, Long[] percent, AtomicInteger counter, RegistrationPerson node, OperationType[] operationType) {
         checkPercent(person, percent, counter, node, operationType);
         percentages += percent[0];
         counter.getAndAdd(1);
-        transactionDetails(node, price, percent[0], operationType[0]);
+        transactionDetails(node, price, percent[0], operationType[0], counter);
     }
 
     private void checkPercent(RegistrationPerson registrationPerson, Long[] percent, AtomicInteger counter, RegistrationPerson node, OperationType[] operationType) {
@@ -92,15 +98,18 @@ public class TransactionServiceImpl implements TransactionService {
         return price.multiply(new BigDecimal(percent)).divide(new BigDecimal(100), RoundingMode.HALF_DOWN);
     }
 
-    private void transactionDetails(RegistrationPerson registrationPerson, BigDecimal price, Long percent, OperationType operationType) {
+    private void transactionDetails(RegistrationPerson registrationPerson, BigDecimal price, Long percent, OperationType operationType, AtomicInteger counter) {
         BankAccount bank = registrationPerson.getBankAccount();
         RegistrationTransaction transaction = new RegistrationTransaction();
         transaction.setPercent(percent);
+        transaction.setWholePrice(price);
         transaction.setPrice(calculatePrice(percent, price));
         transaction.setRegistrationPerson(registrationPerson);
         transaction.setOperationType(operationType);
+        transaction.setDate(LocalDate.now());
+        transaction.setLevel(counter.get());
         BigDecimal newBalance = bank.getBalance().add(transaction.getPrice());
-        bank.setBalance(newBalance);
+        bank.setBalance(bank.getBalance().add(newBalance));
         bankAccountRepository.save(bank);
         registrationPersonRepository.save(registrationPerson);
         transactionRepository.save(transaction);
@@ -115,7 +124,36 @@ public class TransactionServiceImpl implements TransactionService {
             Long longInt = Long.valueOf(string);
             list.add(longInt);
         }
-
         return list;
     }
+
+
+    @Override
+    public Map<SubscriptionPlan, BigDecimal> monthlyIncome(RegistrationPerson registrationPerson) {
+        Map<SubscriptionPlan, BigDecimal> income = new HashMap<>();
+        List<SubscriptionPlan> subscriptionPlans = subscriptionPlanRepository.findAll();
+        for (SubscriptionPlan s : subscriptionPlans) {
+            income.put(s, BigDecimal.ZERO);
+        }
+
+        List<RegistrationTransaction> allTransactions = transactionRepository.
+                findAllByRegistrationPersonAndDateBetween(registrationPerson, LocalDate.now().minusMonths(1),LocalDate.now());
+
+
+        for (RegistrationTransaction transactions : allTransactions) {
+            for (SubscriptionPlan s : subscriptionPlans) {
+                List<Long> percentages = mapFromStringToLong(s.getPercents());
+
+                if (transactions.getLevel() < percentages.size()) {
+                    BigDecimal oldSum = income.get(s);
+                    BigDecimal valueToAdd = transactions.getWholePrice().multiply(BigDecimal.valueOf(percentages.get(transactions.getLevel()))).divide(BigDecimal.valueOf(100)).setScale(2);
+                    income.put(s, oldSum.add(valueToAdd));
+                }
+            }
+
+        }
+
+        return income;
+    }
+
 }
