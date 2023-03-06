@@ -1,6 +1,6 @@
 package com.example.piramidadjii.configModule.impl;
 
-import com.example.piramidadjii.baseEntities.Person;
+import com.example.piramidadjii.baseModule.baseEntites.Person;
 import com.example.piramidadjii.configModule.ConfigurationService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;

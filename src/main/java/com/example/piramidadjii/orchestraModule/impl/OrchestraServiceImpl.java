@@ -33,6 +33,7 @@ public class OrchestraServiceImpl implements OrchestraService {
     }
     private BinaryPerson createBinaryPerson(RegistrationPerson person, boolean preferredDirection) {
         BinaryPerson binPerson = new BinaryPerson();
+        binPerson.setId(person.getId());
         binPerson.setBankAccount(person.getBankAccount());
         binPerson.setName(person.getName());
         binPerson.setEmail(person.getEmail());
@@ -43,7 +44,7 @@ public class OrchestraServiceImpl implements OrchestraService {
         return binPerson;
     }
     private BinaryPerson binParent(RegistrationPerson parent) {
-        return binaryPersonRepository.findByEmail(parent.getEmail()).orElseThrow();
+        return binaryPersonRepository.findById(parent.getId()).orElseThrow();
     }
 
     private BinaryPerson addBinaryPerson(BinaryPerson binParent, BinaryPerson binChild) {
