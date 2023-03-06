@@ -1,7 +1,8 @@
-package com.example.piramidadjii.orchestra.impl;
+package com.example.piramidadjii.orchestraModule.impl;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
-import com.example.piramidadjii.orchestra.OrchestraService;
+import com.example.piramidadjii.configModule.ConfigurationService;
+import com.example.piramidadjii.orchestraModule.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ public class OrchestraServiceImpl implements OrchestraService {
     @Autowired
     private BinaryPersonRepository binaryPersonRepository;
 
+    private ConfigurationService configurationService;
+
     @Override
     public BinaryPerson registerNewPerson(RegistrationPerson person, boolean preferredDirection) {
         return addBinaryPerson(binParent(findSuitableParent(person)), createBinaryPerson(person, preferredDirection));
@@ -21,7 +24,7 @@ public class OrchestraServiceImpl implements OrchestraService {
     public RegistrationPerson findSuitableParent(RegistrationPerson node) {
         Objects.requireNonNull(node,"nema node");
         RegistrationPerson parent = node.getParent();
-        if (Objects.isNull(/*root*/parent.getParent()) || parent.getSubscriptionPlan().isEligibleForBinary()) {
+        if (Objects.isNull(/*root*/parent.getParent()) || configurationService.isEligable(parent.getSubscriptionPlan())) {
             return parent;
         }
         else {

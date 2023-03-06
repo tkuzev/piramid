@@ -2,9 +2,8 @@ package com.example.piramidadjii.binaryTreeModule.services.impl;
 
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
-import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.binaryTreeModule.services.DistributeMoneyService;
-import com.example.piramidadjii.orchestra.OrchestraService;
+import com.example.piramidadjii.orchestraModule.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationPersonService;
 import org.junit.jupiter.api.Test;
