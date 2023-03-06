@@ -45,7 +45,6 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         BinaryPerson binPerson = new BinaryPerson();
         binPerson.setBankAccount(person.getBankAccount());
         binPerson.setName(person.getName());
-        binPerson.setEmail(person.getEmail());
         binPerson.setRightContainer(BigDecimal.ZERO);
         binPerson.setLeftContainer(BigDecimal.ZERO);
         binPerson.setPreferredDirection(preferredDirection);
@@ -54,7 +53,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     }
 
     private BinaryPerson binParent(RegistrationPerson parent) {
-        return binaryPersonRepository.findByEmail(parent.getEmail()).orElseThrow();
+        return binaryPersonRepository.findById(parent.getId()).orElseThrow();
     }
 
     private BinaryPerson addBinaryPerson(BinaryPerson binParent, BinaryPerson binChild) {

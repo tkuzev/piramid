@@ -1,18 +1,13 @@
-package com.example.piramidadjii.baseEntities;
+package com.example.piramidadjii.baseModule.baseEntites;
 
 import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
-import jakarta.persistence.Column;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.math.BigDecimal;
 
 @MappedSuperclass
 @Getter
@@ -30,7 +25,7 @@ public class Person extends BaseEntity {
     private String email;
 
 
-    @ManyToOne
+    @OneToOne
     private BankAccount bankAccount;
 
 }

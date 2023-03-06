@@ -1,17 +1,14 @@
 package com.example.piramidadjii.registrationTreeModule.entities;
 
 import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
-import com.example.piramidadjii.baseEntities.Person;
+import com.example.piramidadjii.baseModule.baseEntites.Person;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
 
 @Entity
 @Table(name = "registration_person")

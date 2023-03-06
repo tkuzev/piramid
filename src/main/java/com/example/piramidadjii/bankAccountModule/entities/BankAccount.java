@@ -1,17 +1,15 @@
 package com.example.piramidadjii.bankAccountModule.entities;
 
-import com.example.piramidadjii.baseEntities.BaseEntity;
-import com.example.piramidadjii.baseEntities.Person;
+import com.example.piramidadjii.baseModule.baseEntites.BaseEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,10 +18,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class BankAccount extends BaseEntity {
 
-    @NotNull(message = "email cannot be null")
-    @Email
-    @Column(nullable = false)
-    private String email;
 
     @NotNull(message = "balance cannot be null")
     @Column(nullable = false)

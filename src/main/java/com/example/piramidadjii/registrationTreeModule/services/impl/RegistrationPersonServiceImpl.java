@@ -37,7 +37,6 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         Collections.reverse(subscriptionPlans);
         RegistrationPerson registrationPerson = setPersonDetails(name,email, parentId);
         BankAccount bankAccount = new BankAccount();
-        bankAccount.setEmail(registrationPerson.getEmail());
         bankAccount.setBalance(money);
         bankAccountRepository.save(bankAccount);
         registrationPerson.setBankAccount(bankAccount);
@@ -62,7 +61,7 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
     @Override
     public void setSubscription(RegistrationPerson registrationPerson, long id) {
-        BankAccount bank = bankAccountRepository.findByEmail(registrationPerson.getEmail()).orElseThrow();
+        BankAccount bank = bankAccountRepository.findById(registrationPerson.getId()).orElseThrow();
         registrationPerson.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(id).orElseThrow());
         BigDecimal balance = bank.getBalance();
         BigDecimal fee = subscriptionPlanRepository.getSubscriptionPlanById(id).orElseThrow().getRegistrationFee();

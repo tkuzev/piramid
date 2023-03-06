@@ -1,6 +1,6 @@
 package com.example.piramidadjii.binaryTreeModule.entities;
 
-import com.example.piramidadjii.baseEntities.Person;
+import com.example.piramidadjii.baseModule.baseEntites.Person;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

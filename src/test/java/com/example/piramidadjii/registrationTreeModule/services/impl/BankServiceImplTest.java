@@ -3,11 +3,9 @@ package com.example.piramidadjii.registrationTreeModule.services.impl;
 import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
-import com.example.piramidadjii.registrationTreeModule.entities.RegistrationTransaction;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
-import com.example.piramidadjii.registrationTreeModule.repositories.TransactionRepository;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationPersonService;
 import com.example.piramidadjii.registrationTreeModule.services.TransactionService;
 import org.junit.jupiter.api.Test;
@@ -25,7 +23,7 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-class TransactionServiceImplTest {
+class BankServiceImplTest {
     @Autowired
     SubscriptionPlanRepository subscriptionPlanRepository;
     @Autowired
@@ -91,7 +89,7 @@ class TransactionServiceImplTest {
         assertEquals(before + 2, after);
         assertEquals(5, transactionRepository.findByRegistrationPerson(registrationPerson).get().getPercent()); // expected 5%
         assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByRegistrationPerson(registrationPerson).get().getPrice());
-        assertEquals("SOLD",transactionRepository.findByRegistrationPerson(registrationPerson).get().getOperationType().toString());
+        assertEquals("SOLD",transactionRepository.findByRegistrationPerson(registrationPerson).get().getDescription().toString());
     }
 
     private RegistrationPerson createPerson() {

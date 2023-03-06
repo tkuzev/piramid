@@ -1,12 +1,14 @@
 package com.example.piramidadjii;
 
+import com.example.piramidadjii.bankAccountModule.entities.Bank;
+import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
-import com.example.piramidadjii.binaryTreeModule.entities.BinaryTransaction;
+import com.example.piramidadjii.bankAccountModule.repositories.BankRepository;
+import com.example.piramidadjii.baseModule.enums.Description;
+import com.example.piramidadjii.baseModule.enums.OperationType;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
-import com.example.piramidadjii.binaryTreeModule.repositories.BinaryTransactionRepository;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
-import com.example.piramidadjii.registrationTreeModule.enums.OperationType;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -29,12 +31,12 @@ public class PiramidadjiiApplication {
     private BinaryPersonRepository binaryPersonRepository;
 
     @Autowired
-    private BinaryTransactionRepository binaryTransactionRepository;
+    private BankRepository bankRepository;
 
     @Autowired
     private BankAccountRepository bankAccountRepository;
 
-    private BigDecimal moneyToGive=BigDecimal.ZERO;
+    private BigDecimal moneyToGive = BigDecimal.ZERO;
 
     public static void main(String[] args) {
         SpringApplication.run(PiramidadjiiApplication.class, args);
@@ -45,60 +47,80 @@ public class PiramidadjiiApplication {
 
         List<BinaryPerson> binaryPersonList = binaryPersonRepository.findAll();
         binaryPersonList.forEach(this::updateMoney);
-        updateBossMoney(binaryPersonRepository.findById(1L).orElseThrow());
-        moneyToGive=BigDecimal.ZERO;
+        updateBossMoney();
+        moneyToGive = BigDecimal.ZERO;
     }
 
-    private void updateBossMoney(BinaryPerson binaryPerson){
-        binaryPerson.getBankAccount().setBalance(binaryPerson.getBankAccount().getBalance().add(binaryPerson.getRightContainer().add(binaryPerson.getLeftContainer())));
-        BinaryTransaction winning=new BinaryTransaction();
-        winning.setBinaryPerson(binaryPerson);
-        winning.setPrice(binaryPerson.getRightContainer().add(binaryPerson.getLeftContainer()));
-        winning.setOperationType(OperationType.MONTHLY_BINARY_TRANSACTION);
-        BinaryTransaction lose=new BinaryTransaction();
-        lose.setBinaryPerson(binaryPerson);
-        lose.setPrice(moneyToGive.negate());
-        lose.setOperationType(OperationType.MONTHLY_BINARY_TRANSACTION);
-        binaryPerson.getBankAccount().setBalance(binaryPerson.getBankAccount().getBalance().subtract(moneyToGive));
-        binaryPerson.setLeftContainer(BigDecimal.ZERO);
-        binaryPerson.setRightContainer(BigDecimal.ZERO);
-        binaryPersonRepository.save(binaryPerson);
-        bankAccountRepository.save(binaryPerson.getBankAccount());
-        binaryTransactionRepository.save(winning);
-        binaryTransactionRepository.save(lose);
+    private void updateBossMoney() {
+        BinaryPerson boss = binaryPersonRepository.findById(1L).orElseThrow();
+        boss.getBankAccount().setBalance(boss.getBankAccount().getBalance().add(boss.getRightContainer().add(boss.getLeftContainer())));
+        Bank debitTransaction = new Bank();
+        debitTransaction.setDstAccId(1L);
+        //todo v sqkla da se dobavi pomoshten bankov akaunt s id -1
+        debitTransaction.setAmount(boss.getRightContainer().add(boss.getLeftContainer()));
+        debitTransaction.setOperationType(OperationType.DT);
+        debitTransaction.setDescription(Description.MONTHLY_BINARY_TRANSACTION);
+        Bank creditTransaction = new Bank();
+        creditTransaction.setSrcAccId(-1L);
+        creditTransaction.setAmount(moneyToGive);
+        creditTransaction.setOperationType(OperationType.CT);
+        creditTransaction.setDescription(Description.MONTHLY_BINARY_TRANSACTION);
+        boss.getBankAccount().setBalance(boss.getBankAccount().getBalance().subtract(moneyToGive));
+        boss.setLeftContainer(BigDecimal.ZERO);
+        boss.setRightContainer(BigDecimal.ZERO);
+        binaryPersonRepository.save(boss);
+        bankAccountRepository.save(boss.getBankAccount());
+        bankRepository.save(debitTransaction);
+        bankRepository.save(creditTransaction);
     }
 
     private void updateMoney(BinaryPerson binaryPerson) {
-        if (binaryPerson.getId()==1){
+        if (binaryPerson.getId() == 1) {
             return;
         }
 
         BigDecimal oldBalance = binaryPerson.getBankAccount().getBalance();
-        BinaryTransaction binaryTransaction = new BinaryTransaction();
+
+        Bank debitTransaction = new Bank();
+        Bank creditTransaction = new Bank();
+        BankAccount helperBankAccount = bankAccountRepository.findById(-1L).orElseThrow();
+        BigDecimal oldHelperBalance = helperBankAccount.getBalance();
 
         if (binaryPerson.getLeftContainer().compareTo(binaryPerson.getRightContainer()) < 0) {
             BigDecimal newBalance = oldBalance.add(binaryPerson.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
+            BigDecimal newHelperBalance = oldHelperBalance.subtract(binaryPerson.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
             binaryPerson.getBankAccount().setBalance(newBalance);
+            helperBankAccount.setBalance(newHelperBalance);
             moneyToGive = moneyToGive.add(binaryPerson.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
-            binaryTransaction.setPrice(binaryPerson.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
+            creditTransaction.setAmount(binaryPerson.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
+            debitTransaction.setAmount(binaryPerson.getLeftContainer().multiply(BigDecimal.valueOf(0.05)));
+
         } else {
             BigDecimal newBalance = oldBalance.add(binaryPerson.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
+            BigDecimal newHelperBalance = oldHelperBalance.subtract(binaryPerson.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
             binaryPerson.getBankAccount().setBalance(newBalance);
-            binaryTransaction.setPrice(binaryPerson.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
-            moneyToGive=moneyToGive.add(binaryPerson.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
+            helperBankAccount.setBalance(newHelperBalance);
+            moneyToGive = moneyToGive.add(binaryPerson.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
+            creditTransaction.setAmount(binaryPerson.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
+            debitTransaction.setAmount(binaryPerson.getRightContainer().multiply(BigDecimal.valueOf(0.05)));
         }
 
         binaryPerson.setRightContainer(BigDecimal.ZERO);
         binaryPerson.setLeftContainer(BigDecimal.ZERO);
         binaryPersonRepository.save(binaryPerson);
 
-        binaryTransaction.setBinaryPerson(binaryPerson);
-        binaryTransaction.setOperationType(OperationType.MONTHLY_BINARY_PERCENTAGE);
-        binaryTransactionRepository.save(binaryTransaction);
+        creditTransaction.setSrcAccId(-1L);
+        creditTransaction.setOperationType(OperationType.CT);
+        creditTransaction.setDescription(Description.MONTHLY_BINARY_PERCENTAGE);
+        bankRepository.save(creditTransaction);
+        bankAccountRepository.save(helperBankAccount);
+
+        debitTransaction.setDstAccId(binaryPerson.getId());
+        debitTransaction.setOperationType(OperationType.DT);
+        debitTransaction.setDescription(Description.MONTHLY_BINARY_PERCENTAGE);
+        bankRepository.save(debitTransaction);
         bankAccountRepository.save(binaryPerson.getBankAccount());
     }
-
-
 
 
     @Scheduled(cron = "00 00 00 * * *", zone = "Europe/Sofia")
