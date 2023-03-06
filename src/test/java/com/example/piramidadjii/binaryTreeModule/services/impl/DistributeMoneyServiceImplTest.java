@@ -4,6 +4,7 @@ import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.binaryTreeModule.services.DistributeMoneyService;
+import com.example.piramidadjii.orchestra.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationPersonService;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ class DistributeMoneyServiceImplTest {
     @Autowired
     private RegistrationPersonService registrationPersonService;
     @Autowired
-    private BinaryRegistrationService binaryRegistrationService;
+    private OrchestraService orchestraService;
     @Autowired
     private DistributeMoneyService distributeMoneyService;
     @Test
@@ -30,9 +31,9 @@ class DistributeMoneyServiceImplTest {
         RegistrationPerson person5 = registrationPersonService.registerPerson("Person5", "5.com", new BigDecimal("250"), 3L);
         RegistrationPerson person6 = registrationPersonService.registerPerson("Person6", "6.com", new BigDecimal("500"), 5L);
 
-        BinaryPerson binPerson3 = binaryRegistrationService.registerNewPerson(person3, false);
-        BinaryPerson binPerson4 = binaryRegistrationService.registerNewPerson(person4, true);
-        BinaryPerson binPerson6 = binaryRegistrationService.registerNewPerson(person6, true);
+        BinaryPerson binPerson3 = orchestraService.registerNewPerson(person3, false);
+        BinaryPerson binPerson4 = orchestraService.registerNewPerson(person4, true);
+        BinaryPerson binPerson6 = orchestraService.registerNewPerson(person6, true);
         binPerson4.setLeftContainer(BigDecimal.valueOf(400L));
         binaryPersonRepository.save(binPerson4);
 
