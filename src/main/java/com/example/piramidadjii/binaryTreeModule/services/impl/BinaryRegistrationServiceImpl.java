@@ -17,7 +17,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     //main methods
     @Override
     public BinaryPerson registerNewPerson(RegistrationPerson person, boolean preferredDirection) {
-        return addBinaryPerson(binParent(findParent(person)), createBinaryPerson(person, preferredDirection));
+        return addBinaryPerson(binParent(findSuitableParent(person)), createBinaryPerson(person, preferredDirection));
     }
 
     @Override
@@ -27,15 +27,15 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     }
 
 
-    public RegistrationPerson findParent(RegistrationPerson node) {
-        if (Objects.isNull(node)) {
-            throw new RuntimeException("nema node");
-        }
-        if (Objects.isNull(/*root*/node.getParent().getParent()) || node.getParent().getSubscriptionPlan().isEligibleForBinary()) {
-            return node.getParent();
+    //da otdelim registration person ot binari modula
+    public RegistrationPerson findSuitableParent(RegistrationPerson node) {
+        Objects.requireNonNull(node,"nema node");
+        RegistrationPerson parent = node.getParent();
+        if (Objects.isNull(/*root*/parent.getParent()) || parent.getSubscriptionPlan().isEligibleForBinary()) {
+            return parent;
         }
         else {
-            return findParent(node.getParent());
+            return findSuitableParent(parent);
         }
     }
 
