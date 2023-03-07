@@ -25,7 +25,7 @@ class RegistrationPersonServiceImplTest {
 
     @Test
     void registerTestFourthTier() {
-        registrationPersonService.registerPerson("Person", "email@person.com", new BigDecimal("500"), 1L);
+        registrationPersonService.registerPerson("Person",  new BigDecimal("500"), 1L);
 
         RegistrationPerson registrationPerson = registrationPersonRepository.getFirstByEmail("email@person.com").orElseThrow();
 
@@ -34,7 +34,7 @@ class RegistrationPersonServiceImplTest {
 
     @Test
     void registerTestThirdTier() {
-        registrationPersonService.registerPerson("Person", "email@person2.com", new BigDecimal("450"), 1L);
+        registrationPersonService.registerPerson("Person", new BigDecimal("450"), 1L);
 
         RegistrationPerson registrationPerson = registrationPersonRepository.getFirstByEmail("email@person2.com").orElseThrow();
 
@@ -43,7 +43,7 @@ class RegistrationPersonServiceImplTest {
 
     @Test
     void registerTestSecondTier() {
-        registrationPersonService.registerPerson("Person", "email@person3.com", new BigDecimal("350"), 1L);
+        registrationPersonService.registerPerson("Person", new BigDecimal("350"), 1L);
 
         RegistrationPerson registrationPerson = registrationPersonRepository.getFirstByEmail("email@person3.com").orElseThrow();
 
@@ -52,7 +52,7 @@ class RegistrationPersonServiceImplTest {
 
     @Test
     void registerTestFirstTier() {
-        registrationPersonService.registerPerson("Person", "email@person4.com", new BigDecimal("250"), 1L);
+        registrationPersonService.registerPerson("Person", new BigDecimal("250"), 1L);
 
         RegistrationPerson registrationPerson = registrationPersonRepository.getFirstByEmail("email@person4.com").orElseThrow();
 
@@ -61,7 +61,7 @@ class RegistrationPersonServiceImplTest {
 
     @Test
     void upgradePlanTest(){
-        registrationPersonService.registerPerson("Person", "email@puhi.com", new BigDecimal("250"), 1L);
+        registrationPersonService.registerPerson("Person", new BigDecimal("250"), 1L);
         RegistrationPerson registrationPerson = registrationPersonRepository.getFirstByEmail("email@puhi.com").orElseThrow();
         registrationPerson.getBankAccount().setBalance(registrationPerson.getBankAccount().getBalance().add(BigDecimal.valueOf(500L)));
 

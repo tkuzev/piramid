@@ -32,10 +32,10 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
 
     @Override
-    public RegistrationPerson registerPerson(String name, String email, BigDecimal money, Long parentId) {
+    public RegistrationPerson registerPerson(String name, BigDecimal money, Long parentId) {
         subscriptionPlans.addAll(subscriptionPlanRepository.findAll());
         Collections.reverse(subscriptionPlans);
-        RegistrationPerson registrationPerson = setPersonDetails(name,email, parentId);
+        RegistrationPerson registrationPerson = setPersonDetails(name, parentId);
         BankAccount bankAccount = new BankAccount();
         bankAccount.setBalance(money);
         bankAccountRepository.save(bankAccount);
@@ -70,15 +70,11 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         bankAccountRepository.save(bank);
     }
 
-    private RegistrationPerson setPersonDetails(String name, String email, Long parentId) {
+    private RegistrationPerson setPersonDetails(String name, Long parentId) {
         RegistrationPerson registrationPerson = new RegistrationPerson();
         registrationPerson.setName(name);
 
-        if (registrationPersonRepository.getFirstByEmail(email).isPresent()){
-            throw new RuntimeException("emaila trqq da e unique pich");
-        }else {
-            registrationPerson.setEmail(email);
-        }
+
         registrationPerson.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
         registrationPerson.setParent(registrationPersonRepository.findById(parentId).orElseThrow());
         //registrationTreeRepository.save(registrationTree);

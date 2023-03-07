@@ -17,7 +17,7 @@ public class OrchestraServiceImpl implements OrchestraService {
     private ConfigurationService configurationService;
 
     @Override
-    public BinaryPerson registerNewPerson(RegistrationPerson person, boolean preferredDirection) {
+    public BinaryPerson registerNewBinaryPerson(RegistrationPerson person, boolean preferredDirection) {
         return addBinaryPerson(binParent(findSuitableParent(person)), createBinaryPerson(person, preferredDirection));
     }
 
