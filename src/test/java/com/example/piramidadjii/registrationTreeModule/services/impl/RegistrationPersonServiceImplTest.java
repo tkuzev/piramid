@@ -26,43 +26,86 @@ class RegistrationPersonServiceImplTest {
     @Test
     void registerTestFourthTier() {
         RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("500"), 1L);
+        RegistrationPerson personFromRepo = registrationPersonRepository.findById(person.getId()).get();
 
+        //subscription plan
+        assertEquals(4L, personFromRepo.getSubscriptionPlan().getId());
 
-        assertEquals(4L, (long) person.getSubscriptionPlan().getId());
+        //check bank account id = person id
+        assertEquals(person.getId(), personFromRepo.getBankAccount().getId());
+
+        //check money
+        assertEquals(BigDecimal.valueOf(0).setScale(2), personFromRepo.getBankAccount().getBalance());
+
+        //check parent id
+        assertEquals(1L, personFromRepo.getParent().getId());
     }
 
     @Test
     void registerTestThirdTier() {
         RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("450"), 1L);
+        RegistrationPerson personFromRepo = registrationPersonRepository.findById(person.getId()).get();
 
+        //subscription plan
+        assertEquals(3L, personFromRepo.getSubscriptionPlan().getId());
 
-        assertEquals(3L, (long) person.getSubscriptionPlan().getId());
+        //check bank account id = person id
+        assertEquals(person.getId(), personFromRepo.getBankAccount().getId());
+
+        //check money
+        assertEquals(BigDecimal.valueOf(50).setScale(2), personFromRepo.getBankAccount().getBalance());
+
+        //check parent id
+        assertEquals(1L, personFromRepo.getParent().getId());
     }
 
     @Test
     void registerTestSecondTier() {
         RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("350"), 1L);
+        RegistrationPerson personFromRepo = registrationPersonRepository.findById(person.getId()).get();
 
-        assertEquals(2L, (long) person.getSubscriptionPlan().getId());
+        //subscription plan
+        assertEquals(2L, personFromRepo.getSubscriptionPlan().getId());
+
+        //check bank account id = person id
+        assertEquals(person.getId(), personFromRepo.getBankAccount().getId());
+
+        //check money
+        assertEquals(BigDecimal.valueOf(50).setScale(2), personFromRepo.getBankAccount().getBalance());
+
+        //check parent id
+        assertEquals(1L, personFromRepo.getParent().getId());
     }
 
     @Test
     void registerTestFirstTier() {
         RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("250"), 1L);
+        RegistrationPerson personFromRepo = registrationPersonRepository.findById(person.getId()).get();
 
+        //subscription plan
+        assertEquals(1L, personFromRepo.getSubscriptionPlan().getId());
 
-        assertEquals(1L, (long) person.getSubscriptionPlan().getId());
+        //check bank account id = person id
+        assertEquals(person.getId(), personFromRepo.getBankAccount().getId());
+
+        //check money
+        assertEquals(BigDecimal.valueOf(50).setScale(2), personFromRepo.getBankAccount().getBalance());
+
+        //check parent id
+        assertEquals(1L, personFromRepo.getParent().getId());
     }
 
     @Test
-    void upgradePlanTest(){
-        RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("250"), 1L);
-        person.getBankAccount().setBalance(person.getBankAccount().getBalance().add(BigDecimal.valueOf(500L)));
+    void upgradeSubscriptionPlanTestSuccessfully(){
+        RegistrationPerson person = registrationPersonService.registerPerson("KUR", new BigDecimal("250"), 1L);
+        RegistrationPerson personFromRepo = registrationPersonRepository.findById(person.getId()).get();
 
-        registrationPersonService.upgradeSubscriptionPlan(person,subscriptionPlanRepository.getSubscriptionPlanById(3L).orElseThrow());
+        personFromRepo.getBankAccount().setBalance(personFromRepo.getBankAccount().getBalance().add(BigDecimal.valueOf(500)));
+        registrationPersonService.upgradeSubscriptionPlan(personFromRepo, subscriptionPlanRepository.getSubscriptionPlanById(3L).orElseThrow());
+        registrationPersonRepository.save(personFromRepo);
 
-        assertEquals(3L, person.getSubscriptionPlan().getId());
-        assertEquals(BigDecimal.valueOf(150).setScale(2), person.getBankAccount().getBalance());
+        assertEquals(3L, personFromRepo.getSubscriptionPlan().getId());
+        assertEquals(BigDecimal.valueOf(150).setScale(2), personFromRepo.getBankAccount().getBalance());
     }
 }
 

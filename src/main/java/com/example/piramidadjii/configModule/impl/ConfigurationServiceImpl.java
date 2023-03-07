@@ -20,16 +20,16 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     public boolean isEligable(SubscriptionPlan subscriptionPlan) {
         return subscriptionPlan.isEligibleForBinary();
     }
-
-    @Override
-    public BigDecimal monthTaxPaid(Person person) {
-        RegistrationPerson registrationPerson = registrationPersonRepository.getRegistrationPersonById(person.getId()).orElseThrow();
-        return registrationPerson.getSubscriptionPlan().getRegistrationFee();
-    }
-
-    @Override
-    public boolean isTaxPaid(Person person) {
-        RegistrationPerson registrationPerson = registrationPersonRepository.getRegistrationPersonById(person.getId()).orElseThrow();
-        return registrationPerson.getSubscriptionExpirationDate().isBefore(LocalDate.now());
-    }
+//
+//    @Override
+//    public BigDecimal monthTaxPaid(Person person) {
+//        RegistrationPerson registrationPerson = registrationPersonRepository.getRegistrationPersonById(person.getId()).orElseThrow();
+//        return registrationPerson.getSubscriptionPlan().getRegistrationFee();
+//    }
+//
+//    @Override
+//    public boolean isTaxPaid(Person person) {
+//        RegistrationPerson registrationPerson = registrationPersonRepository.getRegistrationPersonById(person.getId()).orElseThrow();
+//        return registrationPerson.getSubscriptionExpirationDate().isBefore(LocalDate.now());
+//    }
 }
