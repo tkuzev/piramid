@@ -1,11 +1,11 @@
 create table bank (
                       id bigint not null auto_increment,
                       amount decimal(38,2),
-                      description smallint,
+                      description varchar(255),
                       dst_acc_id bigint,
                       item_price decimal(38,2),
                       level bigint,
-                      operation_type smallint,
+                      operation_type varchar(255),
                       percent bigint,
                       src_acc_id bigint,
                       transaction_date date,
@@ -20,7 +20,7 @@ create table bank_account (
 );
 
 create table binary_person (
-                               id bigint not null auto_increment,
+                               id bigint not null,
                                name varchar(20) not null,
                                left_container decimal(38,2),
                                preferred_direction bit not null,
