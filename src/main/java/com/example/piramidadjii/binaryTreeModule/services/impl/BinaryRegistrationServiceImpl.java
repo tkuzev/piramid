@@ -19,7 +19,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     private ConfigurationService configurationService;
 
     @Override
-    public BinaryPerson registerNewPerson(RegistrationPerson person, boolean preferredDirection) {
+    public BinaryPerson registerNewBinaryPerson(RegistrationPerson person, boolean preferredDirection) {
         return addBinaryPerson(binParent(findSuitableParent(person)), createBinaryPerson(person, preferredDirection));
     }
 
@@ -38,7 +38,6 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         binPerson.setId(person.getId());
         binPerson.setBankAccount(person.getBankAccount());
         binPerson.setName(person.getName());
-        binPerson.setEmail(person.getEmail());
         binPerson.setRightContainer(BigDecimal.ZERO);
         binPerson.setLeftContainer(BigDecimal.ZERO);
         binPerson.setPreferredDirection(preferredDirection);

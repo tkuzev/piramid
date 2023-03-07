@@ -2,6 +2,7 @@ package com.example.piramidadjii.binaryTreeModule.services.impl;
 
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
+import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.orchestraModule.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
@@ -20,8 +21,9 @@ class BinaryRegistrationServiceImplTest {
     private BinaryPersonRepository binaryPersonRepository;
     @Autowired
     private RegistrationPersonService registrationPersonService;
+
     @Autowired
-    private OrchestraService orchestraService;
+    private BinaryRegistrationService binaryRegistrationService;
     @Autowired
     private RegistrationPersonRepository registrationPersonRepository;
 
@@ -31,7 +33,7 @@ class BinaryRegistrationServiceImplTest {
         RegistrationPerson registrationPerson = registrationPersonService.registerPerson("Person", new BigDecimal("500"), 1L);
 
         registrationPersonService.setSubscription(registrationPerson,4);
-        orchestraService.registerNewBinaryPerson(registrationPerson, false);
+        binaryRegistrationService.registerNewBinaryPerson(registrationPerson, false);
 //        BinaryPerson binaryPerson = binaryPersonRepository.findByEmail("email@person.com").orElseThrow();
 //
 //        assertEquals("email@person.com", binaryPerson.getEmail());
@@ -45,9 +47,9 @@ class BinaryRegistrationServiceImplTest {
         RegistrationPerson person5 = registrationPersonService.registerPerson("Person5",  new BigDecimal("250"), 3L);
         RegistrationPerson person6 = registrationPersonService.registerPerson("Person6",  new BigDecimal("500"), 5L);
 
-        BinaryPerson binPerson3 = orchestraService.registerNewBinaryPerson(person3, false);
-        BinaryPerson binPerson4 = orchestraService.registerNewBinaryPerson(person4, true);
-        BinaryPerson binPerson6 = orchestraService.registerNewBinaryPerson(person6, true);
+        BinaryPerson binPerson3 = binaryRegistrationService.registerNewBinaryPerson(person3, false);
+        BinaryPerson binPerson4 = binaryRegistrationService.registerNewBinaryPerson(person4, true);
+        BinaryPerson binPerson6 = binaryRegistrationService.registerNewBinaryPerson(person6, true);
 
 
 //        assertFalse(binaryPersonRepository.findByEmail("2@com").isPresent());
@@ -69,9 +71,9 @@ class BinaryRegistrationServiceImplTest {
         RegistrationPerson person2 = registrationPersonService.registerPerson("Person4",  new BigDecimal("500"), 1L);
         RegistrationPerson person3 = registrationPersonService.registerPerson("Person6",  new BigDecimal("500"), 2L);
 
-        BinaryPerson binPerson1 = orchestraService.registerNewBinaryPerson(person1, false);
-        BinaryPerson binPerson2 = orchestraService.registerNewBinaryPerson(person2, true);
-        BinaryPerson binPerson3 = orchestraService.registerNewBinaryPerson(person3, true);
+        BinaryPerson binPerson1 = binaryRegistrationService.registerNewBinaryPerson(person1, false);
+        BinaryPerson binPerson2 = binaryRegistrationService.registerNewBinaryPerson(person2, true);
+        BinaryPerson binPerson3 = binaryRegistrationService.registerNewBinaryPerson(person3, true);
 
         binPerson1.getBankAccount().setBalance(BigDecimal.ZERO);
         binPerson1.setLeftContainer(BigDecimal.valueOf(700));
@@ -93,7 +95,7 @@ class BinaryRegistrationServiceImplTest {
     @Test
     void testId(){
         RegistrationPerson person1 = registrationPersonService.registerPerson("Person3",  new BigDecimal("500"), 1L);
-        BinaryPerson person = orchestraService.registerNewBinaryPerson(person1,true);
+        BinaryPerson person = binaryRegistrationService.registerNewBinaryPerson(person1,true);
         binaryPersonRepository.save(person);
         System.out.println();
 
