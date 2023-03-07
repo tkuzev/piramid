@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 public interface ConfigurationService {
      boolean isEligable(SubscriptionPlan subscriptionPlan);
 
-     BigDecimal monthTaxPaid(Person person);
-
-     boolean isTaxPaid(Person person);
+//     BigDecimal monthTaxPaid(Person person);
+//
+//     boolean isTaxPaid(Person person);
 }
