@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
-
     @Override
     public void createSubscriptionPlan(SubscriptionPlan subscriptionPlan) {
         SubscriptionPlan newSubscriptionPlan = new SubscriptionPlan();
