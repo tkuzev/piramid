@@ -2,14 +2,13 @@ create table bank (
                       id bigint not null auto_increment,
                       amount decimal(38,2),
                       description varchar(255),
-                      dst_acc_id bigint,
                       item_price decimal(38,2),
                       level bigint,
                       operation_type varchar(255),
                       percent bigint,
-                      src_acc_id bigint,
-                      transaction_date date,
-                      bank_account_id bigint,
+                      transaction_date datetime(6),
+                      dst_acc_id_id bigint,
+                      src_acc_id_id bigint,
                       primary key (id)
 );
 

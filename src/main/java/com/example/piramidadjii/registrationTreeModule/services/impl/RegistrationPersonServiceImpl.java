@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -71,6 +72,7 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
     @Override
     public void setSubscription(RegistrationPerson registrationPerson, long id) {
+        BankAccount helperBankAccount = bankAccountRepository.findById(-1L).orElseThrow();
         BankAccount bank = bankAccountRepository.findById(registrationPerson.getId()).orElseThrow();
         registrationPerson.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(id).orElseThrow());
         BigDecimal balance = bank.getBalance();
@@ -79,20 +81,21 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         bank.setBalance(newBalance);
         bankAccountRepository.save(bank);
 
+
         Bank debitTransaction = new Bank();
         Bank creditTransaction = new Bank();
-        creditTransaction.setDstAccId(-1L);
-        creditTransaction.setSrcAccId(registrationPerson.getBankAccount().getId());
+        creditTransaction.setDstAccId(helperBankAccount);
+        creditTransaction.setSrcAccId(registrationPerson.getBankAccount());
         creditTransaction.setAmount(registrationPerson.getSubscriptionPlan().getRegistrationFee());
-        creditTransaction.setOperationType(OperationType.CT);
+        creditTransaction.setOperationType(OperationType.DT);
         creditTransaction.setDescription(Description.REGISTRATION_FEE);
-        creditTransaction.setTransactionDate(LocalDate.now());
-        debitTransaction.setTransactionDate(LocalDate.now());
+        creditTransaction.setTransactionDate(LocalDateTime.now());
+        debitTransaction.setTransactionDate(LocalDateTime.now());
         debitTransaction.setDescription(Description.REGISTRATION_FEE);
-        debitTransaction.setOperationType(OperationType.DT);
+        debitTransaction.setOperationType(OperationType.CT);
         debitTransaction.setAmount(registrationPerson.getSubscriptionPlan().getRegistrationFee());
-        debitTransaction.setDstAccId(registrationPerson.getBankAccount().getId());
-        debitTransaction.setSrcAccId(-1L);
+        debitTransaction.setDstAccId(registrationPerson.getBankAccount());
+        debitTransaction.setSrcAccId(helperBankAccount);
         bankRepository.save(creditTransaction);
         bankRepository.save(debitTransaction);
     }
@@ -110,26 +113,27 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
     @Override
     public void upgradeSubscriptionPlan(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan) {
+        BankAccount helperBankAccount = bankAccountRepository.findById(-1L).orElseThrow();
         if (isUpdateUnavailable(registrationPerson, subscriptionPlan)) {
             return;
         }
         registrationPerson.getBankAccount().setBalance(registrationPerson.getBankAccount().getBalance().subtract(subscriptionPlan.getRegistrationFee()));
-        Bank debitTransaction = new Bank();
         Bank creditTransaction = new Bank();
-        creditTransaction.setDstAccId(-1L);
-        creditTransaction.setSrcAccId(registrationPerson.getBankAccount().getId());
-        creditTransaction.setAmount(subscriptionPlan.getRegistrationFee());
-        creditTransaction.setOperationType(OperationType.CT);
-        creditTransaction.setDescription(Description.UPDATE_PLAN_FEE);
-        creditTransaction.setTransactionDate(LocalDate.now());
-        debitTransaction.setTransactionDate(LocalDate.now());
-        debitTransaction.setDescription(Description.UPDATE_PLAN_FEE);
-        debitTransaction.setOperationType(OperationType.DT);
+        Bank debitTransaction = new Bank();
+        debitTransaction.setDstAccId(helperBankAccount);
+        debitTransaction.setSrcAccId(registrationPerson.getBankAccount());
         debitTransaction.setAmount(subscriptionPlan.getRegistrationFee());
-        debitTransaction.setDstAccId(registrationPerson.getBankAccount().getId());
-        debitTransaction.setSrcAccId(-1L);
-        bankRepository.save(creditTransaction);
+        debitTransaction.setOperationType(OperationType.DT);
+        debitTransaction.setDescription(Description.UPDATE_PLAN_FEE);
+        debitTransaction.setTransactionDate(LocalDateTime.now());
+        creditTransaction.setTransactionDate(LocalDateTime.now());
+        creditTransaction.setDescription(Description.UPDATE_PLAN_FEE);
+        creditTransaction.setOperationType(OperationType.CT);
+        creditTransaction.setAmount(subscriptionPlan.getRegistrationFee());
+        creditTransaction.setDstAccId(registrationPerson.getBankAccount());
+        creditTransaction.setSrcAccId(helperBankAccount);
         bankRepository.save(debitTransaction);
+        bankRepository.save(creditTransaction);
         registrationPerson.setSubscriptionPlan(subscriptionPlan);
     }
 

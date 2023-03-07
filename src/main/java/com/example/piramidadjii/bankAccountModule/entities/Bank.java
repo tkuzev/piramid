@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -22,8 +22,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Bank extends BaseEntity {
     private BigDecimal amount;
-    private Long srcAccId;
-    private Long dstAccId;
+    @ManyToOne
+    private BankAccount srcAccId;
+    @ManyToOne
+    private BankAccount dstAccId;
     private BigDecimal itemPrice;
     private Long level;
     private Long percent;
@@ -31,8 +33,5 @@ public class Bank extends BaseEntity {
     private Description description;
     @Enumerated(EnumType.STRING)
     private OperationType operationType;
-    private LocalDate transactionDate;
-
-    @ManyToOne
-    private BankAccount bankAccount;
+    private LocalDateTime transactionDate;
 }

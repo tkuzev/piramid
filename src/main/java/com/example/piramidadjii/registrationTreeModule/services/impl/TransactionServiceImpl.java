@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -107,11 +108,11 @@ public class TransactionServiceImpl implements TransactionService {
         debitTransaction.setPercent(percent);
         debitTransaction.setItemPrice(price);
         debitTransaction.setAmount(calculatePrice(percent, price));
-        debitTransaction.setDstAccId(registrationPerson.getId());
-        debitTransaction.setSrcAccId(-1L);
+        debitTransaction.setDstAccId(registrationPerson.getBankAccount());
+        debitTransaction.setSrcAccId(helperBankAccount);
         debitTransaction.setDescription(description);
         debitTransaction.setOperationType(OperationType.DT);
-        debitTransaction.setTransactionDate(LocalDate.now());
+        debitTransaction.setTransactionDate(LocalDateTime.now());
         debitTransaction.setLevel((long) counter.get());
         BigDecimal newDebitBalance = personBankAccount.getBalance().add(debitTransaction.getAmount());
         personBankAccount.setBalance(personBankAccount.getBalance().add(newDebitBalance));
@@ -122,11 +123,11 @@ public class TransactionServiceImpl implements TransactionService {
         creditTransaction.setPercent(percent);
         creditTransaction.setItemPrice(price);
         creditTransaction.setAmount(calculatePrice(percent, price));
-        creditTransaction.setDstAccId(-1L);
-        creditTransaction.setSrcAccId(registrationPerson.getId());
+        creditTransaction.setDstAccId(helperBankAccount);
+        creditTransaction.setSrcAccId(registrationPerson.getBankAccount());
         creditTransaction.setDescription(description);
         creditTransaction.setOperationType(OperationType.CT);
-        creditTransaction.setTransactionDate(LocalDate.now());
+        creditTransaction.setTransactionDate(LocalDateTime.now());
         creditTransaction.setLevel((long) counter.get());
         BigDecimal newCreditBalance = helperBankAccount.getBalance().subtract(debitTransaction.getAmount());
         helperBankAccount.setBalance(helperBankAccount.getBalance().subtract(newCreditBalance));
@@ -156,7 +157,7 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         List<Bank> allTransactions = bankRepository.
-                findAllByIdAndTransactionDateBetween(registrationPerson.getId(), LocalDate.now().minusMonths(1),LocalDate.now());
+                findAllByIdAndTransactionDateBetween(registrationPerson.getId(), LocalDateTime.now().minusMonths(1),LocalDateTime.now());
 
 
         for (Bank transactions : allTransactions) {

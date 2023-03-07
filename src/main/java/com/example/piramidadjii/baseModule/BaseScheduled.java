@@ -38,6 +38,7 @@ public class BaseScheduled {
     private BigDecimal moneyToGive = BigDecimal.ZERO;
 
 
+
     @Scheduled(cron = "00 00 00 1 * *", zone = "Europe/Sofia")
     public void binaryTree() {
 
@@ -48,16 +49,17 @@ public class BaseScheduled {
     }
 
     private void updateBossMoney() {
+        BankAccount helperBankAccount=bankAccountRepository.findById(-1L).orElseThrow();
         BinaryPerson boss = binaryPersonRepository.findById(1L).orElseThrow();
         boss.getBankAccount().setBalance(boss.getBankAccount().getBalance().add(boss.getRightContainer().add(boss.getLeftContainer())));
         Bank debitTransaction = new Bank();
-        debitTransaction.setDstAccId(1L);
+        debitTransaction.setDstAccId(boss.getBankAccount());
         //todo v sqkla da se dobavi pomoshten bankov akaunt s id -1
         debitTransaction.setAmount(boss.getRightContainer().add(boss.getLeftContainer()));
         debitTransaction.setOperationType(OperationType.DT);
         debitTransaction.setDescription(Description.MONTHLY_BINARY_TRANSACTION);
         Bank creditTransaction = new Bank();
-        creditTransaction.setSrcAccId(-1L);
+        creditTransaction.setSrcAccId(helperBankAccount);
         creditTransaction.setAmount(moneyToGive);
         creditTransaction.setOperationType(OperationType.CT);
         creditTransaction.setDescription(Description.MONTHLY_BINARY_TRANSACTION);
@@ -105,13 +107,13 @@ public class BaseScheduled {
         binaryPerson.setLeftContainer(BigDecimal.ZERO);
         binaryPersonRepository.save(binaryPerson);
 
-        creditTransaction.setSrcAccId(-1L);
+        creditTransaction.setSrcAccId(helperBankAccount);
         creditTransaction.setOperationType(OperationType.CT);
         creditTransaction.setDescription(Description.MONTHLY_BINARY_PERCENTAGE);
         bankRepository.save(creditTransaction);
         bankAccountRepository.save(helperBankAccount);
 
-        debitTransaction.setDstAccId(binaryPerson.getId());
+        debitTransaction.setDstAccId(binaryPerson.getBankAccount());
         debitTransaction.setOperationType(OperationType.DT);
         debitTransaction.setDescription(Description.MONTHLY_BINARY_PERCENTAGE);
         bankRepository.save(debitTransaction);
