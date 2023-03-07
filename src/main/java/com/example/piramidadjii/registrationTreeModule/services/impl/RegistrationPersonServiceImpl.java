@@ -1,8 +1,10 @@
 package com.example.piramidadjii.registrationTreeModule.services.impl;
 
+import com.example.piramidadjii.bankAccountModule.entities.Bank;
 import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
-import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
+import com.example.piramidadjii.bankAccountModule.repositories.BankRepository;
+import com.example.piramidadjii.baseModule.enums.OperationType;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
@@ -27,6 +29,9 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
     @Autowired
     private BankAccountRepository bankAccountRepository;
+
+    @Autowired
+    private BankRepository bankRepository;
 
     List<SubscriptionPlan> subscriptionPlans = new ArrayList<>();
 
@@ -68,6 +73,19 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         BigDecimal newBalance = balance.subtract(fee);
         bank.setBalance(newBalance);
         bankAccountRepository.save(bank);
+
+        Bank debitTransaction = new Bank();
+        Bank creditTransaction = new Bank();
+        creditTransaction.setDstAccId(-1L);
+        creditTransaction.setSrcAccId(registrationPerson.getBankAccount().getId());
+        creditTransaction.setAmount(registrationPerson.getSubscriptionPlan().getRegistrationFee());
+        creditTransaction.setOperationType(OperationType.CT);
+        debitTransaction.setOperationType(OperationType.DT);
+        debitTransaction.setAmount(registrationPerson.getSubscriptionPlan().getRegistrationFee());
+        debitTransaction.setDstAccId(registrationPerson.getBankAccount().getId());
+        debitTransaction.setSrcAccId(-1L);
+        bankRepository.save(creditTransaction);
+        bankRepository.save(debitTransaction);
     }
 
     private RegistrationPerson setPersonDetails(String name, Long parentId) {
@@ -82,11 +100,23 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
     }
 
     @Override
-    public void upgradeSubscriptionPlan(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan){
-        if (isUpdateUnavailable(registrationPerson, subscriptionPlan)){
+    public void upgradeSubscriptionPlan(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan) {
+        if (isUpdateUnavailable(registrationPerson, subscriptionPlan)) {
             return;
         }
         registrationPerson.getBankAccount().setBalance(registrationPerson.getBankAccount().getBalance().subtract(subscriptionPlan.getRegistrationFee()));
+        Bank debitTransaction = new Bank();
+        Bank creditTransaction = new Bank();
+        creditTransaction.setDstAccId(-1L);
+        creditTransaction.setSrcAccId(registrationPerson.getBankAccount().getId());
+        creditTransaction.setAmount(subscriptionPlan.getRegistrationFee());
+        creditTransaction.setOperationType(OperationType.CT);
+        debitTransaction.setOperationType(OperationType.DT);
+        debitTransaction.setAmount(subscriptionPlan.getRegistrationFee());
+        debitTransaction.setDstAccId(registrationPerson.getBankAccount().getId());
+        debitTransaction.setSrcAccId(-1L);
+        bankRepository.save(creditTransaction);
+        bankRepository.save(debitTransaction);
         registrationPerson.setSubscriptionPlan(subscriptionPlan);
     }
 
