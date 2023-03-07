@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Person extends BaseEntity {
+public class Person{
 
     @NotNull(message = "Name cannot be empty")
     @Size(min = 3,max = 20)

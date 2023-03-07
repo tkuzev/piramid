@@ -94,9 +94,9 @@ class BinaryRegistrationServiceImplTest {
 
     @Test
     void testId(){
-        RegistrationPerson person1 = registrationPersonService.registerPerson("Person3",  new BigDecimal("500"), 1L);
+        RegistrationPerson person1 = registrationPersonService.registerPerson("kurkur22",  new BigDecimal("350"), 1L);
         BinaryPerson person = binaryRegistrationService.registerNewBinaryPerson(person1,true);
-        binaryPersonRepository.save(person);
+//
         System.out.println();
 
     }

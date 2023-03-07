@@ -26,7 +26,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     public RegistrationPerson findSuitableParent(RegistrationPerson node) {
         Objects.requireNonNull(node,"nema node");
         RegistrationPerson parent = node.getParent();
-        if (Objects.isNull(/*root*/parent.getParent()) || configurationService.isEligable(parent.getSubscriptionPlan())) {
+        if (Objects.isNull(/*root*/parent.getParent())) {
             return parent;
         }
         else {
