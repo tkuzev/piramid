@@ -89,4 +89,13 @@ class BinaryRegistrationServiceImplTest {
         binaryPersonRepository.save(binPerson2);
         binaryPersonRepository.save(binPerson3);
     }
+
+    @Test
+    void testId(){
+        RegistrationPerson person1 = registrationPersonService.registerPerson("Person3",  new BigDecimal("500"), 1L);
+        BinaryPerson person = orchestraService.registerNewBinaryPerson(person1,true);
+        binaryPersonRepository.save(person);
+        System.out.println();
+
+    }
 }

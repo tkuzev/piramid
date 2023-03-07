@@ -19,12 +19,6 @@ public class Person extends BaseEntity {
     @Size(min = 3,max = 20)
     private String name;
 
-    @NotNull(message = "Email cannot be null")
-    @Column(unique = true)
-    @Email
-    private String email;
-
-
     @OneToOne
     private BankAccount bankAccount;
 

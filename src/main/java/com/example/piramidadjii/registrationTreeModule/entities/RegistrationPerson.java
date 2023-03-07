@@ -20,7 +20,6 @@ public class RegistrationPerson extends Person {
     @ManyToOne
     private RegistrationPerson parent;
 
-
     @ManyToOne
     private SubscriptionPlan subscriptionPlan;
 

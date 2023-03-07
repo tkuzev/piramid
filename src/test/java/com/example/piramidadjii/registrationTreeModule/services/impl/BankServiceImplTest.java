@@ -102,7 +102,6 @@ class BankServiceImplTest {
         bankAccountRepository.save(newBankAccount);
         registrationPerson.setName("kircho");
         registrationPerson.setBankAccount(newBankAccount);
-        registrationPerson.setEmail("baiHui@bank.com");
         //registrationPerson.getBankAccount().setBalance(BigDecimal.valueOf(10000));
         registrationPerson.setParent(registrationPersonRepository.getRegistrationPersonById(1L).orElseThrow());
         registrationPerson.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(1L).orElseThrow());

@@ -36,7 +36,6 @@ public class OrchestraServiceImpl implements OrchestraService {
         binPerson.setId(person.getId());
         binPerson.setBankAccount(person.getBankAccount());
         binPerson.setName(person.getName());
-        binPerson.setEmail(person.getEmail());
         binPerson.setRightContainer(BigDecimal.ZERO);
         binPerson.setLeftContainer(BigDecimal.ZERO);
         binPerson.setPreferredDirection(preferredDirection);
