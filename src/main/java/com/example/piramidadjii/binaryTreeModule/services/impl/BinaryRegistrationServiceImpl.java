@@ -47,7 +47,6 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     private BinaryPerson binParent(RegistrationPerson parent) {
         return binaryPersonRepository.findById(parent.getId()).orElseThrow();
     }
-
     private BinaryPerson addBinaryPerson(BinaryPerson binParent, BinaryPerson binChild) {
         if (binParent.isPreferredDirection()/*right*/) {
             if (Objects.isNull(binParent.getRightChild())) {
@@ -58,7 +57,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
                 addBinaryPerson(binParent.getRightChild(), binChild);
             }
         } else {
-            if (Objects.isNull(binParent.getLeftChild())) {
+            if (Objects.isNull(binParent.getLeftChild())){
                 binParent.setLeftChild(binChild);
                 binChild.setParent(binParent);
                 binaryPersonRepository.save(binParent);
@@ -69,7 +68,6 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         binaryPersonRepository.save(binChild);
         return binChild;
     }
-
     @Override
     public void changePreferredDirection(BinaryPerson binaryPerson, boolean direction) {
         binaryPerson.setPreferredDirection(direction);
