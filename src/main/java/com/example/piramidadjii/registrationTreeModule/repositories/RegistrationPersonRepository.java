@@ -13,7 +13,6 @@ public interface RegistrationPersonRepository extends JpaRepository<Registration
 
     Optional<RegistrationPerson> getRegistrationPersonById(Long id);
 
-    Optional<RegistrationPerson> getFirstByEmail(String email);
 
     List<RegistrationPerson> getAllBySubscriptionExpirationDate(LocalDate date);
 

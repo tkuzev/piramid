@@ -25,50 +25,44 @@ class RegistrationPersonServiceImplTest {
 
     @Test
     void registerTestFourthTier() {
-        registrationPersonService.registerPerson("Person", "email@person.com", new BigDecimal("500"), 1L);
+        RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("500"), 1L);
 
-        RegistrationPerson registrationPerson = registrationPersonRepository.getFirstByEmail("email@person.com").orElseThrow();
 
-        assertEquals(4L, (long) registrationPerson.getSubscriptionPlan().getId());
+        assertEquals(4L, (long) person.getSubscriptionPlan().getId());
     }
 
     @Test
     void registerTestThirdTier() {
-        registrationPersonService.registerPerson("Person", "email@person2.com", new BigDecimal("450"), 1L);
+        RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("450"), 1L);
 
-        RegistrationPerson registrationPerson = registrationPersonRepository.getFirstByEmail("email@person2.com").orElseThrow();
 
-        assertEquals(3L, (long) registrationPerson.getSubscriptionPlan().getId());
+        assertEquals(3L, (long) person.getSubscriptionPlan().getId());
     }
 
     @Test
     void registerTestSecondTier() {
-        registrationPersonService.registerPerson("Person", "email@person3.com", new BigDecimal("350"), 1L);
+        RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("350"), 1L);
 
-        RegistrationPerson registrationPerson = registrationPersonRepository.getFirstByEmail("email@person3.com").orElseThrow();
-
-        assertEquals(2L, (long) registrationPerson.getSubscriptionPlan().getId());
+        assertEquals(2L, (long) person.getSubscriptionPlan().getId());
     }
 
     @Test
     void registerTestFirstTier() {
-        registrationPersonService.registerPerson("Person", "email@person4.com", new BigDecimal("250"), 1L);
+        RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("250"), 1L);
 
-        RegistrationPerson registrationPerson = registrationPersonRepository.getFirstByEmail("email@person4.com").orElseThrow();
 
-        assertEquals(1L, (long) registrationPerson.getSubscriptionPlan().getId());
+        assertEquals(1L, (long) person.getSubscriptionPlan().getId());
     }
 
     @Test
     void upgradePlanTest(){
-        registrationPersonService.registerPerson("Person", "email@puhi.com", new BigDecimal("250"), 1L);
-        RegistrationPerson registrationPerson = registrationPersonRepository.getFirstByEmail("email@puhi.com").orElseThrow();
-        registrationPerson.getBankAccount().setBalance(registrationPerson.getBankAccount().getBalance().add(BigDecimal.valueOf(500L)));
+        RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("250"), 1L);
+        person.getBankAccount().setBalance(person.getBankAccount().getBalance().add(BigDecimal.valueOf(500L)));
 
-        registrationPersonService.upgradeSubscriptionPlan(registrationPerson,subscriptionPlanRepository.getSubscriptionPlanById(3L).orElseThrow());
+        registrationPersonService.upgradeSubscriptionPlan(person,subscriptionPlanRepository.getSubscriptionPlanById(3L).orElseThrow());
 
-        assertEquals(3L, registrationPerson.getSubscriptionPlan().getId());
-        assertEquals(BigDecimal.valueOf(150).setScale(2), registrationPerson.getBankAccount().getBalance());
+        assertEquals(3L, person.getSubscriptionPlan().getId());
+        assertEquals(BigDecimal.valueOf(150).setScale(2), person.getBankAccount().getBalance());
     }
 }
 

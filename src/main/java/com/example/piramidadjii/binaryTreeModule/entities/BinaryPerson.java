@@ -29,7 +29,6 @@ public class BinaryPerson extends Person {
     @Column(nullable = false)
     private boolean preferredDirection;
 
-
     @ManyToOne
     private BinaryPerson parent;
 
