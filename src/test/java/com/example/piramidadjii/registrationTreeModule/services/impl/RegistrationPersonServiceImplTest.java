@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class RegistrationPersonServiceImplTest {
@@ -23,6 +23,13 @@ class RegistrationPersonServiceImplTest {
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
 
+    @Test()
+    void testRegistrationFail(){
+        assertThrows(RuntimeException.class, ()->{
+            RegistrationPerson person = registrationPersonService.registerPerson("KKKKKKKKKUUUUUUURRRRRRRRRRR", new BigDecimal("100"), 1L);
+        });
+    }
+
     @Test
     void registerTestFourthTier() {
         RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("500"), 1L);
@@ -31,17 +38,8 @@ class RegistrationPersonServiceImplTest {
         //subscription plan
         assertEquals(4L, personFromRepo.getSubscriptionPlan().getId());
 
-        //check bank account id = person id
-        assertEquals(person.getId(), personFromRepo.getBankAccount().getId());
-
         //check money
         assertEquals(BigDecimal.valueOf(0).setScale(2), personFromRepo.getBankAccount().getBalance());
-
-        //check parent id
-        assertEquals(1L, personFromRepo.getParent().getId());
-
-        //check transaction
-        
     }
 
     @Test
@@ -52,14 +50,8 @@ class RegistrationPersonServiceImplTest {
         //subscription plan
         assertEquals(3L, personFromRepo.getSubscriptionPlan().getId());
 
-        //check bank account id = person id
-        assertEquals(person.getId(), personFromRepo.getBankAccount().getId());
-
         //check money
         assertEquals(BigDecimal.valueOf(50).setScale(2), personFromRepo.getBankAccount().getBalance());
-
-        //check parent id
-        assertEquals(1L, personFromRepo.getParent().getId());
     }
 
     @Test
@@ -70,14 +62,9 @@ class RegistrationPersonServiceImplTest {
         //subscription plan
         assertEquals(2L, personFromRepo.getSubscriptionPlan().getId());
 
-        //check bank account id = person id
-        assertEquals(person.getId(), personFromRepo.getBankAccount().getId());
-
         //check money
         assertEquals(BigDecimal.valueOf(50).setScale(2), personFromRepo.getBankAccount().getBalance());
 
-        //check parent id
-        assertEquals(1L, personFromRepo.getParent().getId());
     }
 
     @Test
@@ -88,14 +75,8 @@ class RegistrationPersonServiceImplTest {
         //subscription plan
         assertEquals(1L, personFromRepo.getSubscriptionPlan().getId());
 
-        //check bank account id = person id
-        assertEquals(person.getId(), personFromRepo.getBankAccount().getId());
-
         //check money
         assertEquals(BigDecimal.valueOf(50).setScale(2), personFromRepo.getBankAccount().getBalance());
-
-        //check parent id
-        assertEquals(1L, personFromRepo.getParent().getId());
     }
 
     @Test
@@ -109,6 +90,27 @@ class RegistrationPersonServiceImplTest {
 
         assertEquals(3L, personFromRepo.getSubscriptionPlan().getId());
         assertEquals(BigDecimal.valueOf(150).setScale(2), personFromRepo.getBankAccount().getBalance());
+    }
+
+    @Test
+    void testParentAndBankAccount() {
+        RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("250"), 1L);
+        RegistrationPerson personFromRepo = registrationPersonRepository.findById(person.getId()).get();
+
+        //check bank account id = person id
+        assertEquals(person.getId(), personFromRepo.getBankAccount().getId());
+
+        //check parent id
+        assertEquals(1L, personFromRepo.getParent().getId());
+    }
+
+    @Test
+    void testRegistrationFeeTransactions() {
+        RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("250"), 1L);
+        RegistrationPerson personFromRepo = registrationPersonRepository.findById(person.getId()).get();
+
+
+
     }
 }
 

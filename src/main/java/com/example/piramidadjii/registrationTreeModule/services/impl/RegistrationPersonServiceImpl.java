@@ -10,6 +10,7 @@ import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationPersonService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,7 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
 
     @Override
+    @Transactional
     public RegistrationPerson registerPerson(String name, BigDecimal money, Long parentId) {
         subscriptionPlans.addAll(subscriptionPlanRepository.findAll());
         Collections.reverse(subscriptionPlans);
@@ -49,13 +51,14 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         for (SubscriptionPlan subscriptionPlan : subscriptionPlans) {
             if (checkBalance(registrationPerson.getBankAccount().getBalance(), subscriptionPlan.getId()) >= 0) {
                 setSubscription(registrationPerson, subscriptionPlan.getId());
+                registrationPerson.setIsSubscriptionEnabled(true);
+                registrationPersonRepository.save(registrationPerson);
                 break;
             } else if (subscriptionPlan.getId() == 1) {
                 throw new RuntimeException();
             }
         }
-        registrationPerson.setIsSubscriptionEnabled(true);
-        registrationPersonRepository.save(registrationPerson);
+
         return registrationPerson;
     }
 
