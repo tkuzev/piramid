@@ -17,6 +17,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class RegistrationPerson extends Person {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne
     private RegistrationPerson parent;
 
