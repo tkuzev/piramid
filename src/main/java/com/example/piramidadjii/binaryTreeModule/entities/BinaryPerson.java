@@ -18,11 +18,17 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class BinaryPerson extends Person {
 
+    @Id
+    private Long id;
+
     @OneToOne
     private BinaryPerson leftChild;
+
     @OneToOne
     private BinaryPerson rightChild;
+
     private BigDecimal leftContainer;
+
     private BigDecimal rightContainer;
 
     @NotNull(message = "direction cannot be null")
