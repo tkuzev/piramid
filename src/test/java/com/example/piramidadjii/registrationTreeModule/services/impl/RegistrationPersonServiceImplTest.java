@@ -39,6 +39,9 @@ class RegistrationPersonServiceImplTest {
 
         //check parent id
         assertEquals(1L, personFromRepo.getParent().getId());
+
+        //check transaction
+        
     }
 
     @Test
