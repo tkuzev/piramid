@@ -4,6 +4,7 @@ import com.example.piramidadjii.bankAccountModule.entities.Bank;
 import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
 import com.example.piramidadjii.bankAccountModule.repositories.BankRepository;
+import com.example.piramidadjii.baseModule.enums.Description;
 import com.example.piramidadjii.baseModule.enums.OperationType;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -83,6 +85,10 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         creditTransaction.setSrcAccId(registrationPerson.getBankAccount().getId());
         creditTransaction.setAmount(registrationPerson.getSubscriptionPlan().getRegistrationFee());
         creditTransaction.setOperationType(OperationType.CT);
+        creditTransaction.setDescription(Description.REGISTRATION_FEE);
+        creditTransaction.setTransactionDate(LocalDate.now());
+        debitTransaction.setTransactionDate(LocalDate.now());
+        debitTransaction.setDescription(Description.REGISTRATION_FEE);
         debitTransaction.setOperationType(OperationType.DT);
         debitTransaction.setAmount(registrationPerson.getSubscriptionPlan().getRegistrationFee());
         debitTransaction.setDstAccId(registrationPerson.getBankAccount().getId());
@@ -114,6 +120,10 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         creditTransaction.setSrcAccId(registrationPerson.getBankAccount().getId());
         creditTransaction.setAmount(subscriptionPlan.getRegistrationFee());
         creditTransaction.setOperationType(OperationType.CT);
+        creditTransaction.setDescription(Description.UPDATE_PLAN_FEE);
+        creditTransaction.setTransactionDate(LocalDate.now());
+        debitTransaction.setTransactionDate(LocalDate.now());
+        debitTransaction.setDescription(Description.UPDATE_PLAN_FEE);
         debitTransaction.setOperationType(OperationType.DT);
         debitTransaction.setAmount(subscriptionPlan.getRegistrationFee());
         debitTransaction.setDstAccId(registrationPerson.getBankAccount().getId());

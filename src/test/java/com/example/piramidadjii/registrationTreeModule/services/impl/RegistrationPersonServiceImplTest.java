@@ -1,5 +1,6 @@
 package com.example.piramidadjii.registrationTreeModule.services.impl;
 
+import com.example.piramidadjii.bankAccountModule.repositories.BankRepository;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
@@ -22,6 +23,8 @@ class RegistrationPersonServiceImplTest {
 
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
+    @Autowired
+    private BankRepository bankRepository;
 
     @Test()
     void testRegistrationFail(){
@@ -81,6 +84,7 @@ class RegistrationPersonServiceImplTest {
 
     @Test
     void upgradeSubscriptionPlanTestSuccessfully(){
+        int oldTransactions = bankRepository.findAll().size();
         RegistrationPerson person = registrationPersonService.registerPerson("KUR", new BigDecimal("250"), 1L);
         RegistrationPerson personFromRepo = registrationPersonRepository.findById(person.getId()).get();
 
@@ -90,6 +94,7 @@ class RegistrationPersonServiceImplTest {
 
         assertEquals(3L, personFromRepo.getSubscriptionPlan().getId());
         assertEquals(BigDecimal.valueOf(150).setScale(2), personFromRepo.getBankAccount().getBalance());
+        assertEquals(oldTransactions + 4, bankRepository.findAll().size());
     }
 
     @Test
