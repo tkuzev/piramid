@@ -41,7 +41,7 @@ public class BaseInit implements CommandLineRunner {
             subscriptionPlanRepository.save(bronze);
 
             SubscriptionPlan silver=new SubscriptionPlan();
-            silver.setId(-1L);
+            silver.setId(2L);
             silver.setName("Silver");
             silver.setPercents("3//2");
             silver.setEligibleForBinary(false);
@@ -69,7 +69,7 @@ public class BaseInit implements CommandLineRunner {
             BankAccount helperBank=new BankAccount();
             bossBank.setBalance(BigDecimal.ZERO);
             bossBank.setId(1L);
-            helperBank.setId(2L);
+            helperBank.setId(-1L);
             helperBank.setBalance(BigDecimal.ZERO);
 
             bankAccountRepository.save(bossBank);
