@@ -102,8 +102,6 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
     private RegistrationPerson setPersonDetails(String name, Long parentId) {
         RegistrationPerson registrationPerson = new RegistrationPerson();
         registrationPerson.setName(name);
-
-
         registrationPerson.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
         registrationPerson.setParent(registrationPersonRepository.findById(parentId).orElseThrow());
         //registrationTreeRepository.save(registrationTree);
