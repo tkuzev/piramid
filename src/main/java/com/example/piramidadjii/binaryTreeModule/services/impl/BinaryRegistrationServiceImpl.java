@@ -34,12 +34,8 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         }
     }
     private BinaryPerson createBinaryPerson(RegistrationPerson person, boolean preferredDirection) {
-        BinaryPerson binPerson = new BinaryPerson();
-        binPerson.setId(person.getId());
-        binPerson.setBankAccount(person.getBankAccount());
+        BinaryPerson binPerson = new BinaryPerson(person.getId(), BigDecimal.ZERO, BigDecimal.ZERO, preferredDirection);
         binPerson.setName(person.getName());
-        binPerson.setRightContainer(BigDecimal.ZERO);
-        binPerson.setLeftContainer(BigDecimal.ZERO);
         binPerson.setPreferredDirection(preferredDirection);
         binaryPersonRepository.save(binPerson);
         return binPerson;
