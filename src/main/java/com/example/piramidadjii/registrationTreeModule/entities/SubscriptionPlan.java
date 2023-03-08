@@ -24,7 +24,6 @@ public class SubscriptionPlan extends BaseEntity {
     private String name;
 
     @NotNull(message = "percents cannot be null")
-    @Positive
     @Column(nullable = false)
     private String percents;
 
