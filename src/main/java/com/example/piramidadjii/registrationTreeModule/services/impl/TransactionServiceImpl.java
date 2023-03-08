@@ -169,7 +169,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setOperationType(dt);
         transaction.setTransactionDate(LocalDateTime.now());
 
-        if (registrationPerson.getId()!=1L || registrationPerson.getId()!=-1L) {
+        if (registrationPerson.getId()!=1L && registrationPerson.getId()!=-1L) {
             transaction.setLevel((long) counter.get()-1);
         }
     }
