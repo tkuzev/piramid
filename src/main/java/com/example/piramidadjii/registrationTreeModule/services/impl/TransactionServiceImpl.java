@@ -45,7 +45,7 @@ public class TransactionServiceImpl implements TransactionService {
         final Long[] percent = new Long[1];
         AtomicInteger counter = new AtomicInteger(0);
         Description[] description = new Description[1];
-        Long profit = 20L;
+        Long profit = 100L;
 
         traverseFromNodeToRoot(registrationPerson)
                 .limit(5)
@@ -168,6 +168,5 @@ public class TransactionServiceImpl implements TransactionService {
         debitTransaction.setTransactionDate(LocalDateTime.now());
         debitTransaction.setLevel((long) counter.get());
     }
-
 
 }
