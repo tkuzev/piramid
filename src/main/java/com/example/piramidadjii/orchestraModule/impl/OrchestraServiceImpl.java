@@ -13,15 +13,14 @@ import java.math.BigDecimal;
 public class OrchestraServiceImpl implements OrchestraService {
 
     @Autowired
-    BinaryRegistrationService binaryRegistrationService;
+    private BinaryRegistrationService binaryRegistrationService;
     @Autowired
-    RegistrationPersonService registrationPersonService;
+    private RegistrationPersonService registrationPersonService;
     @Autowired
-    ConfigurationService configurationService;
+    private ConfigurationService configurationService;
     @Override
     public void registerPerson(String name, BigDecimal money, Long parentId, boolean preferredDirection) {
         RegistrationPerson registrationPerson = registrationPersonService.registerPerson(name, money, parentId);
-
         if(configurationService.isEligable(registrationPerson.getSubscriptionPlan())){
             binaryRegistrationService.registerNewBinaryPerson(registrationPerson, preferredDirection);
         }

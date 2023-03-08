@@ -16,8 +16,10 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BankAccount extends BaseEntity {
+public class BankAccount {
 
+    @Id
+    private Long id;
 
     @NotNull(message = "balance cannot be null")
     @Column(nullable = false)
