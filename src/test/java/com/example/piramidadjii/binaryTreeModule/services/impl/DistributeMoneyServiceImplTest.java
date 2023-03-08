@@ -23,14 +23,14 @@ class DistributeMoneyServiceImplTest {
     @Autowired
     private DistributeMoneyService distributeMoneyService;
     @Test
-    void distributeMoneyWithoutBossMoney() {
-        RegistrationPerson person2 = registrationPersonService.registerPerson("Person2", new BigDecimal("250"), 1L);
+    void testMoneyInContainersDistribution() {
+        registrationPersonService.registerPerson("Person2", new BigDecimal("250"), 1L);
         RegistrationPerson person3 = registrationPersonService.registerPerson("Person3", new BigDecimal("500"), 1L);
         RegistrationPerson person4 = registrationPersonService.registerPerson("Person4", new BigDecimal("500"), 1L);
-        RegistrationPerson person5 = registrationPersonService.registerPerson("Person5", new BigDecimal("250"), 3L);
+        registrationPersonService.registerPerson("Person5", new BigDecimal("250"), 3L);
         RegistrationPerson person6 = registrationPersonService.registerPerson("Person6", new BigDecimal("500"), 5L);
 
-        BinaryPerson binPerson3 = binaryRegistrationService.registerNewBinaryPerson(person3, false);
+        binaryRegistrationService.registerNewBinaryPerson(person3, false);
         BinaryPerson binPerson4 = binaryRegistrationService.registerNewBinaryPerson(person4, true);
         BinaryPerson binPerson6 = binaryRegistrationService.registerNewBinaryPerson(person6, true);
         binPerson4.setLeftContainer(BigDecimal.valueOf(400L));
@@ -39,16 +39,16 @@ class DistributeMoneyServiceImplTest {
         distributeMoneyService.distributeMoney(binPerson6, BigDecimal.valueOf(300));
 
         //person6
-//        assertEquals(BigDecimal.ZERO.setScale(2), binaryPersonRepository.findByEmail("6.com").get().getLeftContainer());
-//        assertEquals(BigDecimal.ZERO.setScale(2), binaryPersonRepository.findByEmail("6.com").get().getRightContainer());
-//
-//        //person4
-//        assertEquals(BigDecimal.ZERO.setScale(2), binaryPersonRepository.findByEmail("4.com").get().getLeftContainer());
-//        assertEquals(BigDecimal.valueOf(300).setScale(2), binaryPersonRepository.findByEmail("4.com").get().getRightContainer());
-//
-//        //person3
-//        assertEquals(BigDecimal.valueOf(300).setScale(2), binaryPersonRepository.findByEmail("3.com").get().getLeftContainer());
-//        assertEquals(BigDecimal.ZERO.setScale(2), binaryPersonRepository.findByEmail("3.com").get().getRightContainer());
+        assertEquals(BigDecimal.ZERO.setScale(2), binaryPersonRepository.findById(person6.getId()).get().getLeftContainer());
+        assertEquals(BigDecimal.ZERO.setScale(2), binaryPersonRepository.findById(person6.getId()).get().getRightContainer());
+
+        //person4
+        assertEquals(BigDecimal.ZERO.setScale(2), binaryPersonRepository.findById(person4.getId()).get().getLeftContainer());
+        assertEquals(BigDecimal.valueOf(300).setScale(2), binaryPersonRepository.findById(person4.getId()).get().getRightContainer());
+
+        //person3
+        assertEquals(BigDecimal.valueOf(300).setScale(2), binaryPersonRepository.findById(person3.getId()).get().getLeftContainer());
+        assertEquals(BigDecimal.ZERO.setScale(2), binaryPersonRepository.findById(person3.getId()).get().getRightContainer());
 
         //Boss
         assertEquals(BigDecimal.ZERO.setScale(2), binaryPersonRepository.findById(1L).get().getLeftContainer());

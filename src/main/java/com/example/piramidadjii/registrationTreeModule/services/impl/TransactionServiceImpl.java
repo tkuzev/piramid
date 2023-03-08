@@ -4,10 +4,10 @@ import com.example.piramidadjii.bankAccountModule.entities.Bank;
 import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
 import com.example.piramidadjii.bankAccountModule.repositories.BankRepository;
+import com.example.piramidadjii.baseModule.enums.Description;
 import com.example.piramidadjii.baseModule.enums.OperationType;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
-import com.example.piramidadjii.baseModule.enums.Description;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.services.TransactionService;
@@ -45,7 +45,7 @@ public class TransactionServiceImpl implements TransactionService {
         final Long[] percent = new Long[1];
         AtomicInteger counter = new AtomicInteger(0);
         Description[] description = new Description[1];
-        Long profit = 20L;
+        Long profit = 100L;
 
         traverseFromNodeToRoot(registrationPerson)
                 .limit(5)
@@ -56,8 +56,8 @@ public class TransactionServiceImpl implements TransactionService {
                 registrationPersonRepository.getRegistrationPersonById(1L).orElseThrow(),
                 price,
                 profit - percentages,
-                Description.BONUS, counter);
-        percentages=0L;
+                Description.MONEY_LEFT, counter);
+        percentages = 0L;
     }
 
 
@@ -113,7 +113,7 @@ public class TransactionServiceImpl implements TransactionService {
         debitTransaction.setDescription(description);
         debitTransaction.setOperationType(OperationType.DT);
         debitTransaction.setTransactionDate(LocalDateTime.now());
-        debitTransaction.setLevel((long) counter.get());
+        if (registrationPerson.getId()!=1L) debitTransaction.setLevel((long) counter.get() - 1);
         BigDecimal newDebitBalance = personBankAccount.getBalance().add(debitTransaction.getAmount());
         personBankAccount.setBalance(personBankAccount.getBalance().add(newDebitBalance));
         bankAccountRepository.save(personBankAccount);
@@ -128,7 +128,7 @@ public class TransactionServiceImpl implements TransactionService {
         creditTransaction.setDescription(description);
         creditTransaction.setOperationType(OperationType.CT);
         creditTransaction.setTransactionDate(LocalDateTime.now());
-        creditTransaction.setLevel((long) counter.get());
+        if (registrationPerson.getId()!=1L) creditTransaction.setLevel((long) counter.get() - 1);
         BigDecimal newCreditBalance = helperBankAccount.getBalance().subtract(debitTransaction.getAmount());
         helperBankAccount.setBalance(helperBankAccount.getBalance().subtract(newCreditBalance));
         bankAccountRepository.save(helperBankAccount);
@@ -157,7 +157,7 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         List<Bank> allTransactions = bankRepository.
-                findAllByIdAndTransactionDateBetween(registrationPerson.getId(), LocalDateTime.now().minusMonths(1),LocalDateTime.now());
+                findAllByIdAndTransactionDateBetween(registrationPerson.getId(), LocalDateTime.now().minusMonths(1), LocalDateTime.now());
 
 
         for (Bank transactions : allTransactions) {

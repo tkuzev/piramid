@@ -1,10 +1,8 @@
 package com.example.piramidadjii.registrationTreeModule.services.impl;
 
-import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
 import com.example.piramidadjii.bankAccountModule.repositories.BankRepository;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
-import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationPersonService;
@@ -12,15 +10,7 @@ import com.example.piramidadjii.registrationTreeModule.services.TransactionServi
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -42,93 +32,36 @@ class BankServiceImplTest {
     RegistrationPersonService registrationPersonService;
 
     @Test
-    void createTransactionWithSixPeople() {
-//        List<RegistrationPerson> streamList = createRegistrationTree(6);
+    void testTransactionWithSevenLevelsExpectedFiveCTDT() {
+        registrationPersonService.registerPerson("Person2", BigDecimal.valueOf(500), 1L);
+        registrationPersonService.registerPerson("Person3", BigDecimal.valueOf(500), 2L);
+        registrationPersonService.registerPerson("Person4", BigDecimal.valueOf(1500), 3L);
+        registrationPersonService.registerPerson("Person5", BigDecimal.valueOf(500), 4L);
+        registrationPersonService.registerPerson("Person6", BigDecimal.valueOf(500), 5L);
+        RegistrationPerson person7 = registrationPersonService.registerPerson("Person7", BigDecimal.valueOf(500), 6L);
 
         int before = bankRepository.findAll().size();
 
-
-        RegistrationPerson pesho = registrationPersonService.registerPerson("Pesho", BigDecimal.valueOf(500), 1L);
-        RegistrationPerson gosho = registrationPersonService.registerPerson("Gosho", BigDecimal.valueOf(500), 2L);
-        RegistrationPerson mosho = registrationPersonService.registerPerson("Mosho", BigDecimal.valueOf(1500), 3L);
-        RegistrationPerson tosho = registrationPersonService.registerPerson("Tosho", BigDecimal.valueOf(500), 4L);
-        RegistrationPerson fosho = registrationPersonService.registerPerson("Fosho", BigDecimal.valueOf(500), 5L);
-        RegistrationPerson registrationPerson = registrationPersonService.registerPerson("7sluchainidumi", BigDecimal.valueOf(500), 6L);
-
-        transactionService.createTransaction(tosho,BigDecimal.valueOf(5000));
-        transactionService.createTransaction(tosho,BigDecimal.valueOf(5000));
-        transactionService.createTransaction(tosho,BigDecimal.valueOf(5000));
-        transactionService.createTransaction(fosho,BigDecimal.valueOf(5000));
-        transactionService.createTransaction(registrationPerson,BigDecimal.valueOf(10000));
-        transactionService.createTransaction(tosho,BigDecimal.valueOf(5000));
-        Map<SubscriptionPlan, BigDecimal> subscriptionPlanBigDecimalMap1 = transactionService.monthlyIncome(mosho);
-
-//        transactionService.createTransaction(streamList.get(streamList.size() - 1), BigDecimal.valueOf(5000));
-//        transactionService.createTransaction(streamList.get(streamList.size() - 1), BigDecimal.valueOf(5000));
-//        transactionService.createTransaction(streamList.get(streamList.size() - 1), BigDecimal.valueOf(5000));
-
-//        int after = transactionRepository.findAll().size();
-//
-//        assertEquals(before + 6, after);
-//        assertEquals(BigDecimal.valueOf(250).setScale(2), transactionRepository.findByRegistrationPerson(streamList.get(5)).get().getPrice());
-//
-//        assertEquals("SOLD",transactionRepository.findByRegistrationPerson(streamList.get(streamList.size()-1)).get().getOperationType().toString());
-//        assertEquals("BONUS",transactionRepository.findByRegistrationPerson(streamList.get(2)).get().getOperationType().toString());
-
-        System.out.println();
-
-    }
-
-    @Test
-    void createTransactionWithOnePerson() {
-        RegistrationPerson registrationPerson = createPerson();
-
-        int before = bankRepository.findAll().size();
-
-        transactionService.createTransaction(registrationPerson, BigDecimal.valueOf(5000));
+        transactionService.createTransaction(person7,BigDecimal.valueOf(5000));
 
         int after = bankRepository.findAll().size();
 
-//        assertEquals(before + 2, after);
-//        assertEquals(5, bankRepository.findByRegistrationPerson(registrationPerson).get().getPercent()); // expected 5%
-//        assertEquals(BigDecimal.valueOf(250).setScale(2), bankRepository.findByRegistrationPerson(registrationPerson).get().getPrice());
-//        assertEquals("SOLD",bankRepository.findByRegistrationPerson(registrationPerson).get().getDescription().toString());
+        assertEquals(before + 6*2, after);
     }
 
-    private RegistrationPerson createPerson() {
-        RegistrationPerson registrationPerson = new RegistrationPerson();
-        BankAccount newBankAccount = new BankAccount();
-        newBankAccount.setBalance(BigDecimal.valueOf(100.0974728383));
-        bankAccountRepository.save(newBankAccount);
-        registrationPerson.setName("kircho");
-        registrationPerson.setBankAccount(newBankAccount);
-        //registrationPerson.getBankAccount().setBalance(BigDecimal.valueOf(10000));
-        registrationPerson.setParent(registrationPersonRepository.getRegistrationPersonById(1L).orElseThrow());
-        registrationPerson.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(1L).orElseThrow());
-        registrationPerson.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
-        registrationPerson = registrationPersonRepository.save(registrationPerson);
-        bankAccountRepository.save(newBankAccount);
-        return registrationPerson;
+    @Test
+    void testTransactionWithOnePersonExpectedTwoCTDT() {
+        RegistrationPerson person = registrationPersonService.registerPerson("Person2", BigDecimal.valueOf(500), 1L);
+
+        int before = bankRepository.findAll().size();
+
+        transactionService.createTransaction(person, BigDecimal.valueOf(5000));
+
+        int after = bankRepository.findAll().size();
+
+        assertEquals(before + 2*2, after);
     }
 
-    private List<RegistrationPerson> createRegistrationTree(int numOfNodes) {
-        int n = numOfNodes + 2;
-
-        return IntStream.range(2, n)
-                .mapToObj(i -> {
-                    RegistrationPerson registrationPerson = new RegistrationPerson();
-                    BankAccount newBankAccount = new BankAccount();
-                    newBankAccount.setBalance(BigDecimal.valueOf(300));
-                    bankAccountRepository.save(newBankAccount);
-                    registrationPerson.setName(i + "sluchainidumi");
-                    registrationPerson.setBankAccount(newBankAccount);
-                    registrationPerson = registrationPersonRepository.save(registrationPerson);
-                    registrationPerson.setParent(registrationPersonRepository.getRegistrationPersonById(registrationPerson.getId() - 1).orElseThrow()); // TODO random parent (between 1 and existing num of nodes)
-                    registrationPerson.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(ThreadLocalRandom.current().nextLong(1, 4)).orElseThrow());
-                    registrationPerson.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
-                    registrationPerson = registrationPersonRepository.save(registrationPerson);
-                    return registrationPerson;
-                }).collect(Collectors.toList());
-    }
-
+    //TODO: test transaction details
+    //TODO: test dali izkarcha otchet za meseca??
 }

@@ -3,9 +3,7 @@ package com.example.piramidadjii.binaryTreeModule.services.impl;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
-import com.example.piramidadjii.orchestraModule.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
-import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationPersonService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,23 +22,19 @@ class BinaryRegistrationServiceImplTest {
 
     @Autowired
     private BinaryRegistrationService binaryRegistrationService;
-    @Autowired
-    private RegistrationPersonRepository registrationPersonRepository;
-
 
     @Test
-    void registerNewPerson() {
-        RegistrationPerson registrationPerson = registrationPersonService.registerPerson("Person", new BigDecimal("500"), 1L);
+    void testRegisterNewPersonInBinarySuccessfully() {
+        RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("500"), 1L);
+        binaryRegistrationService.registerNewBinaryPerson(person, false);
+        binaryPersonRepository.findById(person.getId()).orElseThrow();
 
-        registrationPersonService.setSubscription(registrationPerson,4);
-        binaryRegistrationService.registerNewBinaryPerson(registrationPerson, false);
-//        BinaryPerson binaryPerson = binaryPersonRepository.findByEmail("email@person.com").orElseThrow();
-//
-//        assertEquals("email@person.com", binaryPerson.getEmail());
+        assertTrue(binaryPersonRepository.findById(person.getId()).isPresent());
+        assertEquals(1L, binaryPersonRepository.findById(person.getId()).get().getParent().getId());
     }
 
     @Test
-    void testBinaryPersonRegistration(){
+    void testMultipleBinaryRegistrations(){
         RegistrationPerson person2 = registrationPersonService.registerPerson("Person2", new BigDecimal("250"), 1L);
         RegistrationPerson person3 = registrationPersonService.registerPerson("Person3",  new BigDecimal("500"), 1L);
         RegistrationPerson person4 = registrationPersonService.registerPerson("Person4",  new BigDecimal("500"), 1L);
@@ -52,14 +46,12 @@ class BinaryRegistrationServiceImplTest {
         BinaryPerson binPerson6 = binaryRegistrationService.registerNewBinaryPerson(person6, true);
 
 
-//        assertFalse(binaryPersonRepository.findByEmail("2@com").isPresent());
-//        assertEquals(binPerson3.getId(), binaryPersonRepository.findById(1L).get().getRightChild().getId());
-//        assertEquals(binPerson4.getEmail(), binaryPersonRepository.findByEmail("3@com").get().getLeftChild().getEmail());
-//        assertFalse(binaryPersonRepository.findByEmail("5@com").isPresent());
-//        assertEquals(binPerson6.getEmail(), binaryPersonRepository.findByEmail("4@com").get().getRightChild().getEmail());
+        assertFalse(binaryPersonRepository.findById(person2.getId()).isPresent());
+        assertEquals(binPerson3.getId(), binaryPersonRepository.findById(1L).get().getRightChild().getId());
+        assertEquals(binPerson4.getId(), binaryPersonRepository.findById(person3.getId()).get().getLeftChild().getId());
+        assertFalse(binaryPersonRepository.findById(person5.getId()).isPresent());
+        assertEquals(binPerson6.getId(), binaryPersonRepository.findById(person4.getId()).get().getRightChild().getId());
     }
-
-
 
     @Test  //ako she go testvash vzemi promeni crona ili izchakai da stane 1vi den ot meseca oligofren prost
     void scheduledMethod(){
@@ -90,14 +82,5 @@ class BinaryRegistrationServiceImplTest {
         binaryPersonRepository.save(binPerson1);
         binaryPersonRepository.save(binPerson2);
         binaryPersonRepository.save(binPerson3);
-    }
-
-    @Test
-    void testId(){
-        RegistrationPerson person1 = registrationPersonService.registerPerson("kurkur22",  new BigDecimal("350"), 1L);
-        BinaryPerson person = binaryRegistrationService.registerNewBinaryPerson(person1,true);
-//
-        System.out.println();
-
     }
 }
