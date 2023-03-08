@@ -41,7 +41,7 @@ public class BaseInit implements CommandLineRunner {
             subscriptionPlanRepository.save(bronze);
 
             SubscriptionPlan silver=new SubscriptionPlan();
-            silver.setId(2L);
+            silver.setId(-1L);
             silver.setName("Silver");
             silver.setPercents("3//2");
             silver.setEligibleForBinary(false);
