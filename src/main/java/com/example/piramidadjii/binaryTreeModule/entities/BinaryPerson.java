@@ -38,4 +38,10 @@ public class BinaryPerson extends Person {
     @ManyToOne
     private BinaryPerson parent;
 
+    public BinaryPerson(Long id, BigDecimal leftContainer, BigDecimal rightContainer, boolean preferredDirection) {
+        this.id = id;
+        this.leftContainer = leftContainer;
+        this.rightContainer = rightContainer;
+        this.preferredDirection = preferredDirection;
+    }
 }

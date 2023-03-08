@@ -61,7 +61,6 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
                 throw new RuntimeException();
             }
         }
-
         return registrationPerson;
     }
 

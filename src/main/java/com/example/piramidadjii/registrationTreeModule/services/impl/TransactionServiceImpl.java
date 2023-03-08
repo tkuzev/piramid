@@ -114,6 +114,8 @@ public class TransactionServiceImpl implements TransactionService {
         debitTransaction.setOperationType(OperationType.DT);
         debitTransaction.setTransactionDate(LocalDateTime.now());
         if (registrationPerson.getId()!=1L) debitTransaction.setLevel((long) counter.get() - 1);
+
+        setTr(debitTransaction, percent, price, registrationPerson.getBankAccount(), helperBankAccount, description, OperationType.DT, counter);
         BigDecimal newDebitBalance = personBankAccount.getBalance().add(debitTransaction.getAmount());
         personBankAccount.setBalance(personBankAccount.getBalance().add(newDebitBalance));
         bankAccountRepository.save(personBankAccount);
@@ -129,6 +131,7 @@ public class TransactionServiceImpl implements TransactionService {
         creditTransaction.setOperationType(OperationType.CT);
         creditTransaction.setTransactionDate(LocalDateTime.now());
         if (registrationPerson.getId()!=1L) creditTransaction.setLevel((long) counter.get() - 1);
+        setTr(creditTransaction, percent, price, helperBankAccount, registrationPerson.getBankAccount(), description, OperationType.CT, counter);
         BigDecimal newCreditBalance = helperBankAccount.getBalance().subtract(debitTransaction.getAmount());
         helperBankAccount.setBalance(helperBankAccount.getBalance().subtract(newCreditBalance));
         bankAccountRepository.save(helperBankAccount);
@@ -164,7 +167,7 @@ public class TransactionServiceImpl implements TransactionService {
             for (SubscriptionPlan s : subscriptionPlans) {
                 List<Long> percentages = mapFromStringToLong(s.getPercents());
 
-                if (transactions.getLevel() < percentages.size()) {
+                if (!transactions.getDescription().equals(Description.REGISTRATION_FEE) && transactions.getLevel() < percentages.size()) {
                     BigDecimal oldSum = income.get(s);
                     BigDecimal valueToAdd = transactions.getItemPrice().multiply(BigDecimal.valueOf(percentages.get(Math.toIntExact(transactions.getLevel())))).divide(BigDecimal.valueOf(100)).setScale(2);
                     income.put(s, oldSum.add(valueToAdd));
@@ -174,6 +177,17 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         return income;
+    }
+    private static void setTr(Bank debitTransaction, Long percent, BigDecimal price, BankAccount registrationPerson, BankAccount helperBankAccount, Description description, OperationType dt, AtomicInteger counter) {
+        debitTransaction.setPercent(percent);
+        debitTransaction.setItemPrice(price);
+        debitTransaction.setAmount(calculatePrice(percent, price));
+        debitTransaction.setDstAccId(registrationPerson);
+        debitTransaction.setSrcAccId(helperBankAccount);
+        debitTransaction.setDescription(description);
+        debitTransaction.setOperationType(dt);
+        debitTransaction.setTransactionDate(LocalDateTime.now());
+        debitTransaction.setLevel((long) counter.get());
     }
 
 }
