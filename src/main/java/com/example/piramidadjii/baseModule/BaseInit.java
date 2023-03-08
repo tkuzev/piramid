@@ -65,15 +65,15 @@ public class BaseInit implements CommandLineRunner {
             subscriptionPlanRepository.save(platinum);
         }
         if (bankAccountRepository.count()==0){
-            BankAccount bossBank=new BankAccount();
             BankAccount helperBank=new BankAccount();
-            bossBank.setBalance(BigDecimal.ZERO);
-            bossBank.setId(1L);
             helperBank.setId(-1L);
             helperBank.setBalance(BigDecimal.ZERO);
-
-            bankAccountRepository.save(bossBank);
             bankAccountRepository.save(helperBank);
+
+            BankAccount bossBank=new BankAccount();
+            bossBank.setBalance(BigDecimal.ZERO);
+            bossBank.setId(1L);
+            bankAccountRepository.save(bossBank);
         }
         if (registrationPersonRepository.count()==0){
             RegistrationPerson boss=new RegistrationPerson();
