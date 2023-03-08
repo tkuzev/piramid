@@ -60,7 +60,6 @@ public class TransactionServiceImpl implements TransactionService {
         percentages = 0L;
     }
 
-
     private void setNewTransactions(RegistrationPerson person, BigDecimal price, Long[] percent, AtomicInteger counter, RegistrationPerson node, Description[] description) {
         checkPercent(person, percent, counter, node, description);
         percentages += percent[0];
@@ -105,33 +104,17 @@ public class TransactionServiceImpl implements TransactionService {
         BankAccount helperBankAccount = bankAccountRepository.findById(-1L).orElseThrow();
         Bank debitTransaction = new Bank();
         Bank creditTransaction = new Bank();
-        debitTransaction.setPercent(percent);
-        debitTransaction.setItemPrice(price);
-        debitTransaction.setAmount(calculatePrice(percent, price));
-        debitTransaction.setDstAccId(registrationPerson.getBankAccount());
-        debitTransaction.setSrcAccId(helperBankAccount);
-        debitTransaction.setDescription(description);
-        debitTransaction.setOperationType(OperationType.DT);
-        debitTransaction.setTransactionDate(LocalDateTime.now());
-        if (registrationPerson.getId()!=1L) debitTransaction.setLevel((long) counter.get() - 1);
 
         setTr(debitTransaction, percent, price, registrationPerson.getBankAccount(), helperBankAccount, description, OperationType.DT, counter);
+
         BigDecimal newDebitBalance = personBankAccount.getBalance().add(debitTransaction.getAmount());
         personBankAccount.setBalance(personBankAccount.getBalance().add(newDebitBalance));
         bankAccountRepository.save(personBankAccount);
         registrationPersonRepository.save(registrationPerson);
         bankRepository.save(debitTransaction);
 
-        creditTransaction.setPercent(percent);
-        creditTransaction.setItemPrice(price);
-        creditTransaction.setAmount(calculatePrice(percent, price));
-        creditTransaction.setDstAccId(helperBankAccount);
-        creditTransaction.setSrcAccId(registrationPerson.getBankAccount());
-        creditTransaction.setDescription(description);
-        creditTransaction.setOperationType(OperationType.CT);
-        creditTransaction.setTransactionDate(LocalDateTime.now());
-        if (registrationPerson.getId()!=1L) creditTransaction.setLevel((long) counter.get() - 1);
         setTr(creditTransaction, percent, price, helperBankAccount, registrationPerson.getBankAccount(), description, OperationType.CT, counter);
+
         BigDecimal newCreditBalance = helperBankAccount.getBalance().subtract(debitTransaction.getAmount());
         helperBankAccount.setBalance(helperBankAccount.getBalance().subtract(newCreditBalance));
         bankAccountRepository.save(helperBankAccount);
@@ -149,7 +132,6 @@ public class TransactionServiceImpl implements TransactionService {
         }
         return list;
     }
-
 
     @Override
     public Map<SubscriptionPlan, BigDecimal> monthlyIncome(RegistrationPerson registrationPerson) {
@@ -173,21 +155,22 @@ public class TransactionServiceImpl implements TransactionService {
                     income.put(s, oldSum.add(valueToAdd));
                 }
             }
-
         }
 
         return income;
     }
-    private static void setTr(Bank debitTransaction, Long percent, BigDecimal price, BankAccount registrationPerson, BankAccount helperBankAccount, Description description, OperationType dt, AtomicInteger counter) {
-        debitTransaction.setPercent(percent);
-        debitTransaction.setItemPrice(price);
-        debitTransaction.setAmount(calculatePrice(percent, price));
-        debitTransaction.setDstAccId(registrationPerson);
-        debitTransaction.setSrcAccId(helperBankAccount);
-        debitTransaction.setDescription(description);
-        debitTransaction.setOperationType(dt);
-        debitTransaction.setTransactionDate(LocalDateTime.now());
-        debitTransaction.setLevel((long) counter.get());
-    }
+    private static void setTr(Bank transaction, Long percent, BigDecimal price, BankAccount registrationPerson, BankAccount helperBankAccount, Description description, OperationType dt, AtomicInteger counter) {
+        transaction.setPercent(percent);
+        transaction.setItemPrice(price);
+        transaction.setAmount(calculatePrice(percent, price));
+        transaction.setDstAccId(registrationPerson);
+        transaction.setSrcAccId(helperBankAccount);
+        transaction.setDescription(description);
+        transaction.setOperationType(dt);
+        transaction.setTransactionDate(LocalDateTime.now());
 
+        if (registrationPerson.getId()!=1L) {
+            transaction.setLevel((long) counter.get()-1);
+        }
+    }
 }
