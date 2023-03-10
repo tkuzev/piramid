@@ -26,12 +26,8 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     public RegistrationPerson findSuitableParent(RegistrationPerson node) {
         Objects.requireNonNull(node,"nema node");
         RegistrationPerson parent = node.getParent();
-        if (Objects.isNull(/*root*/parent.getParent())) {
-            return parent;
-        }
-        else {
-            return findSuitableParent(parent);
-        }
+
+        return (Objects.isNull(/*root*/parent.getParent())) ? parent: findSuitableParent(parent);
     }
     private BinaryPerson createBinaryPerson(RegistrationPerson person, boolean preferredDirection) {
         BinaryPerson binPerson = new BinaryPerson(person.getId(), BigDecimal.ZERO, BigDecimal.ZERO, preferredDirection);
@@ -43,14 +39,17 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     private BinaryPerson binParent(RegistrationPerson parent) {
         return binaryPersonRepository.findById(parent.getId()).orElseThrow();
     }
-    private BinaryPerson addBinaryPerson(BinaryPerson binParent, BinaryPerson binChild) {
+
+    //todo da ima i oshthe edin chovek koito e choveka pod koito shte slojim noviq chovek, validachiq dali e svobodna pozichiqta
+    private BinaryPerson addBinaryPerson(BinaryPerson binParent, BinaryPerson binChild ) {
+        BinaryPerson child = binParent.getRightChild();
         if (binParent.isPreferredDirection()/*right*/) {
-            if (Objects.isNull(binParent.getRightChild())) {
+            if (Objects.isNull(child)) {
                 binParent.setRightChild(binChild);
                 binChild.setParent(binParent);
                 binaryPersonRepository.save(binParent);
             } else {
-                addBinaryPerson(binParent.getRightChild(), binChild);
+                addBinaryPerson(child, binChild);
             }
         } else {
             if (Objects.isNull(binParent.getLeftChild())){

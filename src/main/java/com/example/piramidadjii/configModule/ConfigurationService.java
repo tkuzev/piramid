@@ -1,14 +1,20 @@
 package com.example.piramidadjii.configModule;
 
-import com.example.piramidadjii.baseModule.baseEntites.Person;
+import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
+import com.example.piramidadjii.baseModule.enums.Description;
+import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 
-import java.math.BigDecimal;
-
 public interface ConfigurationService {
-     boolean isEligable(SubscriptionPlan subscriptionPlan);
+    boolean isEligable(SubscriptionPlan subscriptionPlan);
 
-//     BigDecimal monthTaxPaid(Person person);
+    void transactionBoiler(BankAccount helperBankAccount,
+                           RegistrationPerson registrationPerson, SubscriptionPlan registrationPerson1, Description registrationFee);
+
+    //     BigDecimal monthTaxPaid(Person person);
 //
 //     boolean isTaxPaid(Person person);
 }
+
+
+
