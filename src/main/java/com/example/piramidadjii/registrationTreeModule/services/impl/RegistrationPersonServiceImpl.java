@@ -54,16 +54,24 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         bankAccountRepository.save(bankAccount);
         registrationPerson.setBankAccount(bankAccount);
         registrationPersonRepository.save(registrationPerson);
-        for (SubscriptionPlan subscriptionPlan : subscriptionPlans) {
-            if (checkBalance(registrationPerson.getBankAccount().getBalance(), subscriptionPlan.getId()) >= 0) {
-                setSubscription(registrationPerson, subscriptionPlan.getId());
-                registrationPerson.setIsSubscriptionEnabled(true);
-                registrationPersonRepository.save(registrationPerson);
-                break;
-            } else if (subscriptionPlan.getId() == 1) {
-                throw new RuntimeException();
-            }
-        }
+        subscriptionPlans.stream()
+                .filter(x->checkBalance(registrationPerson.getBankAccount().getBalance(), x.getId()) >= 0)
+                .findFirst()
+                .ifPresent(subscriptionPlan -> {
+                        setSubscription(registrationPerson, subscriptionPlan.getId());
+                        registrationPerson.setIsSubscriptionEnabled(true);
+                        registrationPersonRepository.save(registrationPerson);
+                });
+//        for (SubscriptionPlan subscriptionPlan : subscriptionPlans) {
+//            if (checkBalance(registrationPerson.getBankAccount().getBalance(), subscriptionPlan.getId()) >= 0) {
+//                setSubscription(registrationPerson, subscriptionPlan.getId());
+//                registrationPerson.setIsSubscriptionEnabled(true);
+//                registrationPersonRepository.save(registrationPerson);
+//                break;
+//            } else if (subscriptionPlan.getId() == 1) {
+//
+//            }
+//        }
         return registrationPerson;
     }
 
