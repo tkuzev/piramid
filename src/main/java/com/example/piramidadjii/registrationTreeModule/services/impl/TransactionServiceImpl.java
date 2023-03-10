@@ -39,6 +39,8 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
 
+    private static final long HELPER_BANK_ID = -1;
+
     @Override
     @Transactional
     public void createTransaction(RegistrationPerson registrationPerson, BigDecimal price) {
@@ -101,7 +103,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     private void transactionDetails(RegistrationPerson registrationPerson, BigDecimal price, Long percent, Description description, AtomicInteger counter) {
         BankAccount personBankAccount = registrationPerson.getBankAccount();
-        BankAccount helperBankAccount = bankAccountRepository.findById(-1L).orElseThrow();
+        BankAccount helperBankAccount = bankAccountRepository.findById(HELPER_BANK_ID).orElseThrow();
         Bank debitTransaction = Bank.builder()
                 .percent(percent)
                 .itemPrice(price)
@@ -112,7 +114,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .operationType(OperationType.DT)
                 .transactionDate(LocalDateTime.now())
                 .build();
-        if (registrationPerson.getId() != 1L && registrationPerson.getId() != -1L) {
+        if (registrationPerson.getId() != 1L && registrationPerson.getId() != HELPER_BANK_ID) {
             debitTransaction.setLevel((long) counter.get() - 1);
         }
         Bank creditTransaction = Bank.builder()
@@ -125,7 +127,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .operationType(OperationType.CT)
                 .transactionDate(LocalDateTime.now())
                 .build();
-        if (registrationPerson.getId() != 1L && registrationPerson.getId() != -1L) {
+        if (registrationPerson.getId() != 1L && registrationPerson.getId() != HELPER_BANK_ID) {
             creditTransaction.setLevel((long) counter.get() - 1);
         }
 

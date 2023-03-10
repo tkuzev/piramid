@@ -37,6 +37,8 @@ public class BaseScheduled {
 
     private BigDecimal moneyToGive = BigDecimal.ZERO;
 
+    private static final long HELPER_BANK_ID = -1;
+
 
 
     @Scheduled(cron = "00 00 00 1 * *", zone = "Europe/Sofia")
@@ -49,7 +51,8 @@ public class BaseScheduled {
     }
 
     private void updateBossMoney() {
-        BankAccount helperBankAccount=bankAccountRepository.findById(-1L).orElseThrow();
+
+        BankAccount helperBankAccount=bankAccountRepository.findById(HELPER_BANK_ID).orElseThrow();
         BinaryPerson boss = binaryPersonRepository.findById(1L).orElseThrow();
         boss.getBankAccount().setBalance(boss.getBankAccount().getBalance().add(boss.getRightContainer().add(boss.getLeftContainer())));
         Bank debitTransaction = new Bank();
@@ -81,7 +84,7 @@ public class BaseScheduled {
 
         Bank debitTransaction = new Bank();
         Bank creditTransaction = new Bank();
-        BankAccount helperBankAccount = bankAccountRepository.findById(-1L).orElseThrow();
+        BankAccount helperBankAccount = bankAccountRepository.findById(HELPER_BANK_ID).orElseThrow();
         BigDecimal oldHelperBalance = helperBankAccount.getBalance();
 
         if (binaryPerson.getLeftContainer().compareTo(binaryPerson.getRightContainer()) < 0) {
