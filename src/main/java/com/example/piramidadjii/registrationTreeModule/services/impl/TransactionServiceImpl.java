@@ -102,10 +102,33 @@ public class TransactionServiceImpl implements TransactionService {
     private void transactionDetails(RegistrationPerson registrationPerson, BigDecimal price, Long percent, Description description, AtomicInteger counter) {
         BankAccount personBankAccount = registrationPerson.getBankAccount();
         BankAccount helperBankAccount = bankAccountRepository.findById(-1L).orElseThrow();
-        Bank debitTransaction = new Bank();
-        Bank creditTransaction = new Bank();
+        Bank debitTransaction = Bank.builder()
+                .percent(percent)
+                .itemPrice(price)
+                .amount(calculatePrice(percent, price))
+                .dstAccId(registrationPerson.getBankAccount())
+                .srcAccId(helperBankAccount)
+                .description(description)
+                .operationType(OperationType.DT)
+                .transactionDate(LocalDateTime.now())
+                .build();
+        if (registrationPerson.getId() != 1L && registrationPerson.getId() != -1L) {
+            debitTransaction.setLevel((long) counter.get() - 1);
+        }
+        Bank creditTransaction = Bank.builder()
+                .percent(percent)
+                .itemPrice(price)
+                .amount(calculatePrice(percent, price).negate())
+                .dstAccId(helperBankAccount)
+                .srcAccId(registrationPerson.getBankAccount())
+                .description(description)
+                .operationType(OperationType.CT)
+                .transactionDate(LocalDateTime.now())
+                .build();
+        if (registrationPerson.getId() != 1L && registrationPerson.getId() != -1L) {
+            creditTransaction.setLevel((long) counter.get() - 1);
+        }
 
-        setTr(debitTransaction, percent, price, registrationPerson.getBankAccount(), helperBankAccount, description, OperationType.DT, counter);
 
         BigDecimal newDebitBalance = personBankAccount.getBalance().add(debitTransaction.getAmount());
         personBankAccount.setBalance(personBankAccount.getBalance().add(newDebitBalance));
@@ -113,7 +136,6 @@ public class TransactionServiceImpl implements TransactionService {
         registrationPersonRepository.save(registrationPerson);
         bankRepository.save(debitTransaction);
 
-        setTr(creditTransaction, percent, price.negate(), helperBankAccount, registrationPerson.getBankAccount(), description, OperationType.CT, counter);
 
         BigDecimal newCreditBalance = helperBankAccount.getBalance().subtract(debitTransaction.getAmount());
         helperBankAccount.setBalance(helperBankAccount.getBalance().subtract(newCreditBalance));
@@ -158,19 +180,5 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         return income;
-    }
-    private static void setTr(Bank transaction, Long percent, BigDecimal price, BankAccount registrationPerson, BankAccount helperBankAccount, Description description, OperationType dt, AtomicInteger counter) {
-        transaction.setPercent(percent);
-        transaction.setItemPrice(price);
-        transaction.setAmount(calculatePrice(percent, price));
-        transaction.setDstAccId(registrationPerson);
-        transaction.setSrcAccId(helperBankAccount);
-        transaction.setDescription(description);
-        transaction.setOperationType(dt);
-        transaction.setTransactionDate(LocalDateTime.now());
-
-        if (registrationPerson.getId()!=1L && registrationPerson.getId()!=-1L) {
-            transaction.setLevel((long) counter.get()-1);
-        }
     }
 }

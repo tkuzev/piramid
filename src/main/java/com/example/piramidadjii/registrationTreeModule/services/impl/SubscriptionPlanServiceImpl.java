@@ -10,12 +10,14 @@ import org.springframework.stereotype.Service;
 public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
+
     @Override
     public void createSubscriptionPlan(SubscriptionPlan subscriptionPlan) {
-        SubscriptionPlan newSubscriptionPlan = new SubscriptionPlan();
-        newSubscriptionPlan.setName(subscriptionPlan.getName());
-        newSubscriptionPlan.setPercents(subscriptionPlan.getPercents());
-        newSubscriptionPlan.setRegistrationFee(subscriptionPlan.getRegistrationFee());
+        SubscriptionPlan newSubscriptionPlan = SubscriptionPlan.builder()
+                .name(subscriptionPlan.getName())
+                .percents(subscriptionPlan.getPercents())
+                .registrationFee(subscriptionPlan.getRegistrationFee())
+                .build();
         subscriptionPlanRepository.save(newSubscriptionPlan);
     }
 

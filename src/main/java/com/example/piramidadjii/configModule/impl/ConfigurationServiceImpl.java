@@ -45,21 +45,37 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 //    }
     @Override
     public void transactionBoiler(BankAccount helperBankAccount, RegistrationPerson registrationPerson, SubscriptionPlan registrationPerson1, Description registrationFee) {
-        Bank debitTransaction = new Bank();
-        Bank creditTransaction = new Bank();
-        creditTransaction.setDstAccId(helperBankAccount);
-        creditTransaction.setSrcAccId(registrationPerson.getBankAccount());
-        creditTransaction.setAmount(registrationPerson1.getRegistrationFee());
-        creditTransaction.setOperationType(OperationType.DT);
-        creditTransaction.setDescription(registrationFee);
-        creditTransaction.setTransactionDate(LocalDateTime.now());
-        debitTransaction.setTransactionDate(LocalDateTime.now());
-        debitTransaction.setDescription(registrationFee);
-        debitTransaction.setOperationType(OperationType.CT);
-        debitTransaction.setAmount(registrationPerson1.getRegistrationFee().negate());
-        debitTransaction.setDstAccId(registrationPerson.getBankAccount());
-        debitTransaction.setSrcAccId(helperBankAccount);
+        Bank debitTransaction = Bank.builder()
+                .amount(registrationPerson1.getRegistrationFee().negate())
+                .srcAccId(helperBankAccount)
+                .dstAccId(registrationPerson.getBankAccount())
+                .description(registrationFee)
+                .operationType(OperationType.CT)
+                .transactionDate(LocalDateTime.now())
+                .build();
+        Bank creditTransaction = Bank.builder()
+                .amount(registrationPerson1.getRegistrationFee())
+                .srcAccId(registrationPerson.getBankAccount())
+                .dstAccId(helperBankAccount)
+                .description(registrationFee)
+                .operationType(OperationType.DT)
+                .transactionDate(LocalDateTime.now())
+                .build();
+
+//        creditTransaction.setDstAccId(helperBankAccount);
+//        creditTransaction.setSrcAccId(registrationPerson.getBankAccount());
+//        creditTransaction.setAmount(registrationPerson1.getRegistrationFee());
+//        creditTransaction.setOperationType(OperationType.DT);
+//        creditTransaction.setDescription(registrationFee);
+//        creditTransaction.setTransactionDate(LocalDateTime.now());
+//        debitTransaction.setTransactionDate(LocalDateTime.now());
+//        debitTransaction.setDescription(registrationFee);
+//        debitTransaction.setOperationType(OperationType.CT);
+//        debitTransaction.setAmount(registrationPerson1.getRegistrationFee().negate());
+//        debitTransaction.setDstAccId(registrationPerson.getBankAccount());
+//        debitTransaction.setSrcAccId(helperBankAccount);
         bankRepository.save(creditTransaction);
         bankRepository.save(debitTransaction);
+
     }
 }
