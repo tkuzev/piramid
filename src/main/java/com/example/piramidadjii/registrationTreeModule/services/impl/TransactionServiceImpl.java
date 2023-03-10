@@ -76,7 +76,7 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         if (node.getId().equals(registrationPerson.getId())) {
-            Long FLAT_PERCENTAGE = 5L;
+            long FLAT_PERCENTAGE = 5L;
             percent[0] = FLAT_PERCENTAGE;
             description[0] = Description.SOLD;
         } else if (counter.get() > percents.size()) {
@@ -113,7 +113,7 @@ public class TransactionServiceImpl implements TransactionService {
         registrationPersonRepository.save(registrationPerson);
         bankRepository.save(debitTransaction);
 
-        setTr(creditTransaction, percent, price, helperBankAccount, registrationPerson.getBankAccount(), description, OperationType.CT, counter);
+        setTr(creditTransaction, percent, price.negate(), helperBankAccount, registrationPerson.getBankAccount(), description, OperationType.CT, counter);
 
         BigDecimal newCreditBalance = helperBankAccount.getBalance().subtract(debitTransaction.getAmount());
         helperBankAccount.setBalance(helperBankAccount.getBalance().subtract(newCreditBalance));

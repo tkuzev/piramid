@@ -6,6 +6,7 @@ import com.example.piramidadjii.bankAccountModule.repositories.BankAccountReposi
 import com.example.piramidadjii.bankAccountModule.repositories.BankRepository;
 import com.example.piramidadjii.baseModule.enums.Description;
 import com.example.piramidadjii.baseModule.enums.OperationType;
+import com.example.piramidadjii.configModule.ConfigurationService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
@@ -20,7 +21,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -36,6 +36,9 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
     @Autowired
     private BankRepository bankRepository;
+
+    @Autowired
+            private ConfigurationService configurationService;
 
     List<SubscriptionPlan> subscriptionPlans = new ArrayList<>();
 
@@ -81,23 +84,9 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         bankAccountRepository.save(bank);
 
 
-        Bank debitTransaction = new Bank();
-        Bank creditTransaction = new Bank();
-        creditTransaction.setDstAccId(helperBankAccount);
-        creditTransaction.setSrcAccId(registrationPerson.getBankAccount());
-        creditTransaction.setAmount(registrationPerson.getSubscriptionPlan().getRegistrationFee());
-        creditTransaction.setOperationType(OperationType.DT);
-        creditTransaction.setDescription(Description.REGISTRATION_FEE);
-        creditTransaction.setTransactionDate(LocalDateTime.now());
-        debitTransaction.setTransactionDate(LocalDateTime.now());
-        debitTransaction.setDescription(Description.REGISTRATION_FEE);
-        debitTransaction.setOperationType(OperationType.CT);
-        debitTransaction.setAmount(registrationPerson.getSubscriptionPlan().getRegistrationFee());
-        debitTransaction.setDstAccId(registrationPerson.getBankAccount());
-        debitTransaction.setSrcAccId(helperBankAccount);
-        bankRepository.save(creditTransaction);
-        bankRepository.save(debitTransaction);
+        configurationService.transactionBoiler(helperBankAccount, registrationPerson, registrationPerson.getSubscriptionPlan(), Description.REGISTRATION_FEE);
     }
+
 
     private RegistrationPerson setPersonDetails(String name, Long parentId) {
         RegistrationPerson registrationPerson = new RegistrationPerson();
@@ -115,22 +104,7 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
             return;
         }
         registrationPerson.getBankAccount().setBalance(registrationPerson.getBankAccount().getBalance().subtract(subscriptionPlan.getRegistrationFee()));
-        Bank creditTransaction = new Bank();
-        Bank debitTransaction = new Bank();
-        debitTransaction.setDstAccId(helperBankAccount);
-        debitTransaction.setSrcAccId(registrationPerson.getBankAccount());
-        debitTransaction.setAmount(subscriptionPlan.getRegistrationFee());
-        debitTransaction.setOperationType(OperationType.DT);
-        debitTransaction.setDescription(Description.UPDATE_PLAN_FEE);
-        debitTransaction.setTransactionDate(LocalDateTime.now());
-        creditTransaction.setTransactionDate(LocalDateTime.now());
-        creditTransaction.setDescription(Description.UPDATE_PLAN_FEE);
-        creditTransaction.setOperationType(OperationType.CT);
-        creditTransaction.setAmount(subscriptionPlan.getRegistrationFee());
-        creditTransaction.setDstAccId(registrationPerson.getBankAccount());
-        creditTransaction.setSrcAccId(helperBankAccount);
-        bankRepository.save(debitTransaction);
-        bankRepository.save(creditTransaction);
+        configurationService.transactionBoiler(helperBankAccount, registrationPerson, subscriptionPlan, Description.UPDATE_PLAN_FEE);
         registrationPerson.setSubscriptionPlan(subscriptionPlan);
     }
 
