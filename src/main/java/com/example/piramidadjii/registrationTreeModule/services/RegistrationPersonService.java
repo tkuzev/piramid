@@ -10,7 +10,5 @@ public interface RegistrationPersonService {
 
     RegistrationPerson registerPerson(String name, BigDecimal money, Long parentId);
 
-
     void setSubscription(RegistrationPerson registrationPerson, long id);
-    void upgradeSubscriptionPlan(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan);
 }

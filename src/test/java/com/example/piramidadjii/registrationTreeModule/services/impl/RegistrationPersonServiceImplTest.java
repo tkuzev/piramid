@@ -1,17 +1,15 @@
 package com.example.piramidadjii.registrationTreeModule.services.impl;
 
 import com.example.piramidadjii.bankAccountModule.repositories.BankRepository;
-import com.example.piramidadjii.orchestraModule.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationPersonService;
+import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.math.BigDecimal;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -26,9 +24,8 @@ class RegistrationPersonServiceImplTest {
     private SubscriptionPlanRepository subscriptionPlanRepository;
     @Autowired
     private BankRepository bankRepository;
-
     @Autowired
-    private OrchestraService orchestraService;
+    private SubscriptionPlanService subscriptionPlanService;
 
     @Test()
     void testRegistrationFail(){
@@ -92,11 +89,22 @@ class RegistrationPersonServiceImplTest {
         RegistrationPerson personFromRepo = registrationPersonRepository.findById(person.getId()).get();
 
         personFromRepo.getBankAccount().setBalance(personFromRepo.getBankAccount().getBalance().add(BigDecimal.valueOf(500)));
-        registrationPersonService.upgradeSubscriptionPlan(personFromRepo, subscriptionPlanRepository.getSubscriptionPlanById(3L).orElseThrow());
+        subscriptionPlanService.upgradeSubscriptionPlan(personFromRepo, subscriptionPlanRepository.getSubscriptionPlanById(3L).orElseThrow());
         registrationPersonRepository.save(personFromRepo);
 
         assertEquals(3L, personFromRepo.getSubscriptionPlan().getId());
-        assertEquals(BigDecimal.valueOf(150).setScale(2), personFromRepo.getBankAccount().getBalance());
+        assertEquals(BigDecimal.valueOf(350).setScale(2), personFromRepo.getBankAccount().getBalance());
+    }
+
+    @Test
+    void upgradeSubscriptionPlanTestUnsuccessfully(){
+        RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("250"), 1L);
+        RegistrationPerson personFromRepo = registrationPersonRepository.findById(person.getId()).get();
+
+        subscriptionPlanService.upgradeSubscriptionPlan(personFromRepo, subscriptionPlanRepository.getSubscriptionPlanById(3L).orElseThrow());
+
+        assertEquals(1L, personFromRepo.getSubscriptionPlan().getId());
+        assertEquals(BigDecimal.valueOf(50).setScale(2), personFromRepo.getBankAccount().getBalance());
     }
 
     @Test

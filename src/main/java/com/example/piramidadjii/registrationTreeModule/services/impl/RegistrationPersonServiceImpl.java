@@ -2,7 +2,6 @@ package com.example.piramidadjii.registrationTreeModule.services.impl;
 
 import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
-import com.example.piramidadjii.bankAccountModule.repositories.BankRepository;
 import com.example.piramidadjii.baseModule.enums.Description;
 import com.example.piramidadjii.configModule.ConfigurationService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
@@ -18,22 +17,19 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class RegistrationPersonServiceImpl implements RegistrationPersonService {
     @Autowired
     private RegistrationPersonRepository registrationPersonRepository;
-
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
-
     @Autowired
     private BankAccountRepository bankAccountRepository;
-
     @Autowired
     private ConfigurationService configurationService;
-
-    private static final long HELPER_BANK_ACCOUNT_ID = -1;
+    private static final long BOSS_BANK_ACCOUNT_ID = 1;
 
     @Override
     @Transactional
@@ -54,6 +50,10 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
                     registrationPerson.setIsSubscriptionEnabled(true);
                     registrationPersonRepository.save(registrationPerson);
                 });
+
+        if(Objects.isNull(registrationPerson.getSubscriptionPlan()))
+            throw new RuntimeException();
+
         return registrationPerson;
     }
 
@@ -64,22 +64,28 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
     @Override
     public void setSubscription(RegistrationPerson registrationPerson, long id) {
-        BankAccount helperBankAccount = bankAccountRepository.findById(HELPER_BANK_ACCOUNT_ID).orElseThrow();
-        BankAccount bank = bankAccountRepository.findById(registrationPerson.getId()).orElseThrow();
-        registrationPerson.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(id).orElseThrow());
-        BigDecimal balance = bank.getBalance();
+        BankAccount bossBankAccount = bankAccountRepository.findById(BOSS_BANK_ACCOUNT_ID).orElseThrow();
+        BankAccount personBankAccount = bankAccountRepository.findById(registrationPerson.getId()).orElseThrow();
+
+        BigDecimal personBalance = personBankAccount.getBalance();
+        BigDecimal bossBalance = bossBankAccount.getBalance();
+
         BigDecimal fee = subscriptionPlanRepository.getSubscriptionPlanById(id).orElseThrow().getRegistrationFee();
-        BigDecimal newBalance = balance.subtract(fee);
-        bank.setBalance(newBalance);
-        bankAccountRepository.save(bank);
+        BigDecimal newBalance = personBalance.subtract(fee);
 
+        registrationPerson.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(id).orElseThrow());
+        personBankAccount.setBalance(newBalance);
+        bossBankAccount.setBalance(bossBalance.add(fee));
 
-        configurationService.transactionBoiler(helperBankAccount, registrationPerson, registrationPerson.
-                getSubscriptionPlan(), Description.REGISTRATION_FEE);
+        bankAccountRepository.save(personBankAccount);
+        bankAccountRepository.save(bossBankAccount);
+
+        configurationService.transactionBoiler(bossBankAccount, registrationPerson, registrationPerson.
+                getSubscriptionPlan(), Description.REGISTRATION_FEE,registrationPerson.getSubscriptionPlan().getRegistrationFee());
     }
 
-
     private RegistrationPerson setPersonDetails(String name, Long parentId) {
+        return RegistrationPerson.builder()
         //registrationTreeRepository.save(registrationTree);
         return RegistrationPerson.builder()
                 .name(name)

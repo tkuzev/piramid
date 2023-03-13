@@ -1,5 +1,4 @@
 package com.example.piramidadjii.orchestraModule.impl;
-import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.configModule.ConfigurationService;
 import com.example.piramidadjii.orchestraModule.OrchestraService;
