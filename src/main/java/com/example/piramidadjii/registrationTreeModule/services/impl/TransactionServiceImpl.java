@@ -53,12 +53,12 @@ public class TransactionServiceImpl implements TransactionService {
                 .limit(5)
                 .forEach(node -> setNewTransactions(registrationPerson, price, percent, counter, node, description));
 
-
         transactionDetails(
                 registrationPersonRepository.getRegistrationPersonById(1L).orElseThrow(),
                 price,
                 profit - percentages,
                 Description.MONEY_LEFT, counter);
+
         percentages = 0L;
     }
 
@@ -114,9 +114,11 @@ public class TransactionServiceImpl implements TransactionService {
                 .operationType(OperationType.DT)
                 .transactionDate(LocalDateTime.now())
                 .build();
+
         if (registrationPerson.getId() != 1L && registrationPerson.getId() != HELPER_BANK_ID) {
             debitTransaction.setLevel((long) counter.get() - 1);
         }
+
         Bank creditTransaction = Bank.builder()
                 .percent(percent)
                 .itemPrice(price)
@@ -127,17 +129,16 @@ public class TransactionServiceImpl implements TransactionService {
                 .operationType(OperationType.CT)
                 .transactionDate(LocalDateTime.now())
                 .build();
+
         if (registrationPerson.getId() != 1L && registrationPerson.getId() != HELPER_BANK_ID) {
             creditTransaction.setLevel((long) counter.get() - 1);
         }
-
 
         BigDecimal newDebitBalance = personBankAccount.getBalance().add(debitTransaction.getAmount());
         personBankAccount.setBalance(personBankAccount.getBalance().add(newDebitBalance));
         bankAccountRepository.save(personBankAccount);
         registrationPersonRepository.save(registrationPerson);
         bankRepository.save(debitTransaction);
-
 
         BigDecimal newCreditBalance = helperBankAccount.getBalance().subtract(debitTransaction.getAmount());
         helperBankAccount.setBalance(helperBankAccount.getBalance().subtract(newCreditBalance));
@@ -150,10 +151,12 @@ public class TransactionServiceImpl implements TransactionService {
         List<Long> list = new ArrayList<>();
 
         String[] stringArray = percents.split("//");
+
         for (String string : stringArray) {
             Long longInt = Long.valueOf(string);
             list.add(longInt);
         }
+
         return list;
     }
 
@@ -161,13 +164,13 @@ public class TransactionServiceImpl implements TransactionService {
     public Map<SubscriptionPlan, BigDecimal> monthlyIncome(RegistrationPerson registrationPerson) {
         Map<SubscriptionPlan, BigDecimal> income = new HashMap<>();
         List<SubscriptionPlan> subscriptionPlans = subscriptionPlanRepository.findAll();
+
         for (SubscriptionPlan s : subscriptionPlans) {
             income.put(s, BigDecimal.ZERO);
         }
 
         List<Bank> allTransactions = bankRepository.
                 findAllByIdAndTransactionDateBetween(registrationPerson.getId(), LocalDateTime.now().minusMonths(1), LocalDateTime.now());
-
 
         for (Bank transactions : allTransactions) {
             for (SubscriptionPlan s : subscriptionPlans) {

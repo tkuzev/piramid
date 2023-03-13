@@ -3,7 +3,6 @@ package com.example.piramidadjii.configModule.impl;
 import com.example.piramidadjii.bankAccountModule.entities.Bank;
 import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankRepository;
-import com.example.piramidadjii.baseModule.baseEntites.Person;
 import com.example.piramidadjii.baseModule.enums.Description;
 import com.example.piramidadjii.baseModule.enums.OperationType;
 import com.example.piramidadjii.configModule.ConfigurationService;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -27,7 +25,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     BankRepository bankRepository;
 
     @Override
-    public boolean isEligable(SubscriptionPlan subscriptionPlan) {
+    public boolean isEligible(SubscriptionPlan subscriptionPlan) {
         return subscriptionPlan.isEligibleForBinary();
     }
 
@@ -44,17 +42,18 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 //        return registrationPerson.getSubscriptionExpirationDate().isBefore(LocalDate.now());
 //    }
     @Override
-    public void transactionBoiler(BankAccount helperBankAccount, RegistrationPerson registrationPerson, SubscriptionPlan registrationPerson1, Description registrationFee) {
+    public void transactionBoiler(BankAccount helperBankAccount, RegistrationPerson registrationPerson, SubscriptionPlan registrationPerson1, Description registrationFee, BigDecimal amount) {
         Bank debitTransaction = Bank.builder()
-                .amount(registrationPerson1.getRegistrationFee().negate())
+                .amount(amount.negate())
                 .srcAccId(helperBankAccount)
                 .dstAccId(registrationPerson.getBankAccount())
                 .description(registrationFee)
                 .operationType(OperationType.CT)
                 .transactionDate(LocalDateTime.now())
                 .build();
+
         Bank creditTransaction = Bank.builder()
-                .amount(registrationPerson1.getRegistrationFee())
+                .amount(amount)
                 .srcAccId(registrationPerson.getBankAccount())
                 .dstAccId(helperBankAccount)
                 .description(registrationFee)
@@ -62,20 +61,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
                 .transactionDate(LocalDateTime.now())
                 .build();
 
-//        creditTransaction.setDstAccId(helperBankAccount);
-//        creditTransaction.setSrcAccId(registrationPerson.getBankAccount());
-//        creditTransaction.setAmount(registrationPerson1.getRegistrationFee());
-//        creditTransaction.setOperationType(OperationType.DT);
-//        creditTransaction.setDescription(registrationFee);
-//        creditTransaction.setTransactionDate(LocalDateTime.now());
-//        debitTransaction.setTransactionDate(LocalDateTime.now());
-//        debitTransaction.setDescription(registrationFee);
-//        debitTransaction.setOperationType(OperationType.CT);
-//        debitTransaction.setAmount(registrationPerson1.getRegistrationFee().negate());
-//        debitTransaction.setDstAccId(registrationPerson.getBankAccount());
-//        debitTransaction.setSrcAccId(helperBankAccount);
         bankRepository.save(creditTransaction);
         bankRepository.save(debitTransaction);
-
     }
 }

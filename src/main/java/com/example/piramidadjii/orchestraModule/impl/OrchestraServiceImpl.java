@@ -21,7 +21,7 @@ public class OrchestraServiceImpl implements OrchestraService {
     @Override
     public void registerPerson(String name, BigDecimal money, Long parentId, boolean preferredDirection) {
         RegistrationPerson registrationPerson = registrationPersonService.registerPerson(name, money, parentId);
-        if(configurationService.isEligable(registrationPerson.getSubscriptionPlan())){
+        if(configurationService.isEligible(registrationPerson.getSubscriptionPlan())){
             binaryRegistrationService.registerNewBinaryPerson(registrationPerson, preferredDirection);
         }
     }
