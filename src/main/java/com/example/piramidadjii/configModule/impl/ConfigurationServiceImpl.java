@@ -62,18 +62,6 @@ public class ConfigurationServiceImpl implements ConfigurationService {
                 .transactionDate(LocalDateTime.now())
                 .build();
 
-//        creditTransaction.setDstAccId(helperBankAccount);
-//        creditTransaction.setSrcAccId(registrationPerson.getBankAccount());
-//        creditTransaction.setAmount(registrationPerson1.getRegistrationFee());
-//        creditTransaction.setOperationType(OperationType.DT);
-//        creditTransaction.setDescription(registrationFee);
-//        creditTransaction.setTransactionDate(LocalDateTime.now());
-//        debitTransaction.setTransactionDate(LocalDateTime.now());
-//        debitTransaction.setDescription(registrationFee);
-//        debitTransaction.setOperationType(OperationType.CT);
-//        debitTransaction.setAmount(registrationPerson1.getRegistrationFee().negate());
-//        debitTransaction.setDstAccId(registrationPerson.getBankAccount());
-//        debitTransaction.setSrcAccId(helperBankAccount);
         bankRepository.save(creditTransaction);
         bankRepository.save(debitTransaction);
 

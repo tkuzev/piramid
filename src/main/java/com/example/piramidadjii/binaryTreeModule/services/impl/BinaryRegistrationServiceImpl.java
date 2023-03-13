@@ -19,8 +19,8 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     private ConfigurationService configurationService;
 
     @Override
-    public BinaryPerson registerNewBinaryPerson(RegistrationPerson person, boolean preferredDirection) {
-        return addBinaryPerson(binParent(findSuitableParent(person)), createBinaryPerson(person, preferredDirection));
+    public void registerNewBinaryPerson(RegistrationPerson person,BinaryPerson daTiGoNatikam, boolean preferredDirection) {
+         addBinaryPerson(binParent(findSuitableParent(person)), createBinaryPerson(person),daTiGoNatikam,preferredDirection);
     }
 
     public RegistrationPerson findSuitableParent(RegistrationPerson node) {
@@ -29,10 +29,9 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
 
         return (Objects.isNull(/*root*/parent.getParent())) ? parent: findSuitableParent(parent);
     }
-    private BinaryPerson createBinaryPerson(RegistrationPerson person, boolean preferredDirection) {
-        BinaryPerson binPerson = new BinaryPerson(person.getId(), BigDecimal.ZERO, BigDecimal.ZERO, preferredDirection);
+    private BinaryPerson createBinaryPerson(RegistrationPerson person) {
+        BinaryPerson binPerson = new BinaryPerson(person.getId(), BigDecimal.ZERO, BigDecimal.ZERO);
         binPerson.setName(person.getName());
-        binPerson.setPreferredDirection(preferredDirection);
         binaryPersonRepository.save(binPerson);
         return binPerson;
     }
@@ -41,32 +40,22 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     }
 
     //todo da ima i oshthe edin chovek koito e choveka pod koito shte slojim noviq chovek, validachiq dali e svobodna pozichiqta
-    private BinaryPerson addBinaryPerson(BinaryPerson binParent, BinaryPerson binChild ) {
-        BinaryPerson child = binParent.getRightChild();
-        if (binParent.isPreferredDirection()/*right*/) {
-            if (Objects.isNull(child)) {
-                binParent.setRightChild(binChild);
-                binChild.setParent(binParent);
-                binaryPersonRepository.save(binParent);
-            } else {
-                addBinaryPerson(child, binChild);
-            }
-        } else {
-            if (Objects.isNull(binParent.getLeftChild())){
-                binParent.setLeftChild(binChild);
-                binChild.setParent(binParent);
-                binaryPersonRepository.save(binParent);
-            } else {
-                addBinaryPerson(binParent.getLeftChild(), binChild);
-            }
-        }
-        binaryPersonRepository.save(binChild);
-        return binChild;
-    }
-    @Override
-    public void changePreferredDirection(BinaryPerson binaryPerson, boolean direction) {
-        binaryPerson.setPreferredDirection(direction);
-        binaryPersonRepository.save(binaryPerson);
-    }
+    private void addBinaryPerson(BinaryPerson binParent, BinaryPerson binChild, BinaryPerson toqDetoMuGoTikat, boolean preferredSide ) {
 
+        if(Objects.isNull(binParent)) throw new RuntimeException("otide za chigari bashtata");
+
+        if(binParent == toqDetoMuGoTikat){
+            if (preferredSide) {
+                binParent.setRightChild(binChild);
+            }
+            else {
+                binParent.setLeftChild(binChild);
+            }
+            binChild.setParent(binParent);
+            binaryPersonRepository.save(binParent);
+            return;
+        }
+        addBinaryPerson(binParent.getRightChild(), binChild, toqDetoMuGoTikat, preferredSide);
+        addBinaryPerson(binParent.getLeftChild(), binChild, toqDetoMuGoTikat, preferredSide);
+    }
 }

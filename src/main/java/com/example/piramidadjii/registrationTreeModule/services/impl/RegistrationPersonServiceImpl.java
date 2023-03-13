@@ -1,11 +1,9 @@
 package com.example.piramidadjii.registrationTreeModule.services.impl;
 
-import com.example.piramidadjii.bankAccountModule.entities.Bank;
 import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
 import com.example.piramidadjii.bankAccountModule.repositories.BankRepository;
 import com.example.piramidadjii.baseModule.enums.Description;
-import com.example.piramidadjii.baseModule.enums.OperationType;
 import com.example.piramidadjii.configModule.ConfigurationService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
@@ -18,9 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -34,9 +29,6 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
     @Autowired
     private BankAccountRepository bankAccountRepository;
-
-    @Autowired
-    private BankRepository bankRepository;
 
     @Autowired
     private ConfigurationService configurationService;
@@ -55,23 +47,13 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         registrationPerson.setBankAccount(bankAccount);
         registrationPersonRepository.save(registrationPerson);
         subscriptionPlans.stream()
-                .filter(x->checkBalance(registrationPerson.getBankAccount().getBalance(), x.getId()) >= 0)
+                .filter(x -> checkBalance(registrationPerson.getBankAccount().getBalance(), x.getId()) >= 0)
                 .findFirst()
                 .ifPresent(subscriptionPlan -> {
-                        setSubscription(registrationPerson, subscriptionPlan.getId());
-                        registrationPerson.setIsSubscriptionEnabled(true);
-                        registrationPersonRepository.save(registrationPerson);
+                    setSubscription(registrationPerson, subscriptionPlan.getId());
+                    registrationPerson.setIsSubscriptionEnabled(true);
+                    registrationPersonRepository.save(registrationPerson);
                 });
-//        for (SubscriptionPlan subscriptionPlan : subscriptionPlans) {
-//            if (checkBalance(registrationPerson.getBankAccount().getBalance(), subscriptionPlan.getId()) >= 0) {
-//                setSubscription(registrationPerson, subscriptionPlan.getId());
-//                registrationPerson.setIsSubscriptionEnabled(true);
-//                registrationPersonRepository.save(registrationPerson);
-//                break;
-//            } else if (subscriptionPlan.getId() == 1) {
-//
-//            }
-//        }
         return registrationPerson;
     }
 
@@ -98,13 +80,12 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
 
     private RegistrationPerson setPersonDetails(String name, Long parentId) {
-        RegistrationPerson registrationPerson = RegistrationPerson.builder()
+        //registrationTreeRepository.save(registrationTree);
+        return RegistrationPerson.builder()
                 .name(name)
                 .subscriptionExpirationDate(LocalDate.now().plusMonths(1))
                 .parent(registrationPersonRepository.findById(parentId).orElseThrow())
                 .build();
-        //registrationTreeRepository.save(registrationTree);
-        return registrationPerson;
     }
 
     @Override
