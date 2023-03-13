@@ -6,5 +6,5 @@ import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPers
 import java.math.BigDecimal;
 
 public interface OrchestraService {
-    void registerPerson(String name, BigDecimal money, Long parentId, BinaryPerson kovrata, boolean preferredDirection);
+    void registerPerson(String name, BigDecimal money, Long parentId, BinaryPerson personToPutItOn, boolean preferredDirection);
 }

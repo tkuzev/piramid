@@ -15,8 +15,8 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     private BinaryPersonRepository binaryPersonRepository;
 
     @Override
-    public void registerNewBinaryPerson(RegistrationPerson person,BinaryPerson daTiGoNatikam, boolean preferredDirection) {
-         addBinaryPerson(binParent(findSuitableParent(person)), createBinaryPerson(person),daTiGoNatikam,preferredDirection);
+    public void registerNewBinaryPerson(RegistrationPerson person, BinaryPerson personToPutItOn, boolean preferredDirection) {
+         addBinaryPerson(binParent(findSuitableParent(person)), createBinaryPerson(person), personToPutItOn,preferredDirection);
     }
 
     public RegistrationPerson findSuitableParent(RegistrationPerson node) {
@@ -28,6 +28,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     private BinaryPerson createBinaryPerson(RegistrationPerson person) {
         BinaryPerson binPerson = new BinaryPerson(person.getId(), BigDecimal.ZERO, BigDecimal.ZERO);
         binPerson.setName(person.getName());
+        binPerson.setBankAccount(person.getBankAccount());
         binaryPersonRepository.save(binPerson);
         return binPerson;
     }
@@ -38,19 +39,22 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     //todo da ima i oshthe edin chovek koito e choveka pod koito shte slojim noviq chovek, validachiq dali e svobodna pozichiqta
     private void addBinaryPerson(BinaryPerson binParent, BinaryPerson binChild, BinaryPerson toqDetoMuGoTikat, boolean preferredSide ) {
 
-        if(Objects.isNull(binParent)) throw new RuntimeException("otide za chigari bashtata");
+        if(Objects.isNull(binParent)) return;
 
-        if(binParent == toqDetoMuGoTikat){
+        if(Objects.equals(binParent.getId(), toqDetoMuGoTikat.getId())){
+
             if (preferredSide) {
                 binParent.setRightChild(binChild);
-            }
-            else {
+            } else {
                 binParent.setLeftChild(binChild);
             }
+
             binChild.setParent(binParent);
             binaryPersonRepository.save(binParent);
+            binaryPersonRepository.save(binChild);
             return;
         }
+
         addBinaryPerson(binParent.getRightChild(), binChild, toqDetoMuGoTikat, preferredSide);
         addBinaryPerson(binParent.getLeftChild(), binChild, toqDetoMuGoTikat, preferredSide);
     }

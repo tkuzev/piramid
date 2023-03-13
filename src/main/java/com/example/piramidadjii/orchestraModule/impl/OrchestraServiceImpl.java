@@ -1,4 +1,6 @@
 package com.example.piramidadjii.orchestraModule.impl;
+
+import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.configModule.ConfigurationService;
 import com.example.piramidadjii.orchestraModule.OrchestraService;
@@ -18,11 +20,12 @@ public class OrchestraServiceImpl implements OrchestraService {
     private RegistrationPersonService registrationPersonService;
     @Autowired
     private ConfigurationService configurationService;
+
     @Override
-    public void registerPerson(String name, BigDecimal money, Long parentId, BinaryPerson kovrata, boolean preferredDirection) {
+    public void registerPerson(String name, BigDecimal money, Long parentId, BinaryPerson personToPutItOn, boolean preferredDirection) {
         RegistrationPerson registrationPerson = registrationPersonService.registerPerson(name, money, parentId);
-        if(configurationService.isEligable(registrationPerson.getSubscriptionPlan())){
-            binaryRegistrationService.registerNewBinaryPerson(registrationPerson, kovrata, preferredDirection);
+        if (configurationService.isEligible(registrationPerson.getSubscriptionPlan())) {
+            binaryRegistrationService.registerNewBinaryPerson(registrationPerson, personToPutItOn, preferredDirection);
         }
     }
 }

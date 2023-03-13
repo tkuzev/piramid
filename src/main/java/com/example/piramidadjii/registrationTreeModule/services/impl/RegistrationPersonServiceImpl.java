@@ -86,27 +86,9 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
     private RegistrationPerson setPersonDetails(String name, Long parentId) {
         return RegistrationPerson.builder()
-        //registrationTreeRepository.save(registrationTree);
-        return RegistrationPerson.builder()
                 .name(name)
                 .subscriptionExpirationDate(LocalDate.now().plusMonths(1))
                 .parent(registrationPersonRepository.findById(parentId).orElseThrow())
                 .build();
-    }
-
-    @Override
-    public void upgradeSubscriptionPlan(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan) {
-        BankAccount helperBankAccount = bankAccountRepository.findById(HELPER_BANK_ACCOUNT_ID).orElseThrow();
-        if (isUpdateUnavailable(registrationPerson, subscriptionPlan)) {
-            return;
-        }
-        registrationPerson.getBankAccount().setBalance(registrationPerson.getBankAccount().getBalance().subtract(subscriptionPlan.getRegistrationFee()));
-        configurationService.transactionBoiler(helperBankAccount, registrationPerson, subscriptionPlan, Description.UPDATE_PLAN_FEE);
-        registrationPerson.setSubscriptionPlan(subscriptionPlan);
-    }
-
-    private static boolean isUpdateUnavailable(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan) {
-        return registrationPerson.getSubscriptionPlan().getPercents().length() > subscriptionPlan.getPercents().length()
-                || registrationPerson.getBankAccount().getBalance().compareTo(subscriptionPlan.getRegistrationFee().subtract(registrationPerson.getSubscriptionPlan().getRegistrationFee())) < 0;
     }
 }
