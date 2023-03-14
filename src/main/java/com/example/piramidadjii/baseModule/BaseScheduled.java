@@ -14,12 +14,17 @@ import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import jakarta.mail.MessagingException;
 import lombok.SneakyThrows;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.swing.text.DateFormatter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
@@ -54,6 +59,7 @@ public class BaseScheduled {
     private MailSenderService mailSenderService;
     private final DateTimeFormatter formatter;
     private final LocalDate date;
+
 
     public BaseScheduled() {
         this.date = LocalDate.now();
@@ -143,7 +149,7 @@ public class BaseScheduled {
     }
 
 
-    @Scheduled(cron = "00 18 15 * * *", zone = "Europe/Sofia")
+    @Scheduled(cron = "00 58 16 * * *", zone = "Europe/Sofia")
     public void getTax() {
         List<RegistrationPerson> allBySubscriptionExpirationDateFalse =
                 registrationPersonRepository.getAllBySubscriptionExpirationDate(LocalDate.now());
@@ -153,8 +159,6 @@ public class BaseScheduled {
 
     @SneakyThrows
     private void getTax(RegistrationPerson registrationPerson) {
-
-
         BigDecimal newBalance = registrationPerson.getBankAccount().getBalance()
                 .subtract(registrationPerson.getSubscriptionPlan().getRegistrationFee());
 
@@ -162,6 +166,7 @@ public class BaseScheduled {
             registrationPerson.getBankAccount().setBalance(newBalance);
             registrationPerson.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
             registrationPersonRepository.save(registrationPerson);
+            generatePDF(registrationPerson);
             String message = "Успешно бе платена таксата за месец " + date.format(formatter) + ".";
             mailSenderService.sendEmail(registrationPerson.getEmail(),"Платена такса", message);
         } else {
@@ -170,6 +175,35 @@ public class BaseScheduled {
             registrationPersonRepository.save(registrationPerson);
         }
 
+    }
+
+    private void generatePDF(RegistrationPerson registrationPerson) throws IOException {
+
+        BankAccount bankAccount = bankAccountRepository.findById(-1L).orElseThrow();
+        Bank transaction = configurationService.transactionBoiler(bankAccount, registrationPerson,
+                registrationPerson.getSubscriptionPlan(),
+                Description.REGISTRATION_FEE,
+                registrationPerson.getSubscriptionPlan().getRegistrationFee());
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Cenata na transakciqta e: ").append(transaction.getAmount()).append(System.lineSeparator()).append(" izvurshena na: ").append(transaction.getTransactionDate());
+
+
+        PDDocument document = new PDDocument();
+        PDPage page = new PDPage();
+        document.addPage(page);
+
+        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        contentStream.setFont(PDType1Font.COURIER, 12);
+        contentStream.beginText();
+        contentStream.moveTextPositionByAmount(0, page.getMediaBox().getHeight() - 12);
+        contentStream.showText(stringBuilder.toString());
+        contentStream.endText();
+        contentStream.close();
+
+        document.save("reciept.pdf");
+        document.close();
     }
 
 
