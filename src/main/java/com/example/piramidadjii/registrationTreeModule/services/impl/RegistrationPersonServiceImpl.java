@@ -36,7 +36,7 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
     public RegistrationPerson registerPerson(String name,String email ,BigDecimal money, Long parentId) {
         List<SubscriptionPlan> subscriptionPlans = subscriptionPlanRepository.findAll().stream().sorted
                 (Comparator.comparing(SubscriptionPlan::getRegistrationFee).reversed()).toList();
-        RegistrationPerson registrationPerson = setPersonDetails(name, parentId);
+        RegistrationPerson registrationPerson = setPersonDetails(name,email ,parentId);
         BankAccount bankAccount = new BankAccount();
         bankAccount.setBalance(money);
         bankAccountRepository.save(bankAccount);

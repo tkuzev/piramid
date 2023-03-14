@@ -27,7 +27,7 @@ class BinaryRegistrationServiceImplTest {
 
     @Test
     void testRegisterNewPersonInBinarySuccessfully() {
-        RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("500"), 1L);
+        RegistrationPerson person = registrationPersonService.registerPerson("Person","kurkur" ,new BigDecimal("500"), 1L);
         binaryRegistrationService.registerNewBinaryPerson(person, binaryPersonRepository.findById(1L).orElseThrow(), false);
         binaryPersonRepository.findById(person.getId()).orElseThrow();
 
@@ -37,11 +37,11 @@ class BinaryRegistrationServiceImplTest {
 
     @Test
     void testMultipleBinaryRegistrations() {
-        RegistrationPerson person2 = registrationPersonService.registerPerson("Person2", new BigDecimal("250"), 1L);
-        RegistrationPerson person3 = registrationPersonService.registerPerson("Person3", new BigDecimal("500"), 1L);
-        RegistrationPerson person4 = registrationPersonService.registerPerson("Person4", new BigDecimal("500"), 1L);
-        RegistrationPerson person5 = registrationPersonService.registerPerson("Person5", new BigDecimal("250"), 3L);
-        RegistrationPerson person6 = registrationPersonService.registerPerson("Person6", new BigDecimal("500"), 5L);
+        RegistrationPerson person2 = registrationPersonService.registerPerson("Person2","kurkur" ,new BigDecimal("250"), 1L);
+        RegistrationPerson person3 = registrationPersonService.registerPerson("Person3","kurkur" ,new BigDecimal("500"), 1L);
+        RegistrationPerson person4 = registrationPersonService.registerPerson("Person4","kurkur" ,new BigDecimal("500"), 1L);
+        RegistrationPerson person5 = registrationPersonService.registerPerson("Person5","kurkur" ,new BigDecimal("250"), 3L);
+        RegistrationPerson person6 = registrationPersonService.registerPerson("Person6","kurkur" ,new BigDecimal("500"), 5L);
 
         binaryRegistrationService.registerNewBinaryPerson(person3, binaryPersonRepository.findById(1L).orElseThrow(), true);
         binaryRegistrationService.registerNewBinaryPerson(person4, binaryPersonRepository.findById(3L).orElseThrow(), false);
