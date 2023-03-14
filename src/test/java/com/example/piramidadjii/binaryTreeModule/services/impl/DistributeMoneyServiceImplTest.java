@@ -24,11 +24,11 @@ class DistributeMoneyServiceImplTest {
     private DistributeMoneyService distributeMoneyService;
     @Test
     void testMoneyInContainersDistribution() {
-        registrationPersonService.registerPerson("Person2", new BigDecimal("250"), 1L);
-        RegistrationPerson person3 = registrationPersonService.registerPerson("Person3", new BigDecimal("500"), 1L);
-        RegistrationPerson person4 = registrationPersonService.registerPerson("Person4", new BigDecimal("500"), 1L);
-        registrationPersonService.registerPerson("Person5", new BigDecimal("250"), 3L);
-        RegistrationPerson person6 = registrationPersonService.registerPerson("Person6", new BigDecimal("500"), 5L);
+        registrationPersonService.registerPerson("Person2", "kurkurkur",new BigDecimal("250"), 1L);
+        RegistrationPerson person3 = registrationPersonService.registerPerson("Person3","kurlur" ,new BigDecimal("500"), 1L);
+        RegistrationPerson person4 = registrationPersonService.registerPerson("Person4","putka" ,new BigDecimal("500"), 1L);
+        registrationPersonService.registerPerson("Person5","pedal" ,new BigDecimal("250"), 3L);
+        RegistrationPerson person6 = registrationPersonService.registerPerson("Person6","vagina" ,new BigDecimal("500"), 5L);
 
         binaryRegistrationService.registerNewBinaryPerson(person3, false);
         BinaryPerson binPerson4 = binaryRegistrationService.registerNewBinaryPerson(person4, true);

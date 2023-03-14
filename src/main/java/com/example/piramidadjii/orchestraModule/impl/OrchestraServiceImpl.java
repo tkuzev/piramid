@@ -19,8 +19,8 @@ public class OrchestraServiceImpl implements OrchestraService {
     @Autowired
     private ConfigurationService configurationService;
     @Override
-    public void registerPerson(String name, BigDecimal money, Long parentId, boolean preferredDirection) {
-        RegistrationPerson registrationPerson = registrationPersonService.registerPerson(name, money, parentId);
+    public void registerPerson(String name,String email ,BigDecimal money, Long parentId, boolean preferredDirection) {
+        RegistrationPerson registrationPerson = registrationPersonService.registerPerson(name,email ,money, parentId);
         if(configurationService.isEligible(registrationPerson.getSubscriptionPlan())){
             binaryRegistrationService.registerNewBinaryPerson(registrationPerson, preferredDirection);
         }

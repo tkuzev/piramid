@@ -26,4 +26,7 @@ public class Person{
     @OneToOne
     private BankAccount bankAccount;
 
+    @Column(nullable = false,unique = true)
+    private String email;
+
 }

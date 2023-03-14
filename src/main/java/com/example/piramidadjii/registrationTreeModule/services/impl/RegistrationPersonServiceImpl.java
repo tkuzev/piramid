@@ -33,11 +33,11 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
     @Override
     @Transactional
-    public RegistrationPerson registerPerson(String name, BigDecimal money, Long parentId) {
+    public RegistrationPerson registerPerson(String name, String email,BigDecimal money, Long parentId) {
         List<SubscriptionPlan> subscriptionPlans = subscriptionPlanRepository.findAll().stream().sorted
                 (Comparator.comparing(SubscriptionPlan::getRegistrationFee).reversed()).toList();
 
-        RegistrationPerson registrationPerson = setPersonDetails(name, parentId);
+        RegistrationPerson registrationPerson = setPersonDetails(name,email ,parentId);
         BankAccount bankAccount = new BankAccount();
         bankAccount.setBalance(money);
         bankAccountRepository.save(bankAccount);
@@ -87,9 +87,10 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
                 getSubscriptionPlan(), Description.REGISTRATION_FEE,registrationPerson.getSubscriptionPlan().getRegistrationFee());
     }
 
-    private RegistrationPerson setPersonDetails(String name, Long parentId) {
+    private RegistrationPerson setPersonDetails(String name,String email ,Long parentId) {
         return RegistrationPerson.builder()
                 .name(name)
+                .email(email)
                 .subscriptionExpirationDate(LocalDate.now().plusMonths(1))
                 .parent(registrationPersonRepository.findById(parentId).orElseThrow())
                 .build();

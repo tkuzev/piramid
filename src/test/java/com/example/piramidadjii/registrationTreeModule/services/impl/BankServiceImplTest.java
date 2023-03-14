@@ -33,12 +33,12 @@ class BankServiceImplTest {
 
     @Test
     void testTransactionWithSevenLevelsExpectedFiveCTDT() {
-        registrationPersonService.registerPerson("Person2", BigDecimal.valueOf(500), 1L);
-        registrationPersonService.registerPerson("Person3", BigDecimal.valueOf(500), 2L);
-        registrationPersonService.registerPerson("Person4", BigDecimal.valueOf(1500), 3L);
-        registrationPersonService.registerPerson("Person5", BigDecimal.valueOf(500), 4L);
-        registrationPersonService.registerPerson("Person6", BigDecimal.valueOf(500), 5L);
-        RegistrationPerson person7 = registrationPersonService.registerPerson("Person7", BigDecimal.valueOf(500), 6L);
+        registrationPersonService.registerPerson("Person2","ebavam ti putkata maina" ,BigDecimal.valueOf(500), 1L);
+        registrationPersonService.registerPerson("Person3","ebavam ti putkata maina" ,BigDecimal.valueOf(500), 2L);
+        registrationPersonService.registerPerson("Person4","ebavam ti putkata maina" ,BigDecimal.valueOf(1500), 3L);
+        registrationPersonService.registerPerson("Person5","ebavam ti putkata maina" ,BigDecimal.valueOf(500), 4L);
+        registrationPersonService.registerPerson("Person6","ebavam ti putkata maina" ,BigDecimal.valueOf(500), 5L);
+        RegistrationPerson person7 = registrationPersonService.registerPerson("Person7","pedal" ,BigDecimal.valueOf(500), 6L);
 
         int before = bankRepository.findAll().size();
 
@@ -51,7 +51,7 @@ class BankServiceImplTest {
 
     @Test
     void testTransactionWithOnePersonExpectedTwoCTDT() {
-        RegistrationPerson person = registrationPersonService.registerPerson("Person2", BigDecimal.valueOf(500), 1L);
+        RegistrationPerson person = registrationPersonService.registerPerson("Person2", "kur",BigDecimal.valueOf(500), 1L);
 
         int before = bankRepository.findAll().size();
 

@@ -25,7 +25,7 @@ class BinaryRegistrationServiceImplTest {
 
     @Test
     void testRegisterNewPersonInBinarySuccessfully() {
-        RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("500"), 1L);
+        RegistrationPerson person = registrationPersonService.registerPerson("Person", "asdsadas",new BigDecimal("500"), 1L);
         binaryRegistrationService.registerNewBinaryPerson(person, false);
         binaryPersonRepository.findById(person.getId()).orElseThrow();
 
@@ -35,11 +35,11 @@ class BinaryRegistrationServiceImplTest {
 
     @Test
     void testMultipleBinaryRegistrations(){
-        RegistrationPerson person2 = registrationPersonService.registerPerson("Person2", new BigDecimal("250"), 1L);
-        RegistrationPerson person3 = registrationPersonService.registerPerson("Person3",  new BigDecimal("500"), 1L);
-        RegistrationPerson person4 = registrationPersonService.registerPerson("Person4",  new BigDecimal("500"), 1L);
-        RegistrationPerson person5 = registrationPersonService.registerPerson("Person5",  new BigDecimal("250"), 3L);
-        RegistrationPerson person6 = registrationPersonService.registerPerson("Person6",  new BigDecimal("500"), 5L);
+        RegistrationPerson person2 = registrationPersonService.registerPerson("Person2","teodorkuzew@gmail.com" ,new BigDecimal("3000"), 1L);
+        RegistrationPerson person3 = registrationPersonService.registerPerson("Person3","babaminivan@gmail.com" , new BigDecimal("5000"), 1L);
+        RegistrationPerson person4 = registrationPersonService.registerPerson("Person4","kocaa.dd@gmail.com" , new BigDecimal("4000"), 1L);
+        RegistrationPerson person5 = registrationPersonService.registerPerson("Person5", "admin@unwe.bg" ,new BigDecimal("4000"), 3L);
+        RegistrationPerson person6 = registrationPersonService.registerPerson("Person6", "vandonov@unwe.bg" ,new BigDecimal("3000"), 5L);
 
         BinaryPerson binPerson3 = binaryRegistrationService.registerNewBinaryPerson(person3, false);
         BinaryPerson binPerson4 = binaryRegistrationService.registerNewBinaryPerson(person4, true);
@@ -59,9 +59,9 @@ class BinaryRegistrationServiceImplTest {
         boss.setLeftContainer(BigDecimal.valueOf(0));
         boss.setRightContainer(BigDecimal.valueOf(700));
         binaryPersonRepository.save(boss);
-        RegistrationPerson person1 = registrationPersonService.registerPerson("Person3",  new BigDecimal("500"), 1L);
-        RegistrationPerson person2 = registrationPersonService.registerPerson("Person4",  new BigDecimal("500"), 1L);
-        RegistrationPerson person3 = registrationPersonService.registerPerson("Person6",  new BigDecimal("500"), 2L);
+        RegistrationPerson person1 = registrationPersonService.registerPerson("Person3", "asdasdas" ,new BigDecimal("500"), 1L);
+        RegistrationPerson person2 = registrationPersonService.registerPerson("Person4", "asdsadas" ,new BigDecimal("500"), 1L);
+        RegistrationPerson person3 = registrationPersonService.registerPerson("Person6", "sdasdasdsa" ,new BigDecimal("500"), 2L);
 
         BinaryPerson binPerson1 = binaryRegistrationService.registerNewBinaryPerson(person1, false);
         BinaryPerson binPerson2 = binaryRegistrationService.registerNewBinaryPerson(person2, true);

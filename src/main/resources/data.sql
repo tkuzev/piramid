@@ -21,6 +21,7 @@ create table bank_account (
 create table binary_person (
                                id bigint not null,
                                name varchar(20) not null,
+                               email varchar(255) not null,
                                left_container decimal(38,2),
                                preferred_direction bit not null,
                                right_container decimal(38,2),
@@ -34,6 +35,7 @@ create table binary_person (
 create table registration_person (
                                      id bigint not null auto_increment,
                                      name varchar(20) not null,
+                                     email varchar(255) not null,
                                      is_subscription_enabled bit,
                                      subscription_expiration_date date,
                                      bank_account_id bigint not null,
@@ -51,8 +53,8 @@ create table subscription_plan (
                                    primary key (id)
 );
 
-insert into registration_person (id,name,bank_account_id)
-values (1,'Boss',1);
+insert into registration_person (id,name,email,bank_account_id)
+values (1,'Boss','piramidajii@gmail.com',1);
 
 insert into bank_account(id, balance)
 values (1,0);
@@ -60,8 +62,8 @@ values (1,0);
 insert into bank_account(id, balance)
 values (-1,0);
 
-insert into binary_person (id,left_container, right_container,name, preferred_direction,bank_account_id)
-values (1,0,0,'Boss',1,1);
+insert into binary_person (id,left_container, right_container,name,email, preferred_direction,bank_account_id)
+values (1,0,0,'Boss','piramidajii@gmail.com',1,1);
 
 insert into subscription_plan (id,name,percents,registration_fee,is_eligible_for_binary)
 values (1,'Bronze','2',200, false);
