@@ -23,7 +23,6 @@ create table binary_person (
                                name varchar(20) not null,
                                email varchar(255) not null,
                                left_container decimal(38,2),
-                               preferred_direction bit not null,
                                right_container decimal(38,2),
                                bank_account_id bigint,
                                left_child_id bigint,
@@ -76,3 +75,5 @@ values (3,'Gold','4//3//2',400, true);
 
 insert into subscription_plan (id,name,percents,registration_fee, is_eligible_for_binary)
 values (4,'Platinum','5//4//3//2',500, true);
+
+

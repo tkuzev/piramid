@@ -30,9 +30,14 @@ class DistributeMoneyServiceImplTest {
         registrationPersonService.registerPerson("Person5","pedal" ,new BigDecimal("250"), 3L);
         RegistrationPerson person6 = registrationPersonService.registerPerson("Person6","vagina" ,new BigDecimal("500"), 5L);
 
-        binaryRegistrationService.registerNewBinaryPerson(person3, false);
-        BinaryPerson binPerson4 = binaryRegistrationService.registerNewBinaryPerson(person4, true);
-        BinaryPerson binPerson6 = binaryRegistrationService.registerNewBinaryPerson(person6, true);
+        binaryRegistrationService.registerNewBinaryPerson(person3, binaryPersonRepository.findById(1L).orElseThrow(), true);
+        binaryRegistrationService.registerNewBinaryPerson(person4, binaryPersonRepository.findById(3L).orElseThrow(), false);
+        binaryRegistrationService.registerNewBinaryPerson(person6, binaryPersonRepository.findById(4L).orElseThrow(), true);
+
+        binaryPersonRepository.findById(3L).orElseThrow();
+        BinaryPerson binPerson4 = binaryPersonRepository.findById(4L).orElseThrow();
+        BinaryPerson binPerson6 = binaryPersonRepository.findById(6L).orElseThrow();
+
         binPerson4.setLeftContainer(BigDecimal.valueOf(400L));
         binaryPersonRepository.save(binPerson4);
 

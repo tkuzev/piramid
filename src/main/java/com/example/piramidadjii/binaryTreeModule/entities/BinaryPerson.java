@@ -33,17 +33,12 @@ public class BinaryPerson extends Person {
 
     private BigDecimal rightContainer;
 
-    @NotNull(message = "direction cannot be null")
-    @Column(nullable = false)
-    private boolean preferredDirection;
-
     @ManyToOne
     private BinaryPerson parent;
 
-    public BinaryPerson(Long id, BigDecimal leftContainer, BigDecimal rightContainer, boolean preferredDirection) {
+    public BinaryPerson(Long id, BigDecimal leftContainer, BigDecimal rightContainer) {
         this.id = id;
         this.leftContainer = leftContainer;
         this.rightContainer = rightContainer;
-        this.preferredDirection = preferredDirection;
     }
 }

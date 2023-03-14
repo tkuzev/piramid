@@ -8,11 +8,13 @@ import com.example.piramidadjii.registrationTreeModule.services.RegistrationPers
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-@SpringBootTest
 
+@SpringBootTest
 class BinaryRegistrationServiceImplTest {
 
     @Autowired
@@ -25,8 +27,8 @@ class BinaryRegistrationServiceImplTest {
 
     @Test
     void testRegisterNewPersonInBinarySuccessfully() {
-        RegistrationPerson person = registrationPersonService.registerPerson("Person", "asdsadas",new BigDecimal("500"), 1L);
-        binaryRegistrationService.registerNewBinaryPerson(person, false);
+        RegistrationPerson person = registrationPersonService.registerPerson("Person", new BigDecimal("500"), 1L);
+        binaryRegistrationService.registerNewBinaryPerson(person, binaryPersonRepository.findById(1L).orElseThrow(), false);
         binaryPersonRepository.findById(person.getId()).orElseThrow();
 
         assertTrue(binaryPersonRepository.findById(person.getId()).isPresent());
@@ -34,17 +36,20 @@ class BinaryRegistrationServiceImplTest {
     }
 
     @Test
-    void testMultipleBinaryRegistrations(){
-        RegistrationPerson person2 = registrationPersonService.registerPerson("Person2","teodorkuzew@gmail.com" ,new BigDecimal("3000"), 1L);
-        RegistrationPerson person3 = registrationPersonService.registerPerson("Person3","babaminivan@gmail.com" , new BigDecimal("5000"), 1L);
-        RegistrationPerson person4 = registrationPersonService.registerPerson("Person4","kocaa.dd@gmail.com" , new BigDecimal("4000"), 1L);
-        RegistrationPerson person5 = registrationPersonService.registerPerson("Person5", "admin@unwe.bg" ,new BigDecimal("4000"), 3L);
-        RegistrationPerson person6 = registrationPersonService.registerPerson("Person6", "vandonov@unwe.bg" ,new BigDecimal("3000"), 5L);
+    void testMultipleBinaryRegistrations() {
+        RegistrationPerson person2 = registrationPersonService.registerPerson("Person2", new BigDecimal("250"), 1L);
+        RegistrationPerson person3 = registrationPersonService.registerPerson("Person3", new BigDecimal("500"), 1L);
+        RegistrationPerson person4 = registrationPersonService.registerPerson("Person4", new BigDecimal("500"), 1L);
+        RegistrationPerson person5 = registrationPersonService.registerPerson("Person5", new BigDecimal("250"), 3L);
+        RegistrationPerson person6 = registrationPersonService.registerPerson("Person6", new BigDecimal("500"), 5L);
 
-        BinaryPerson binPerson3 = binaryRegistrationService.registerNewBinaryPerson(person3, false);
-        BinaryPerson binPerson4 = binaryRegistrationService.registerNewBinaryPerson(person4, true);
-        BinaryPerson binPerson6 = binaryRegistrationService.registerNewBinaryPerson(person6, true);
+        binaryRegistrationService.registerNewBinaryPerson(person3, binaryPersonRepository.findById(1L).orElseThrow(), true);
+        binaryRegistrationService.registerNewBinaryPerson(person4, binaryPersonRepository.findById(3L).orElseThrow(), false);
+        binaryRegistrationService.registerNewBinaryPerson(person6, binaryPersonRepository.findById(4L).orElseThrow(), true);
 
+        BinaryPerson binPerson3 = binaryPersonRepository.findById(3L).orElseThrow();
+        BinaryPerson binPerson4 = binaryPersonRepository.findById(4L).orElseThrow();
+        BinaryPerson binPerson6 = binaryPersonRepository.findById(6L).orElseThrow();
 
         assertFalse(binaryPersonRepository.findById(person2.getId()).isPresent());
         assertEquals(binPerson3.getId(), binaryPersonRepository.findById(1L).get().getRightChild().getId());
@@ -63,9 +68,13 @@ class BinaryRegistrationServiceImplTest {
         RegistrationPerson person2 = registrationPersonService.registerPerson("Person4", "asdsadas" ,new BigDecimal("500"), 1L);
         RegistrationPerson person3 = registrationPersonService.registerPerson("Person6", "sdasdasdsa" ,new BigDecimal("500"), 2L);
 
-        BinaryPerson binPerson1 = binaryRegistrationService.registerNewBinaryPerson(person1, false);
-        BinaryPerson binPerson2 = binaryRegistrationService.registerNewBinaryPerson(person2, true);
-        BinaryPerson binPerson3 = binaryRegistrationService.registerNewBinaryPerson(person3, true);
+        binaryRegistrationService.registerNewBinaryPerson(person1,binaryPersonRepository.findById(1L).orElseThrow(), false);
+        binaryRegistrationService.registerNewBinaryPerson(person2,binaryPersonRepository.findById(2L).orElseThrow(), true);
+        binaryRegistrationService.registerNewBinaryPerson(person3,binaryPersonRepository.findById(3L).orElseThrow(), true);
+
+        BinaryPerson binPerson1 = binaryPersonRepository.findById(2L).orElseThrow();
+        BinaryPerson binPerson2 = binaryPersonRepository.findById(3L).orElseThrow();
+        BinaryPerson binPerson3 = binaryPersonRepository.findById(4L).orElseThrow();
 
         binPerson1.getBankAccount().setBalance(BigDecimal.ZERO);
         binPerson1.setLeftContainer(BigDecimal.valueOf(700));

@@ -8,7 +8,9 @@ import com.example.piramidadjii.baseModule.enums.Description;
 import com.example.piramidadjii.baseModule.enums.OperationType;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
+import com.example.piramidadjii.configModule.ConfigurationService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
+import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import jakarta.mail.MessagingException;
 import lombok.SneakyThrows;
@@ -41,6 +43,9 @@ public class BaseScheduled {
     @Autowired
     private BankAccountRepository bankAccountRepository;
 
+    @Autowired
+    ConfigurationService configurationService;
+
     private BigDecimal moneyToGive = BigDecimal.ZERO;
 
     private static final long HELPER_BANK_ID = -1;
@@ -70,6 +75,7 @@ public class BaseScheduled {
         BinaryPerson boss = binaryPersonRepository.findById(1L).orElseThrow();
         boss.getBankAccount().setBalance(boss.getBankAccount().getBalance().add(boss.getRightContainer().add(boss.getLeftContainer())));
         Bank debitTransaction = new Bank();
+
         debitTransaction.setDstAccId(boss.getBankAccount());
         debitTransaction.setAmount(boss.getRightContainer().add(boss.getLeftContainer()));
         debitTransaction.setOperationType(OperationType.DT);

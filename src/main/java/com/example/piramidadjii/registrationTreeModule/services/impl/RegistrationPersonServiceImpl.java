@@ -33,24 +33,22 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
     @Override
     @Transactional
-    public RegistrationPerson registerPerson(String name, String email,BigDecimal money, Long parentId) {
+    public RegistrationPerson registerPerson(String name,String email ,BigDecimal money, Long parentId) {
         List<SubscriptionPlan> subscriptionPlans = subscriptionPlanRepository.findAll().stream().sorted
                 (Comparator.comparing(SubscriptionPlan::getRegistrationFee).reversed()).toList();
-
-        RegistrationPerson registrationPerson = setPersonDetails(name,email ,parentId);
+        RegistrationPerson registrationPerson = setPersonDetails(name, parentId);
         BankAccount bankAccount = new BankAccount();
         bankAccount.setBalance(money);
         bankAccountRepository.save(bankAccount);
         registrationPerson.setBankAccount(bankAccount);
         registrationPersonRepository.save(registrationPerson);
-
         subscriptionPlans.stream()
-                .filter(x->checkBalance(registrationPerson.getBankAccount().getBalance(), x.getId()) >= 0)
+                .filter(x -> checkBalance(registrationPerson.getBankAccount().getBalance(), x.getId()) >= 0)
                 .findFirst()
                 .ifPresent(subscriptionPlan -> {
-                        setSubscription(registrationPerson, subscriptionPlan.getId());
-                        registrationPerson.setIsSubscriptionEnabled(true);
-                        registrationPersonRepository.save(registrationPerson);
+                    setSubscription(registrationPerson, subscriptionPlan.getId());
+                    registrationPerson.setIsSubscriptionEnabled(true);
+                    registrationPersonRepository.save(registrationPerson);
                 });
 
         if(Objects.isNull(registrationPerson.getSubscriptionPlan()))
@@ -61,7 +59,6 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
     //Helper methods
     private int checkBalance(BigDecimal balance, long planId) {
-
         return balance.compareTo(subscriptionPlanRepository.getSubscriptionPlanById(planId).orElseThrow().getRegistrationFee());
     }
 
