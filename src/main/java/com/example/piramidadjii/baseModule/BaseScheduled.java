@@ -24,6 +24,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.swing.text.DateFormatter;
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -149,7 +150,7 @@ public class BaseScheduled {
     }
 
 
-    @Scheduled(cron = "00 58 16 * * *", zone = "Europe/Sofia")
+    @Scheduled(cron = "00 43 17 * * *", zone = "Europe/Sofia")
     public void getTax() {
         List<RegistrationPerson> allBySubscriptionExpirationDateFalse =
                 registrationPersonRepository.getAllBySubscriptionExpirationDate(LocalDate.now());
@@ -168,9 +169,11 @@ public class BaseScheduled {
             registrationPersonRepository.save(registrationPerson);
             generatePDF(registrationPerson);
             String message = "Успешно бе платена таксата за месец " + date.format(formatter) + ".";
-            mailSenderService.sendEmail(registrationPerson.getEmail(),"Платена такса", message);
+            mailSenderService.sendEmail(registrationPerson.getEmail(),"Платена такса", message,"reciept.pdf");
+            File file=new File("reciept.pdf");
+            file.delete();
         } else {
-            mailSenderService.sendEmail(registrationPerson.getEmail(),"Неуспешно плащане на месечен абонамент","Недостатъчен баланс за заплащане на месечната такса.");
+            mailSenderService.sendEmailWithoutAttachment(registrationPerson.getEmail(),"Неуспешно плащане на месечен абонамент","Недостатъчен баланс за заплащане на месечната такса.");
             registrationPerson.setIsSubscriptionEnabled(false);
             registrationPersonRepository.save(registrationPerson);
         }
@@ -186,7 +189,7 @@ public class BaseScheduled {
                 registrationPerson.getSubscriptionPlan().getRegistrationFee());
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Cenata na transakciqta e: ").append(transaction.getAmount()).append(System.lineSeparator()).append(" izvurshena na: ").append(transaction.getTransactionDate());
+        stringBuilder.append("Cenata na transakciqta e: ").append(transaction.getAmount()).append(" izvurshena na: ").append(transaction.getTransactionDate());
 
 
         PDDocument document = new PDDocument();
@@ -195,7 +198,7 @@ public class BaseScheduled {
 
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
-        contentStream.setFont(PDType1Font.COURIER, 12);
+        contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
         contentStream.beginText();
         contentStream.moveTextPositionByAmount(0, page.getMediaBox().getHeight() - 12);
         contentStream.showText(stringBuilder.toString());
@@ -205,6 +208,5 @@ public class BaseScheduled {
         document.save("reciept.pdf");
         document.close();
     }
-
 
 }
