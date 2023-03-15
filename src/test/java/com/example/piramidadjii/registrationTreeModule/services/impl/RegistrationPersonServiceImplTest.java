@@ -75,15 +75,15 @@ class RegistrationPersonServiceImplTest {
 
     @Test
     void testEmailSender() {
-        RegistrationPerson person = registrationPersonService.registerPerson("Person", "teodorkuzew@gmail.com",new BigDecimal("5000"), 1L);
+        RegistrationPerson person = registrationPersonService.registerPerson("Person", "kocaa.dd@abv.bg",new BigDecimal("5000"), 1L);
 //        RegistrationPerson vladi = registrationPersonService.registerPerson("Person", "vladined01@gmail.com",new BigDecimal("200"), 1L);
-        RegistrationPerson koce = registrationPersonService.registerPerson("Person", "kocaa.dd@abv.bg",new BigDecimal("200"), 1L);
+        //RegistrationPerson koce = registrationPersonService.registerPerson("Person", "kocaa.dd@abv.bg",new BigDecimal("200"), 1L);
         person.setSubscriptionExpirationDate(LocalDate.now());
 //        vladi.setSubscriptionExpirationDate(LocalDate.now());
-        koce.setSubscriptionExpirationDate(LocalDate.now());
+        //koce.setSubscriptionExpirationDate(LocalDate.now());
         registrationPersonRepository.save(person);
 //        registrationPersonRepository.save(vladi);
-        registrationPersonRepository.save(koce);
+        //registrationPersonRepository.save(koce);
 
     }
 

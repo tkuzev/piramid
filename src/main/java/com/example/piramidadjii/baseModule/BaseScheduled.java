@@ -150,7 +150,7 @@ public class BaseScheduled {
     }
 
 
-    @Scheduled(cron = "00 43 17 * * *", zone = "Europe/Sofia")
+    @Scheduled(cron = "00 23 14 * * *", zone = "Europe/Sofia")
     public void getTax() {
         List<RegistrationPerson> allBySubscriptionExpirationDateFalse =
                 registrationPersonRepository.getAllBySubscriptionExpirationDate(LocalDate.now());
@@ -189,8 +189,9 @@ public class BaseScheduled {
                 registrationPerson.getSubscriptionPlan().getRegistrationFee());
 
         StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder1 = new StringBuilder();
         stringBuilder.append("Cenata na transakciqta e: ").append(transaction.getAmount()).append(" izvurshena na: ").append(transaction.getTransactionDate());
-
+        stringBuilder1.append("Ostanalite pari v smetkata: ").append(bankAccount.getBalance());
 
         PDDocument document = new PDDocument();
         PDPage page = new PDPage();
@@ -198,10 +199,16 @@ public class BaseScheduled {
 
         PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
-        contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
         contentStream.beginText();
-        contentStream.moveTextPositionByAmount(0, page.getMediaBox().getHeight() - 12);
+        contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
+        contentStream.newLineAtOffset(140, 750);
         contentStream.showText(stringBuilder.toString());
+        contentStream.endText();
+
+        contentStream.beginText();
+        contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
+        contentStream.newLineAtOffset(140, 700);
+        contentStream.showText(stringBuilder1.toString());
         contentStream.endText();
         contentStream.close();
 
