@@ -9,6 +9,12 @@ import java.util.Map;
 
 public interface FacadeService {
     void registerPerson(String name, String email, BigDecimal money, Long parentId, BinaryPerson personToPutItOn, boolean preferredDirection);
+
     Map<SubscriptionPlan, BigDecimal> monthlyIncome(RegistrationPerson registrationPerson);
 
+    void deposit(RegistrationPerson person, BigDecimal money);
+
+    void withdraw(RegistrationPerson person, BigDecimal money);
+
+    void upgradeSubscriptionPlan(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan);
 }

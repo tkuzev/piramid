@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 @Service
@@ -42,7 +43,8 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 //        return registrationPerson.getSubscriptionExpirationDate().isBefore(LocalDate.now());
 //    }
     @Override
-    public Bank transactionBoiler(BankAccount helperBankAccount, RegistrationPerson registrationPerson, SubscriptionPlan registrationPerson1, Description registrationFee, BigDecimal amount) {
+    public Bank transactionBoiler(BankAccount helperBankAccount, RegistrationPerson registrationPerson,
+                                  SubscriptionPlan registrationPerson1, Description registrationFee, BigDecimal amount) {
         Bank debitTransaction = Bank.builder()
                 .amount(amount.negate())
                 .srcAccId(helperBankAccount)
@@ -65,5 +67,42 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         bankRepository.save(debitTransaction);
 
         return creditTransaction;
+    }
+    @Override
+    public Bank transactionBoiler(BankAccount helperBankAccount, RegistrationPerson registrationPerson,
+                                  Description description, BigDecimal price,
+                                  long level, long percent) {
+        Bank debitTransaction = Bank.builder()
+                .percent(percent)
+                .itemPrice(price)
+                .amount(calculatePrice(percent, price))
+                .dstAccId(registrationPerson.getBankAccount())
+                .srcAccId(helperBankAccount)
+                .description(description)
+                .operationType(OperationType.DT)
+                .transactionDate(LocalDateTime.now())
+                .level(level)
+                .build();
+
+        Bank creditTransaction = Bank.builder()
+                .percent(percent)
+                .itemPrice(price)
+                .amount(calculatePrice(percent, price).negate())
+                .dstAccId(helperBankAccount)
+                .srcAccId(registrationPerson.getBankAccount())
+                .description(description)
+                .operationType(OperationType.CT)
+                .transactionDate(LocalDateTime.now())
+                .level(level)
+                .build();
+
+        bankRepository.save(creditTransaction);
+        bankRepository.save(debitTransaction);
+
+        return creditTransaction;
+    }
+
+    private static BigDecimal calculatePrice(Long percent, BigDecimal price) {
+        return price.multiply(new BigDecimal(percent)).divide(new BigDecimal(100), RoundingMode.HALF_DOWN);
     }
 }
