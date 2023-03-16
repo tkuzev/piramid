@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
@@ -51,8 +54,22 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
         bankAccountRepository.save(bossBankAccount);
     }
 
+    @Override
+    public SubscriptionPlan assignSubscriptionPlan(BigDecimal money) {
+        List<SubscriptionPlan> subscriptionPlans = subscriptionPlanRepository.findAll().stream().sorted
+                (Comparator.comparing(SubscriptionPlan::getRegistrationFee).reversed()).toList();
+
+        return subscriptionPlans.stream()
+                .filter(x -> checkBalance(money, x.getId()) >= 0)
+                .findFirst().orElseThrow();
+    }
+
     private static boolean isUpdateUnavailable(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan) {
         return registrationPerson.getSubscriptionPlan().getPercents().length() > subscriptionPlan.getPercents().length()
                 || registrationPerson.getBankAccount().getBalance().compareTo(subscriptionPlan.getRegistrationFee().subtract(registrationPerson.getSubscriptionPlan().getRegistrationFee())) < 0;
+    }
+
+    private int checkBalance(BigDecimal balance, long planId) {
+        return balance.compareTo(subscriptionPlanRepository.getSubscriptionPlanById(planId).orElseThrow().getRegistrationFee());
     }
 }

@@ -25,15 +25,21 @@ public class FacadeServiceImpl implements FacadeService {
     @Autowired
     SubscriptionPlanService subscriptionPlanService;
 
+
+
     @Override
-    public void registerPerson(String name, String email, BigDecimal money,
-                               Long parentId, BinaryPerson personToPutItOn, boolean preferredDirection) {
-        orchestraService.registerPerson(name, email, money, parentId, personToPutItOn, preferredDirection);
+    public void registerPerson(String name, String email, BigDecimal money, Long parentId, Long personToPutItOnId, boolean preferredDirection, SubscriptionPlan subscriptionPlan) {
+        orchestraService.registerPerson(name,email,money,parentId,personToPutItOnId,preferredDirection,subscriptionPlan);
     }
 
     @Override
-    public Map<SubscriptionPlan, BigDecimal> monthlyIncome(RegistrationPerson registrationPerson) {
-        return transactionService.monthlyIncome(registrationPerson);
+    public void registerPerson(String name, String email, BigDecimal money, Long parentId, SubscriptionPlan subscriptionPlan) {
+        orchestraService.registerPerson(name,email,money,parentId,subscriptionPlan);
+    }
+
+    @Override
+    public Map<SubscriptionPlan, BigDecimal> monthlyIncome(Long id) {
+        return transactionService.monthlyIncome(id);
     }
 
     @Override
@@ -49,5 +55,10 @@ public class FacadeServiceImpl implements FacadeService {
     @Override
     public void upgradeSubscriptionPlan(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan) {
         subscriptionPlanService.upgradeSubscriptionPlan(registrationPerson, subscriptionPlan);
+    }
+
+    @Override
+    public void createTransaction(RegistrationPerson registrationPerson, BigDecimal price) {
+        transactionService.createTransaction(registrationPerson,price);
     }
 }

@@ -5,5 +5,5 @@ import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPers
 
 public interface BinaryRegistrationService {
 
-    void registerNewBinaryPerson(RegistrationPerson person, BinaryPerson personToPutItOn, boolean preferredDirection);
+    void registerNewBinaryPerson(RegistrationPerson person, Long personToPutItOnId, boolean preferredDirection);
 }

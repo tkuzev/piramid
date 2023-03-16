@@ -33,23 +33,17 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
     @Override
     @Transactional
-    public RegistrationPerson registerPerson(String name,String email ,BigDecimal money, Long parentId) {
-        List<SubscriptionPlan> subscriptionPlans = subscriptionPlanRepository.findAll().stream().sorted
-                (Comparator.comparing(SubscriptionPlan::getRegistrationFee).reversed()).toList();
+    public RegistrationPerson registerPerson(String name,String email ,BigDecimal money, Long parentId, SubscriptionPlan subscriptionPlan) {
+
         RegistrationPerson registrationPerson = setPersonDetails(name,email ,parentId);
         BankAccount bankAccount = new BankAccount();
         bankAccount.setBalance(money);
         bankAccountRepository.save(bankAccount);
         registrationPerson.setBankAccount(bankAccount);
+        registrationPerson.setIsSubscriptionEnabled(true);
+        registrationPerson.setSubscriptionPlan(subscriptionPlan);
         registrationPersonRepository.save(registrationPerson);
-        subscriptionPlans.stream()
-                .filter(x -> checkBalance(registrationPerson.getBankAccount().getBalance(), x.getId()) >= 0)
-                .findFirst()
-                .ifPresent(subscriptionPlan -> {
-                    setSubscription(registrationPerson, subscriptionPlan.getId());
-                    registrationPerson.setIsSubscriptionEnabled(true);
-                    registrationPersonRepository.save(registrationPerson);
-                });
+
 
         if(Objects.isNull(registrationPerson.getSubscriptionPlan()))
             throw new RuntimeException();
@@ -58,9 +52,7 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
     }
 
     //Helper methods
-    private int checkBalance(BigDecimal balance, long planId) {
-        return balance.compareTo(subscriptionPlanRepository.getSubscriptionPlanById(planId).orElseThrow().getRegistrationFee());
-    }
+
 
     @Override
     public void setSubscription(RegistrationPerson registrationPerson, long id) {

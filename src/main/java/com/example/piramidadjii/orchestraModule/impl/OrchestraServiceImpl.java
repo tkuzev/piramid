@@ -5,6 +5,7 @@ import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationServ
 import com.example.piramidadjii.configModule.ConfigurationService;
 import com.example.piramidadjii.orchestraModule.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
+import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationPersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,14 +19,16 @@ public class OrchestraServiceImpl implements OrchestraService {
     private BinaryRegistrationService binaryRegistrationService;
     @Autowired
     private RegistrationPersonService registrationPersonService;
-    @Autowired
-    private ConfigurationService configurationService;
+
 
     @Override
-    public void registerPerson(String name, String email, BigDecimal money, Long parentId, BinaryPerson personToPutItOn, boolean preferredDirection) {
-        RegistrationPerson registrationPerson = registrationPersonService.registerPerson(name,email ,money, parentId);
-        if (configurationService.isEligible(registrationPerson.getSubscriptionPlan())) {
-            binaryRegistrationService.registerNewBinaryPerson(registrationPerson, personToPutItOn, preferredDirection);
-        }
+    public void registerPerson(String name, String email, BigDecimal money, Long parentId, long personToPutItOnId, boolean preferredDirection, SubscriptionPlan subscriptionPlan) {
+        RegistrationPerson registrationPerson = registrationPersonService.registerPerson(name,email ,money, parentId,subscriptionPlan);
+        binaryRegistrationService.registerNewBinaryPerson(registrationPerson, personToPutItOnId, preferredDirection);
+    }
+
+    @Override
+    public void registerPerson(String name, String email, BigDecimal money, Long parentId, SubscriptionPlan subscriptionPlan) {
+        registrationPersonService.registerPerson(name,email ,money, parentId,subscriptionPlan);
     }
 }

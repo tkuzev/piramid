@@ -161,16 +161,17 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Map<SubscriptionPlan, BigDecimal> monthlyIncome(RegistrationPerson registrationPerson) {
+    public Map<SubscriptionPlan, BigDecimal> monthlyIncome(Long id) {
         Map<SubscriptionPlan, BigDecimal> income = new HashMap<>();
         List<SubscriptionPlan> subscriptionPlans = subscriptionPlanRepository.findAll();
 
         for (SubscriptionPlan s : subscriptionPlans) {
             income.put(s, BigDecimal.ZERO);
         }
+        BankAccount bankAccount=bankAccountRepository.findById(id).orElseThrow();
 
         List<Bank> allTransactions = bankRepository.
-                findAllByIdAndTransactionDateBetween(registrationPerson.getId(), LocalDateTime.now().minusMonths(1), LocalDateTime.now());
+                findAllByDstAccIdAndTransactionDateBetween(bankAccount, LocalDateTime.now().minusMonths(1), LocalDateTime.now());
 
         for (Bank transactions : allTransactions) {
             for (SubscriptionPlan s : subscriptionPlans) {

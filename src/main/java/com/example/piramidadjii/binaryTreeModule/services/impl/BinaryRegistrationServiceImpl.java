@@ -15,7 +15,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     private BinaryPersonRepository binaryPersonRepository;
 
     @Override
-    public void registerNewBinaryPerson(RegistrationPerson person, BinaryPerson personToPutItOn, boolean preferredDirection) {
+    public void registerNewBinaryPerson(RegistrationPerson person, Long personToPutItOn, boolean preferredDirection) {
          addBinaryPerson(binParent(findSuitableParent(person)), createBinaryPerson(person), personToPutItOn,preferredDirection);
     }
 
@@ -38,11 +38,11 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     }
 
     //todo da ima i oshthe edin chovek koito e choveka pod koito shte slojim noviq chovek, validachiq dali e svobodna pozichiqta
-    private void addBinaryPerson(BinaryPerson binParent, BinaryPerson binChild, BinaryPerson toqDetoMuGoTikat, boolean preferredSide ) {
+    private void addBinaryPerson(BinaryPerson binParent, BinaryPerson binChild, Long toqDetoMuGoTikatId, boolean preferredSide ) {
 
         if(Objects.isNull(binParent)) return;
 
-        if(Objects.equals(binParent.getId(), toqDetoMuGoTikat.getId())){
+        if(Objects.equals(binParent.getId(), toqDetoMuGoTikatId)){
 
             if (preferredSide) {
                 binParent.setRightChild(binChild);
@@ -56,7 +56,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
             return;
         }
 
-        addBinaryPerson(binParent.getRightChild(), binChild, toqDetoMuGoTikat, preferredSide);
-        addBinaryPerson(binParent.getLeftChild(), binChild, toqDetoMuGoTikat, preferredSide);
+        addBinaryPerson(binParent.getRightChild(), binChild, toqDetoMuGoTikatId, preferredSide);
+        addBinaryPerson(binParent.getLeftChild(), binChild, toqDetoMuGoTikatId, preferredSide);
     }
 }

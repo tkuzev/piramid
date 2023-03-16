@@ -10,5 +10,5 @@ import java.util.Map;
 public interface TransactionService {
     void createTransaction(RegistrationPerson registrationPerson, BigDecimal price);
 
-    Map<SubscriptionPlan, BigDecimal> monthlyIncome(RegistrationPerson registrationPerson);
+    Map<SubscriptionPlan, BigDecimal> monthlyIncome(Long id);
 }

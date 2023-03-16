@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.support.CronExpression;
 
 import javax.swing.text.DateFormatter;
 import java.io.File;
@@ -32,6 +33,7 @@ import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+
 
 @Configuration
 @EnableScheduling
@@ -56,11 +58,11 @@ public class BaseScheduled {
 
     private static final long HELPER_BANK_ID = -1;
 
+
     @Autowired
     private MailSenderService mailSenderService;
     private final DateTimeFormatter formatter;
     private final LocalDate date;
-
 
     public BaseScheduled() {
         this.date = LocalDate.now();
@@ -69,7 +71,6 @@ public class BaseScheduled {
 
     @Scheduled(cron = "00 00 00 1 * *", zone = "Europe/Sofia")
     public void binaryTree() {
-
         List<BinaryPerson> binaryPersonList = binaryPersonRepository.findAll();
         binaryPersonList.forEach(this::updateMoney);
         updateBossMoney();
@@ -150,7 +151,7 @@ public class BaseScheduled {
     }
 
 
-    @Scheduled(cron = "00 23 14 * * *", zone = "Europe/Sofia")
+    @Scheduled(cron = "00 00 00 * * *", zone = "Europe/Sofia")
     public void getTax() {
         List<RegistrationPerson> allBySubscriptionExpirationDateFalse =
                 registrationPersonRepository.getAllBySubscriptionExpirationDate(LocalDate.now());
@@ -215,5 +216,4 @@ public class BaseScheduled {
         document.save("reciept.pdf");
         document.close();
     }
-
 }
