@@ -12,9 +12,9 @@ public interface FacadeService {
     void registerPerson(String name, String email, BigDecimal money, Long parentId, SubscriptionPlan subscriptionPlan);
     Map<SubscriptionPlan, BigDecimal> monthlyIncome(Long id);
 
-    void deposit(RegistrationPerson person, BigDecimal money);
+    void deposit(Long id, BigDecimal money);
 
-    void withdraw(RegistrationPerson person, BigDecimal money);
+    void withdraw(Long id, BigDecimal money);
 
     void upgradeSubscriptionPlan(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan);
 

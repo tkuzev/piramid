@@ -43,13 +43,13 @@ public class FacadeServiceImpl implements FacadeService {
     }
 
     @Override
-    public void deposit(RegistrationPerson person, BigDecimal money) {
-        bankService.deposit(person, money);
+    public void deposit(Long id, BigDecimal money) {
+        bankService.deposit(id, money);
     }
 
     @Override
-    public void withdraw(RegistrationPerson person, BigDecimal money) {
-        bankService.withdraw(person, money);
+    public void withdraw(Long id, BigDecimal money) {
+        bankService.withdraw(id, money);
     }
 
     @Override

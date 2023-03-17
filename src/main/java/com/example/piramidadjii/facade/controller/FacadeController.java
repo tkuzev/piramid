@@ -1,8 +1,9 @@
 package com.example.piramidadjii.facade.controller;
 
 import com.example.piramidadjii.facade.FacadeService;
+import com.example.piramidadjii.facade.dto.DepositDTO;
 import com.example.piramidadjii.facade.dto.RegisterPersonDTO;
-import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
+import com.example.piramidadjii.facade.dto.UpgradeSubscriptionPlanDTO;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,4 +41,20 @@ public class FacadeController {
         return facadeService.monthlyIncome(id);
     }
 
+    @PostMapping("/user/deposit")
+    public void deposit(@RequestBody DepositDTO depositDTO){
+        facadeService.deposit(depositDTO.getId(),depositDTO.getMoney());
+    }
+
+    @PostMapping("/user/withdraw")
+    public void withdraw(@RequestBody DepositDTO depositDTO){
+        facadeService.withdraw(depositDTO.getId(),depositDTO.getMoney());
+    }
+
+    @PostMapping("/user/subscription-plan/upgrade")
+    public void upgradeSubscriptionPlan(@RequestBody UpgradeSubscriptionPlanDTO upgradeSubscriptionPlanDTO){
+        facadeService.
+                upgradeSubscriptionPlan(upgradeSubscriptionPlanDTO.getRegistrationPerson(),
+                        upgradeSubscriptionPlanDTO.getSubscriptionPlan());
+    }
 }
