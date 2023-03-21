@@ -31,8 +31,8 @@ public class FacadeServiceImpl implements FacadeService {
 
 
     @Override
-    public void registerPerson(RegistrationPerson registrationPerson, BigDecimal money) {
-        orchestraService.registerPerson(registrationPerson, money);
+    public void registerPerson(RegistrationPerson registrationPerson,Long parentId, BigDecimal money) {
+        orchestraService.registerPerson(registrationPerson,parentId, money);
     }
 
     @Override

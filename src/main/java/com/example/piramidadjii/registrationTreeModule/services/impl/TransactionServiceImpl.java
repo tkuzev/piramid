@@ -5,7 +5,7 @@ import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
 import com.example.piramidadjii.bankAccountModule.repositories.BankRepository;
 import com.example.piramidadjii.baseModule.enums.Description;
-import com.example.piramidadjii.baseModule.enums.OperationType;
+import com.example.piramidadjii.configModule.ConfigurationService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
@@ -38,6 +38,8 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
+    @Autowired
+    private ConfigurationService configurationService;
 
     private static final long HELPER_BANK_ID = -1;
 
@@ -49,15 +51,9 @@ public class TransactionServiceImpl implements TransactionService {
         Description[] description = new Description[1];
         Long profit = 100L;
 
-        traverseFromNodeToRoot(registrationPerson)
-                .limit(5)
-                .forEach(node -> setNewTransactions(registrationPerson, price, percent, counter, node, description));
+        traverseFromNodeToRoot(registrationPerson).limit(5).forEach(node -> setNewTransactions(registrationPerson, price, percent, counter, node, description));
 
-        transactionDetails(
-                registrationPersonRepository.getRegistrationPersonById(1L).orElseThrow(),
-                price,
-                profit - percentages,
-                Description.MONEY_LEFT, counter);
+        transactionDetails(registrationPersonRepository.getRegistrationPersonById(1L).orElseThrow(), price, profit - percentages, Description.MONEY_LEFT, counter);
 
         percentages = 0L;
     }
@@ -104,46 +100,21 @@ public class TransactionServiceImpl implements TransactionService {
     private void transactionDetails(RegistrationPerson registrationPerson, BigDecimal price, Long percent, Description description, AtomicInteger counter) {
         BankAccount personBankAccount = registrationPerson.getBankAccount();
         BankAccount helperBankAccount = bankAccountRepository.findById(HELPER_BANK_ID).orElseThrow();
-        Bank debitTransaction = Bank.builder()
-                .percent(percent)
-                .itemPrice(price)
-                .amount(calculatePrice(percent, price))
-                .dstAccId(registrationPerson.getBankAccount())
-                .srcAccId(helperBankAccount)
-                .description(description)
-                .operationType(OperationType.DT)
-                .transactionDate(LocalDateTime.now())
-                .build();
+
 
         if (registrationPerson.getId() != 1L && registrationPerson.getId() != HELPER_BANK_ID) {
-            debitTransaction.setLevel((long) counter.get() - 1);
+            configurationService.transactionBoiler(helperBankAccount, registrationPerson, description, price, counter.get() - 1, percent);
         }
 
-        Bank creditTransaction = Bank.builder()
-                .percent(percent)
-                .itemPrice(price)
-                .amount(calculatePrice(percent, price).negate())
-                .dstAccId(helperBankAccount)
-                .srcAccId(registrationPerson.getBankAccount())
-                .description(description)
-                .operationType(OperationType.CT)
-                .transactionDate(LocalDateTime.now())
-                .build();
-
-        if (registrationPerson.getId() != 1L && registrationPerson.getId() != HELPER_BANK_ID) {
-            creditTransaction.setLevel((long) counter.get() - 1);
-        }
-
-        BigDecimal newDebitBalance = personBankAccount.getBalance().add(debitTransaction.getAmount());
+        BigDecimal amount = price.multiply(BigDecimal.valueOf(percent)).divide(BigDecimal.valueOf(100).setScale(2, RoundingMode.FLOOR));
+        BigDecimal newDebitBalance = personBankAccount.getBalance().add(amount);
         personBankAccount.setBalance(personBankAccount.getBalance().add(newDebitBalance));
         bankAccountRepository.save(personBankAccount);
         registrationPersonRepository.save(registrationPerson);
-        bankRepository.save(debitTransaction);
 
-        BigDecimal newCreditBalance = helperBankAccount.getBalance().subtract(debitTransaction.getAmount());
+        BigDecimal newCreditBalance = helperBankAccount.getBalance().subtract(amount);
         helperBankAccount.setBalance(helperBankAccount.getBalance().subtract(newCreditBalance));
         bankAccountRepository.save(helperBankAccount);
-        bankRepository.save(creditTransaction);
     }
 
     public List<Long> mapFromStringToLong(String percents) {
@@ -168,10 +139,9 @@ public class TransactionServiceImpl implements TransactionService {
         for (SubscriptionPlan s : subscriptionPlans) {
             income.put(s, BigDecimal.ZERO);
         }
-        BankAccount bankAccount=bankAccountRepository.findById(id).orElseThrow();
+        BankAccount bankAccount = bankAccountRepository.findById(id).orElseThrow();
 
-        List<Bank> allTransactions = bankRepository.
-                findAllByDstAccIdAndTransactionDateBetween(bankAccount, LocalDateTime.now().minusMonths(1), LocalDateTime.now());
+        List<Bank> allTransactions = bankRepository.findAllByDstAccIdAndTransactionDateBetween(bankAccount, LocalDateTime.now().minusMonths(1), LocalDateTime.now());
 
         for (Bank transactions : allTransactions) {
             for (SubscriptionPlan s : subscriptionPlans) {

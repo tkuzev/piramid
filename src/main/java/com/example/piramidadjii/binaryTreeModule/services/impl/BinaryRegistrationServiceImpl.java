@@ -1,22 +1,39 @@
 package com.example.piramidadjii.binaryTreeModule.services.impl;
+import com.example.piramidadjii.baseModule.MailSenderService;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
+import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class BinaryRegistrationServiceImpl implements BinaryRegistrationService {
     @Autowired
     private BinaryPersonRepository binaryPersonRepository;
+    @Autowired
+    private RegistrationPersonRepository registrationPersonRepository;
+    @Autowired
+    private MailSenderService mailSenderService;
 
     @Override
-    public void registerNewBinaryPerson(RegistrationPerson person, Long personToPutItOn, boolean preferredDirection) {
-         addBinaryPerson(binParent(findSuitableParent(person)), createBinaryPerson(person), personToPutItOn,preferredDirection);
+    public void registerNewBinaryPerson(RegistrationPerson person,Long childId, Long personToPutItOn, boolean preferredDirection) {
+         addBinaryPerson(binParent(findSuitableParent(person)), childId, personToPutItOn,preferredDirection);
+    }
+
+    @Override
+    public void sendBinaryRegistrationEmail(RegistrationPerson registrationPerson, Long parentId) {
+        try {
+            mailSenderService.sendEmailWithoutAttachment(registrationPerson.getEmail(),"Chigani s mechove","Mechove s chigani na: " + parentId);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public RegistrationPerson findSuitableParent(RegistrationPerson node) {
@@ -41,8 +58,12 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         return binaryPersonRepository.findById(parent.getId()).orElseThrow();
     }
 
-    private void addBinaryPerson(BinaryPerson binParent, BinaryPerson binChild, Long toqDetoMuGoTikatId, boolean preferredSide ) {
+    private void addBinaryPerson(BinaryPerson binParent, Long childId, Long toqDetoMuGoTikatId, boolean preferredSide ) {
         //todo toq metod nqma da ima parent i child, shte priema childID koito shte idva ot pat variable
+        RegistrationPerson child = registrationPersonRepository.findById(childId).orElseThrow();
+
+        BinaryPerson binChild = createBinaryPerson(child);
+
         if(Objects.isNull(binParent)) return;
 
         if(Objects.equals(binParent.getId(), toqDetoMuGoTikatId)){
@@ -59,7 +80,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
             return;
         }
 
-        addBinaryPerson(binParent.getRightChild(), binChild, toqDetoMuGoTikatId, preferredSide);
-        addBinaryPerson(binParent.getLeftChild(), binChild, toqDetoMuGoTikatId, preferredSide);
+        addBinaryPerson(binParent.getRightChild(), childId, toqDetoMuGoTikatId, preferredSide);
+        addBinaryPerson(binParent.getLeftChild(), childId, toqDetoMuGoTikatId, preferredSide);
     }
 }
