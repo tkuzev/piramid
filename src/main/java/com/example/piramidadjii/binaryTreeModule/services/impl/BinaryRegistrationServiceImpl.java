@@ -22,9 +22,11 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     public RegistrationPerson findSuitableParent(RegistrationPerson node) {
         Objects.requireNonNull(node,"nema node");
         RegistrationPerson parent = node.getParent();
-
+        //todo veche prashta emaili, otiva v orkestara
         return (Objects.isNull(/*root*/parent.getParent())) ? parent: findSuitableParent(parent);
     }
+
+    //todo i toq shte hodi da sviri
     private BinaryPerson createBinaryPerson(RegistrationPerson person) {
         BinaryPerson binPerson = new BinaryPerson(person.getId(), BigDecimal.ZERO, BigDecimal.ZERO);
         binPerson.setName(person.getName());
@@ -33,13 +35,14 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         binaryPersonRepository.save(binPerson);
         return binPerson;
     }
+
+    //todo ???????????????
     private BinaryPerson binParent(RegistrationPerson parent) {
         return binaryPersonRepository.findById(parent.getId()).orElseThrow();
     }
 
-    //todo da ima i oshthe edin chovek koito e choveka pod koito shte slojim noviq chovek, validachiq dali e svobodna pozichiqta
     private void addBinaryPerson(BinaryPerson binParent, BinaryPerson binChild, Long toqDetoMuGoTikatId, boolean preferredSide ) {
-
+        //todo toq metod nqma da ima parent i child, shte priema childID koito shte idva ot pat variable
         if(Objects.isNull(binParent)) return;
 
         if(Objects.equals(binParent.getId(), toqDetoMuGoTikatId)){

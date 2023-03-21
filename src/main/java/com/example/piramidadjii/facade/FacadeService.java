@@ -8,8 +8,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 public interface FacadeService {
-    void registerPerson(String name,String email,BigDecimal money, Long parentId, Long personToPutItOnId, boolean preferredDirection, SubscriptionPlan subscriptionPlan);
-    void registerPerson(String name, String email, BigDecimal money, Long parentId, SubscriptionPlan subscriptionPlan);
+     void registerPerson(RegistrationPerson registrationPerson,BigDecimal money);
     Map<SubscriptionPlan, BigDecimal> monthlyIncome(Long id);
 
     void deposit(Long id, BigDecimal money);

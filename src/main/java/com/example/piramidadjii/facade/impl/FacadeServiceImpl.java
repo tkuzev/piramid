@@ -2,6 +2,7 @@ package com.example.piramidadjii.facade.impl;
 
 import com.example.piramidadjii.bankAccountModule.services.BankService;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
+import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.facade.FacadeService;
 import com.example.piramidadjii.orchestraModule.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
@@ -25,16 +26,13 @@ public class FacadeServiceImpl implements FacadeService {
     @Autowired
     SubscriptionPlanService subscriptionPlanService;
 
+    @Autowired
+    BinaryRegistrationService binaryRegistrationService;
 
 
     @Override
-    public void registerPerson(String name, String email, BigDecimal money, Long parentId, Long personToPutItOnId, boolean preferredDirection, SubscriptionPlan subscriptionPlan) {
-        orchestraService.registerPerson(name,email,money,parentId,personToPutItOnId,preferredDirection,subscriptionPlan);
-    }
-
-    @Override
-    public void registerPerson(String name, String email, BigDecimal money, Long parentId, SubscriptionPlan subscriptionPlan) {
-        orchestraService.registerPerson(name,email,money,parentId,subscriptionPlan);
+    public void registerPerson(RegistrationPerson registrationPerson, BigDecimal money) {
+        orchestraService.registerPerson(registrationPerson, money);
     }
 
     @Override

@@ -22,13 +22,10 @@ public class OrchestraServiceImpl implements OrchestraService {
 
 
     @Override
-    public void registerPerson(String name, String email, BigDecimal money, Long parentId, long personToPutItOnId, boolean preferredDirection, SubscriptionPlan subscriptionPlan) {
-        RegistrationPerson registrationPerson = registrationPersonService.registerPerson(name,email ,money, parentId,subscriptionPlan);
-        binaryRegistrationService.registerNewBinaryPerson(registrationPerson, personToPutItOnId, preferredDirection);
-    }
-
-    @Override
-    public void registerPerson(String name, String email, BigDecimal money, Long parentId, SubscriptionPlan subscriptionPlan) {
-        registrationPersonService.registerPerson(name,email ,money, parentId,subscriptionPlan);
+    public void registerPerson(RegistrationPerson registrationPerson, BigDecimal money) {
+        registrationPersonService.registerPerson(registrationPerson,money);
+        if (registrationPerson.getSubscriptionPlan().isEligibleForBinary()){
+            binaryRegistrationService.sendBinaryRegistrationEmail();
+        }
     }
 }

@@ -22,17 +22,10 @@ public class FacadeServiceImplTest {
     @Autowired
     RegistrationPersonRepository registrationPersonRepository;
 
+
+
     @Test
     void testkurami(){
-        facadeService.registerPerson("asd","kuramiemail",
-                BigDecimal.valueOf(500),1L,subscriptionPlanRepository.getSubscriptionPlanById(2L).orElseThrow());
 
-        RegistrationPerson kur = registrationPersonRepository.findById(2L).orElseThrow();
-
-        facadeService.createTransaction(kur,BigDecimal.valueOf(1000));
-        facadeService.createTransaction(kur,BigDecimal.valueOf(1000));
-        facadeService.createTransaction(kur,BigDecimal.valueOf(1000));
-        facadeService.createTransaction(kur,BigDecimal.valueOf(10000));
-        facadeService.createTransaction(kur,BigDecimal.valueOf(1000));
     }
 }

@@ -33,16 +33,26 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
     @Override
     @Transactional
-    public RegistrationPerson registerPerson(String name,String email ,BigDecimal money, Long parentId, SubscriptionPlan subscriptionPlan) {
+    public RegistrationPerson registerPerson(RegistrationPerson registrationPerson, BigDecimal money) {
+        List<SubscriptionPlan> subscriptionPlans = subscriptionPlanRepository.findAll().stream().sorted
+                (Comparator.comparing(SubscriptionPlan::getRegistrationFee).reversed()).toList();
 
-        RegistrationPerson registrationPerson = setPersonDetails(name,email ,parentId);
+//        RegistrationPerson registrationPerson = setPersonDetails(name,email ,parentId);
         BankAccount bankAccount = new BankAccount();
         bankAccount.setBalance(money);
         bankAccountRepository.save(bankAccount);
         registrationPerson.setBankAccount(bankAccount);
         registrationPerson.setIsSubscriptionEnabled(true);
-        registrationPerson.setSubscriptionPlan(subscriptionPlan);
         registrationPersonRepository.save(registrationPerson);
+        subscriptionPlans.stream()
+                .filter(x -> checkBalance(registrationPerson.getBankAccount().getBalance(), x.getId()) >= 0)
+                .findFirst()
+                .ifPresent(subscriptionPlan -> {
+                    setSubscription(registrationPerson, subscriptionPlan.getId());
+                    registrationPerson.setIsSubscriptionEnabled(true);
+                    registrationPerson.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
+                    registrationPersonRepository.save(registrationPerson);
+                });
 
 
         if(Objects.isNull(registrationPerson.getSubscriptionPlan()))
@@ -52,7 +62,9 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
     }
 
     //Helper methods
-
+    private int checkBalance(BigDecimal balance, long planId) {
+        return balance.compareTo(subscriptionPlanRepository.getSubscriptionPlanById(planId).orElseThrow().getRegistrationFee());
+    }
 
     @Override
     public void setSubscription(RegistrationPerson registrationPerson, long id) {
@@ -80,7 +92,6 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         return RegistrationPerson.builder()
                 .name(name)
                 .email(email)
-                .subscriptionExpirationDate(LocalDate.now().plusMonths(1))
                 .parent(registrationPersonRepository.findById(parentId).orElseThrow())
                 .build();
     }

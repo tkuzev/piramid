@@ -11,5 +11,4 @@ public interface SubscriptionPlanService {
 
     void upgradeSubscriptionPlan(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan);
 
-    SubscriptionPlan assignSubscriptionPlan(BigDecimal money);
 }
