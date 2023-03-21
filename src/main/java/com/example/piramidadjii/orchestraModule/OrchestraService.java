@@ -5,5 +5,5 @@ import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPers
 import java.math.BigDecimal;
 
 public interface OrchestraService {
-    void registerPerson(RegistrationPerson registrationPerson, Long parentId, BigDecimal money);
+    void registerPerson(RegistrationPerson registrationPerson, BigDecimal money);
 }

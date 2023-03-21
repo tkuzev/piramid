@@ -30,7 +30,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     @Override
     public void sendBinaryRegistrationEmail(RegistrationPerson registrationPerson, Long parentId) {
         try {
-            mailSenderService.sendEmailWithoutAttachment(registrationPerson.getEmail(), "Chigani s mechove", "Mechove s chigani na: " + parentId);
+            mailSenderService.sendEmailWithoutAttachment(findSuitableParent(registrationPerson).getEmail(), "Chigani s mechove", "http://localhost:8080/register/binary/" + parentId);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }

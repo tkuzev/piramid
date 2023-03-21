@@ -35,7 +35,7 @@ public class FacadeController {
         RegistrationPerson parent = registrationPersonRepository.findById(registerPersonDTO.getParentId()).orElseThrow();
         BigDecimal money = registerPersonDTO.getMoney();
         RegistrationPerson person = customModelMapper(registerPersonDTO, parent);
-        facadeService.registerPerson(person, parent.getId(), money);
+        facadeService.registerPerson(person, money);
     }
 
     @PostMapping("/register/binary/{childId}")
