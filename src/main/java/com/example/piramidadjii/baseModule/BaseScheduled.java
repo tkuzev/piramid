@@ -10,9 +10,7 @@ import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.configModule.ConfigurationService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
-import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
-import jakarta.mail.MessagingException;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -22,14 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.support.CronExpression;
 
-import javax.swing.text.DateFormatter;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -66,7 +61,7 @@ public class BaseScheduled {
 
     public BaseScheduled() {
         this.date = LocalDate.now();
-        this.formatter=DateTimeFormatter.ofPattern("MMMM", new Locale("bg"));
+        this.formatter = DateTimeFormatter.ofPattern("MMMM", new Locale("bg"));
     }
 
     @Scheduled(cron = "00 00 00 1 * *", zone = "Europe/Sofia")
@@ -79,7 +74,7 @@ public class BaseScheduled {
 
     private void updateBossMoney() {
 
-        BankAccount helperBankAccount=bankAccountRepository.findById(HELPER_BANK_ID).orElseThrow();
+        BankAccount helperBankAccount = bankAccountRepository.findById(HELPER_BANK_ID).orElseThrow();
         BinaryPerson boss = binaryPersonRepository.findById(1L).orElseThrow();
         boss.getBankAccount().setBalance(boss.getBankAccount().getBalance().add(boss.getRightContainer().add(boss.getLeftContainer())));
         Bank debitTransaction = new Bank();
@@ -170,11 +165,11 @@ public class BaseScheduled {
             registrationPersonRepository.save(registrationPerson);
             generatePDF(registrationPerson);
             String message = "Успешно бе платена таксата за месец " + date.format(formatter) + ".";
-            mailSenderService.sendEmail(registrationPerson.getEmail(),"Платена такса", message,"reciept.pdf");
-            File file=new File("reciept.pdf");
+            mailSenderService.sendEmail(registrationPerson.getEmail(), "Платена такса", message, "reciept.pdf");
+            File file = new File("reciept.pdf");
             file.delete();
         } else {
-            mailSenderService.sendEmailWithoutAttachment(registrationPerson.getEmail(),"Неуспешно плащане на месечен абонамент","Недостатъчен баланс за заплащане на месечната такса.");
+            mailSenderService.sendEmailWithoutAttachment(registrationPerson.getEmail(), "Неуспешно плащане на месечен абонамент", "Недостатъчен баланс за заплащане на месечната такса.");
             registrationPerson.setIsSubscriptionEnabled(false);
             registrationPersonRepository.save(registrationPerson);
         }

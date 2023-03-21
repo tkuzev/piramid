@@ -1,11 +1,9 @@
 package com.example.piramidadjii.orchestraModule;
 
-import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
-import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 
 import java.math.BigDecimal;
 
 public interface OrchestraService {
-    void registerPerson(RegistrationPerson registrationPerson,Long parentId, BigDecimal money);
+    void registerPerson(RegistrationPerson registrationPerson, Long parentId, BigDecimal money);
 }

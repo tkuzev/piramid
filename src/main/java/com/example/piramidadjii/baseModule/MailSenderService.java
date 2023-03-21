@@ -24,14 +24,14 @@ public class MailSenderService {
                           String attachment) throws MessagingException {
 
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message,true);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
         helper.setTo(recipient);
         helper.setSubject(subject);
         helper.setText(text, true); // true indicates HTML content
 
-        FileSystemResource fileSystemResource=new FileSystemResource(new File(attachment));
-        helper.addAttachment(Objects.requireNonNull(fileSystemResource.getFilename()),fileSystemResource);
+        FileSystemResource fileSystemResource = new FileSystemResource(new File(attachment));
+        helper.addAttachment(Objects.requireNonNull(fileSystemResource.getFilename()), fileSystemResource);
 
         mailSender.send(message);
     }

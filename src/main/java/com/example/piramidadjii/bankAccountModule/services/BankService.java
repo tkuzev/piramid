@@ -1,7 +1,5 @@
 package com.example.piramidadjii.bankAccountModule.services;
 
-import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
-
 import java.math.BigDecimal;
 
 public interface BankService {

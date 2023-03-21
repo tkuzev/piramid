@@ -1,4 +1,5 @@
 package com.example.piramidadjii.binaryTreeModule.services.impl;
+
 import com.example.piramidadjii.baseModule.MailSenderService;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class BinaryRegistrationServiceImpl implements BinaryRegistrationService {
@@ -23,24 +23,23 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     private MailSenderService mailSenderService;
 
     @Override
-    public void registerNewBinaryPerson(RegistrationPerson person,Long childId, Long personToPutItOn, boolean preferredDirection) {
-         addBinaryPerson(binParent(findSuitableParent(person)), childId, personToPutItOn,preferredDirection);
+    public void registerNewBinaryPerson(RegistrationPerson person, Long personToPutItOn, boolean preferredDirection) {
+        addBinaryPerson(binParent(findSuitableParent(person)), person.getId(), personToPutItOn, preferredDirection);
     }
 
     @Override
     public void sendBinaryRegistrationEmail(RegistrationPerson registrationPerson, Long parentId) {
         try {
-            mailSenderService.sendEmailWithoutAttachment(registrationPerson.getEmail(),"Chigani s mechove","Mechove s chigani na: " + parentId);
+            mailSenderService.sendEmailWithoutAttachment(registrationPerson.getEmail(), "Chigani s mechove", "Mechove s chigani na: " + parentId);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
     }
 
     public RegistrationPerson findSuitableParent(RegistrationPerson node) {
-        Objects.requireNonNull(node,"nema node");
+        Objects.requireNonNull(node, "nema node");
         RegistrationPerson parent = node.getParent();
-        //todo veche prashta emaili, otiva v orkestara
-        return (Objects.isNull(/*root*/parent.getParent())) ? parent: findSuitableParent(parent);
+        return (Objects.isNull(/*root*/parent.getParent())) ? parent : findSuitableParent(parent);
     }
 
     //todo i toq shte hodi da sviri
@@ -58,15 +57,15 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         return binaryPersonRepository.findById(parent.getId()).orElseThrow();
     }
 
-    private void addBinaryPerson(BinaryPerson binParent, Long childId, Long toqDetoMuGoTikatId, boolean preferredSide ) {
-        //todo toq metod nqma da ima parent i child, shte priema childID koito shte idva ot pat variable
+    private void addBinaryPerson(BinaryPerson binParent, Long childId, Long toqDetoMuGoTikatId, boolean preferredSide) {
+
         RegistrationPerson child = registrationPersonRepository.findById(childId).orElseThrow();
 
         BinaryPerson binChild = createBinaryPerson(child);
 
-        if(Objects.isNull(binParent)) return;
+        if (Objects.isNull(binParent)) return;
 
-        if(Objects.equals(binParent.getId(), toqDetoMuGoTikatId)){
+        if (Objects.equals(binParent.getId(), toqDetoMuGoTikatId)) {
 
             if (preferredSide) {
                 binParent.setRightChild(binChild);
