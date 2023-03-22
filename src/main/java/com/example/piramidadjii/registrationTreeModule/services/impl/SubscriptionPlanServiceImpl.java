@@ -9,6 +9,7 @@ import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,7 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
         subscriptionPlanRepository.save(newSubscriptionPlan);
     }
 
+    @Transactional
     @Override
     public void upgradeSubscriptionPlan(Long id, SubscriptionPlan subscriptionPlan) {
         RegistrationPerson registrationPerson = registrationPersonRepository.findById(id).orElseThrow();
@@ -43,7 +45,7 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
         BankAccount bossBankAccount = bankAccountRepository.findById(BOSS_BANK_ACCOUNT_ID).orElseThrow();
 
         if (isUpdateUnavailable(registrationPerson, subscriptionPlan)) {
-            return;
+            throw new RuntimeException("nqmash pari da si upgreidnesh plana");
         }
 
         BigDecimal money = subscriptionPlan.getRegistrationFee().subtract(registrationPerson.getSubscriptionPlan().getRegistrationFee());

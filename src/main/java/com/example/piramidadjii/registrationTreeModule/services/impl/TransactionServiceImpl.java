@@ -145,7 +145,8 @@ public class TransactionServiceImpl implements TransactionService {
         }
         BankAccount bankAccount = bankAccountRepository.findById(id).orElseThrow();
 
-        List<Bank> allTransactions = bankRepository.findAllByDstAccIdAndTransactionDateBetween(bankAccount, LocalDateTime.now().minusMonths(1), LocalDateTime.now());
+
+        List<Bank> allTransactions = bankRepository.findAllByDescriptionAndDstAccIdAndTransactionDateBetween(Description.BONUS,bankAccount,LocalDateTime.now().minusMonths(1),LocalDateTime.now());
 
         for (Bank transactions : allTransactions) {
             for (SubscriptionPlan s : subscriptionPlans) {
