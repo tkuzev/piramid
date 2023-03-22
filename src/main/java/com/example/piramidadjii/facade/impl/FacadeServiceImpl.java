@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -58,5 +59,10 @@ public class FacadeServiceImpl implements FacadeService {
     @Override
     public void createTransaction(RegistrationPerson registrationPerson, BigDecimal price) {
         transactionService.createTransaction(registrationPerson,price);
+    }
+
+    @Override
+    public List<BigDecimal> wallet(Long registrationPersonId) {
+        return transactionService.wallet(registrationPersonId);
     }
 }

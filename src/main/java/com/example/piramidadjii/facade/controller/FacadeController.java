@@ -9,15 +9,12 @@ import com.example.piramidadjii.facade.dto.UpgradeSubscriptionPlanDTO;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
-import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.SpringApplicationEvent;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 
 @RestController
@@ -30,35 +27,40 @@ public class FacadeController {
     private BinaryRegistrationService binaryRegistrationService;
 
     @PostMapping("/register")
-    public void registerPerson(@RequestBody RegisterPersonDTO registerPersonDTO){
+    public void registerPerson(@RequestBody RegisterPersonDTO registerPersonDTO) {
         RegistrationPerson parent = registrationPersonRepository.findById(registerPersonDTO.getParentId()).orElseThrow();
-        BigDecimal money=registerPersonDTO.getMoney();
+        BigDecimal money = registerPersonDTO.getMoney();
         RegistrationPerson person = customModelMapper(registerPersonDTO, parent);
-        facadeService.registerPerson(person,parent.getId(), money);
+        facadeService.registerPerson(person, parent.getId(), money);
     }
 
     @PostMapping("/register/binary/{childId}")
-    public void registerBinaryPerson(@PathVariable Long childId, @RequestBody BinaryPersonDTO binaryPersonDTO){
-        binaryRegistrationService.registerNewBinaryPerson(binaryPersonDTO.getParent(),childId,binaryPersonDTO.getBinaryPersonToPutItOnId(),false);
+    public void registerBinaryPerson(@PathVariable Long childId, @RequestBody BinaryPersonDTO binaryPersonDTO) {
+        binaryRegistrationService.registerNewBinaryPerson(binaryPersonDTO.getParent(), childId, binaryPersonDTO.getBinaryPersonToPutItOnId(), false);
     }
 
     @GetMapping("/income/{id}")
-    public Map<SubscriptionPlan, BigDecimal> monthlyIncome(@PathVariable Long id){
+    public Map<SubscriptionPlan, BigDecimal> monthlyIncome(@PathVariable Long id) {
         return facadeService.monthlyIncome(id);
     }
 
     @PostMapping("/user/deposit")
-    public void deposit(@RequestBody DepositDTO depositDTO){
-        facadeService.deposit(depositDTO.getId(),depositDTO.getMoney());
+    public void deposit(@RequestBody DepositDTO depositDTO) {
+        facadeService.deposit(depositDTO.getId(), depositDTO.getMoney());
     }
 
     @PostMapping("/user/withdraw")
-    public void withdraw(@RequestBody DepositDTO depositDTO){
-        facadeService.withdraw(depositDTO.getId(),depositDTO.getMoney());
+    public void withdraw(@RequestBody DepositDTO depositDTO) {
+        facadeService.withdraw(depositDTO.getId(), depositDTO.getMoney());
+    }
+
+    @GetMapping("user/wallet/balance")
+    public List<BigDecimal> balance(@RequestParam Long registrationPersonId) {
+        return facadeService.wallet(registrationPersonId);
     }
 
     @PostMapping("/user/subscription-plan/upgrade")
-    public void upgradeSubscriptionPlan(@RequestBody UpgradeSubscriptionPlanDTO upgradeSubscriptionPlanDTO){
+    public void upgradeSubscriptionPlan(@RequestBody UpgradeSubscriptionPlanDTO upgradeSubscriptionPlanDTO) {
         facadeService.
                 upgradeSubscriptionPlan(upgradeSubscriptionPlanDTO.getRegistrationPerson(),
                         upgradeSubscriptionPlanDTO.getSubscriptionPlan());

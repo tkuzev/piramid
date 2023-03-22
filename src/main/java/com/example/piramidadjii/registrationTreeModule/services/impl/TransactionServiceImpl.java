@@ -5,6 +5,8 @@ import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
 import com.example.piramidadjii.bankAccountModule.repositories.BankRepository;
 import com.example.piramidadjii.baseModule.enums.Description;
+import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
+import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.configModule.ConfigurationService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
@@ -40,6 +42,8 @@ public class TransactionServiceImpl implements TransactionService {
     private SubscriptionPlanRepository subscriptionPlanRepository;
     @Autowired
     private ConfigurationService configurationService;
+    @Autowired
+    private BinaryPersonRepository binaryPersonRepository;
 
     private static final long HELPER_BANK_ID = -1;
 
@@ -156,5 +160,16 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         return income;
+    }
+
+    @Override
+    public List<BigDecimal> wallet(Long registrationPersonId) {
+        if (binaryPersonRepository.existsById(registrationPersonId)) {
+            BinaryPerson binPerson = binaryPersonRepository.findById(registrationPersonId).orElseThrow();
+            return Arrays.asList(binPerson.getBankAccount().getBalance(), binPerson.getLeftContainer(),
+                    binPerson.getRightContainer());
+        }
+        RegistrationPerson regPerson = registrationPersonRepository.findById(registrationPersonId).orElseThrow();
+        return Collections.singletonList(regPerson.getBankAccount().getBalance());
     }
 }
