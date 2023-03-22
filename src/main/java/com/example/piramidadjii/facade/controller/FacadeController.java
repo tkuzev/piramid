@@ -3,10 +3,7 @@ package com.example.piramidadjii.facade.controller;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.facade.FacadeService;
-import com.example.piramidadjii.facade.dto.BinaryPersonDTO;
-import com.example.piramidadjii.facade.dto.DepositDTO;
-import com.example.piramidadjii.facade.dto.EditPersonDTO;
-import com.example.piramidadjii.facade.dto.RegisterPersonDTO;
+import com.example.piramidadjii.facade.dto.*;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @RestController
@@ -26,8 +24,12 @@ public class FacadeController {
     private RegistrationPersonRepository registrationPersonRepository;
     @Autowired
     private BinaryRegistrationService binaryRegistrationService;
-    @Autowired
-    private BinaryPersonRepository binaryPersonRepository;
+
+    @PostMapping("/user/sell")
+    public void makeSell(@RequestBody SellDTO sellDTO){
+        RegistrationPerson person = registrationPersonRepository.findById(sellDTO.getId()).orElseThrow();
+        facadeService.createTransaction(person,sellDTO.getPrice());
+    }
 
     @PostMapping("/register")
     public void registerPerson(@RequestBody RegisterPersonDTO registerPersonDTO) {

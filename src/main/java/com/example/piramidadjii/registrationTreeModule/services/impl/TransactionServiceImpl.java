@@ -152,9 +152,9 @@ public class TransactionServiceImpl implements TransactionService {
             for (SubscriptionPlan s : subscriptionPlans) {
                 List<Long> percentages = mapFromStringToLong(s.getPercents());
 
-                if (!transactions.getDescription().equals(Description.REGISTRATION_FEE) && transactions.getLevel() < percentages.size()) {
+                if (!transactions.getDescription().equals(Description.REGISTRATION_FEE) && transactions.getLevel()-1 < percentages.size()) {
                     BigDecimal oldSum = income.get(s);
-                    BigDecimal valueToAdd = transactions.getItemPrice().multiply(BigDecimal.valueOf(percentages.get(Math.toIntExact(transactions.getLevel())))).divide(BigDecimal.valueOf(100)).setScale(2);
+                    BigDecimal valueToAdd = transactions.getItemPrice().multiply(BigDecimal.valueOf(percentages.get(Math.toIntExact(transactions.getLevel()-1)))).divide(BigDecimal.valueOf(100)).setScale(2);
                     income.put(s, oldSum.add(valueToAdd));
                 }
             }
