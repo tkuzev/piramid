@@ -16,8 +16,6 @@ public interface FacadeService {
 
     void withdraw(Long id, BigDecimal money);
 
-    void upgradeSubscriptionPlan(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan);
-
     void createTransaction(RegistrationPerson registrationPerson, BigDecimal price);
 
     void editProfile(EditPersonDTO editPersonDTO);

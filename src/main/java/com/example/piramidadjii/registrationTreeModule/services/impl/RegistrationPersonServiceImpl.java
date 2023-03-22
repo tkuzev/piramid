@@ -92,7 +92,7 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
     @Override
     public void editPerson(EditPersonDTO editPersonDTO) {
-        RegistrationPerson personToEdit = registrationPersonRepository.findByEmail(editPersonDTO.getEmail()).orElseThrow();
+        RegistrationPerson personToEdit = registrationPersonRepository.findById(editPersonDTO.getId()).orElseThrow();
 
         personToEdit.setEmail(editPersonDTO.getEmail());
         personToEdit.setName(editPersonDTO.getName());

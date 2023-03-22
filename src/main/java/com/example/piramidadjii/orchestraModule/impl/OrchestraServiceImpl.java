@@ -4,7 +4,9 @@ import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationServ
 import com.example.piramidadjii.facade.dto.EditPersonDTO;
 import com.example.piramidadjii.orchestraModule.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
+import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
+import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationPersonService;
 import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ public class OrchestraServiceImpl implements OrchestraService {
     private RegistrationPersonService registrationPersonService;
     @Autowired
     private SubscriptionPlanService subscriptionPlanService;
+    @Autowired
+    private SubscriptionPlanRepository subscriptionPlanRepository;
 
 
     @Override
@@ -34,7 +38,8 @@ public class OrchestraServiceImpl implements OrchestraService {
 
     @Override
     public void editProfile(EditPersonDTO editPersonDTO) {
-        subscriptionPlanService.upgradeSubscriptionPlan(editPersonDTO.getEmail(),editPersonDTO.getSubscriptionPlan());
+        SubscriptionPlan plan = subscriptionPlanRepository.findById(editPersonDTO.getSubscriptionPlanId()).orElseThrow();
+        subscriptionPlanService.upgradeSubscriptionPlan(editPersonDTO.getId(),plan);
         registrationPersonService.editPerson(editPersonDTO);
     }
 }

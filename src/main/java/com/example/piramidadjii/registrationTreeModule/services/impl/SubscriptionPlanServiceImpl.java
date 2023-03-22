@@ -38,8 +38,8 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
     }
 
     @Override
-    public void upgradeSubscriptionPlan(String email,SubscriptionPlan subscriptionPlan) {
-        RegistrationPerson registrationPerson = registrationPersonRepository.findByEmail(email).orElseThrow();
+    public void upgradeSubscriptionPlan(Long id,SubscriptionPlan subscriptionPlan) {
+        RegistrationPerson registrationPerson = registrationPersonRepository.findById(id).orElseThrow();
 
         BankAccount bossBankAccount = bankAccountRepository.findById(BOSS_BANK_ACCOUNT_ID).orElseThrow();
 
