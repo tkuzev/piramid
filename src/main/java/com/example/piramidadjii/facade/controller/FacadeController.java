@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 
 @RestController
@@ -56,17 +56,22 @@ public class FacadeController {
         facadeService.withdraw(depositDTO.getId(), depositDTO.getMoney());
     }
 
+
+    @GetMapping("user/wallet/balance")
+    public List<BigDecimal> balance(@RequestParam Long registrationPersonId) {
+        return facadeService.wallet(registrationPersonId);
+    }
+
     @PostMapping("/profile/edit")
     public void edit(@RequestBody EditPersonDTO editPersonDTO){
         facadeService.editProfile(editPersonDTO);
-    }
 
 
-    private static RegistrationPerson customModelMapper(RegisterPersonDTO registerPersonDTO, RegistrationPerson parent) {
-        RegistrationPerson person = new RegistrationPerson();
-        person.setParent(parent);
-        person.setName(registerPersonDTO.getName());
-        person.setEmail(registerPersonDTO.getEmail());
-        return person;
-    }
+        private static RegistrationPerson customModelMapper(RegisterPersonDTO registerPersonDTO, RegistrationPerson parent) {
+            RegistrationPerson person = new RegistrationPerson();
+            person.setParent(parent);
+            person.setName(registerPersonDTO.getName());
+            person.setEmail(registerPersonDTO.getEmail());
+            return person;
+        }
 }
