@@ -1,7 +1,6 @@
 package com.example.piramidadjii.facade.impl;
 
 import com.example.piramidadjii.bankAccountModule.services.BankService;
-import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.facade.FacadeService;
 import com.example.piramidadjii.orchestraModule.OrchestraService;
@@ -32,8 +31,8 @@ public class FacadeServiceImpl implements FacadeService {
 
 
     @Override
-    public void registerPerson(RegistrationPerson registrationPerson,Long parentId, BigDecimal money) {
-        orchestraService.registerPerson(registrationPerson,parentId, money);
+    public void registerPerson(RegistrationPerson registrationPerson, BigDecimal money) {
+        orchestraService.registerPerson(registrationPerson, money);
     }
 
     @Override
@@ -58,7 +57,7 @@ public class FacadeServiceImpl implements FacadeService {
 
     @Override
     public void createTransaction(RegistrationPerson registrationPerson, BigDecimal price) {
-        transactionService.createTransaction(registrationPerson,price);
+        transactionService.createTransaction(registrationPerson, price);
     }
 
     @Override

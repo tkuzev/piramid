@@ -68,6 +68,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
         return creditTransaction;
     }
+
     @Override
     public Bank transactionBoiler(BankAccount helperBankAccount, RegistrationPerson registrationPerson,
                                   Description description, BigDecimal price,

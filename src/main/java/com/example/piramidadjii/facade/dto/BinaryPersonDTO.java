@@ -8,13 +8,7 @@ import lombok.Setter;
 @Setter
 public class BinaryPersonDTO {
 
-    RegistrationPerson parent;
 
-    public boolean isPreferredDirection() {
-        return preferredDirection;
-    }
-
-    Long ChildId;
     Long binaryPersonToPutItOnId;
     boolean preferredDirection;
 }

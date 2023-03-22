@@ -1,5 +1,7 @@
 package com.example.piramidadjii.facade.controller;
 
+import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
+import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.facade.FacadeService;
 import com.example.piramidadjii.facade.dto.BinaryPersonDTO;
@@ -25,6 +27,8 @@ public class FacadeController {
     private RegistrationPersonRepository registrationPersonRepository;
     @Autowired
     private BinaryRegistrationService binaryRegistrationService;
+    @Autowired
+    private BinaryPersonRepository binaryPersonRepository;
 
     @PostMapping("/register")
     public void registerPerson(@RequestBody RegisterPersonDTO registerPersonDTO) {

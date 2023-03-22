@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @Service
 public class BankServiceImpl implements BankService {
@@ -25,10 +24,12 @@ public class BankServiceImpl implements BankService {
     RegistrationPersonRepository registrationPersonRepository;
 
     BankAccount helperBankAccount;
+
     @PostConstruct
-    private void construct(){
-        this.helperBankAccount=bankAccountRepository.findById(-1L).orElseThrow();
+    private void construct() {
+        this.helperBankAccount = bankAccountRepository.findById(-1L).orElseThrow();
     }
+
     @Override
     public void deposit(Long id, BigDecimal money) {
         RegistrationPerson person = registrationPersonRepository.findById(id).orElseThrow();

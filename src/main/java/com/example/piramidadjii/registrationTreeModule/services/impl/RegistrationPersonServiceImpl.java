@@ -55,7 +55,7 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
                 });
 
 
-        if(Objects.isNull(registrationPerson.getSubscriptionPlan()))
+        if (Objects.isNull(registrationPerson.getSubscriptionPlan()))
             throw new RuntimeException();
 
         return registrationPerson;
@@ -85,10 +85,10 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         bankAccountRepository.save(bossBankAccount);
 
         configurationService.transactionBoiler(bossBankAccount, registrationPerson, registrationPerson.
-                getSubscriptionPlan(), Description.REGISTRATION_FEE,registrationPerson.getSubscriptionPlan().getRegistrationFee());
+                getSubscriptionPlan(), Description.REGISTRATION_FEE, registrationPerson.getSubscriptionPlan().getRegistrationFee());
     }
 
-    private RegistrationPerson setPersonDetails(String name,String email ,Long parentId) {
+    private RegistrationPerson setPersonDetails(String name, String email, Long parentId) {
         return RegistrationPerson.builder()
                 .name(name)
                 .email(email)

@@ -1,6 +1,5 @@
 package com.example.piramidadjii.facade;
 
-import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 
@@ -9,7 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface FacadeService {
-     void registerPerson(RegistrationPerson registrationPerson, Long parentId,BigDecimal money);
+    void registerPerson(RegistrationPerson registrationPerson, BigDecimal money);
+
     Map<SubscriptionPlan, BigDecimal> monthlyIncome(Long id);
 
     void deposit(Long id, BigDecimal money);
