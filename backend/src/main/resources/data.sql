@@ -21,7 +21,7 @@ create table bank_account (
 create table binary_person (
                                id bigint not null,
                                name varchar(20) not null,
-                               email varchar(255) not null,
+                               email varchar(255) not null unique,
                                left_container decimal(38,2),
                                right_container decimal(38,2),
                                bank_account_id bigint,
@@ -34,7 +34,7 @@ create table binary_person (
 create table registration_person (
                                      id bigint not null auto_increment,
                                      name varchar(20) not null,
-                                     email varchar(255) not null,
+                                     email varchar(255) not null unique,
                                      is_subscription_enabled bit,
                                      subscription_expiration_date date,
                                      bank_account_id bigint not null,

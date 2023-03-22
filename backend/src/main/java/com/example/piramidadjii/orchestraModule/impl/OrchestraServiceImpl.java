@@ -5,6 +5,7 @@ import com.example.piramidadjii.facade.dto.EditPersonDTO;
 import com.example.piramidadjii.orchestraModule.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
+import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationPersonService;
 import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
@@ -24,10 +25,15 @@ public class OrchestraServiceImpl implements OrchestraService {
     private SubscriptionPlanService subscriptionPlanService;
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
+    @Autowired
+    private RegistrationPersonRepository registrationPersonRepository;
 
 
     @Override
     public void registerPerson(RegistrationPerson registrationPerson, BigDecimal money) {
+        if (registrationPersonRepository.existsByEmail(registrationPerson.getEmail())){
+            throw new RuntimeException("Emaila trqq da e unique");
+        }
         registrationPersonService.registerPerson(registrationPerson, money);
         if (registrationPerson.getSubscriptionPlan().isEligibleForBinary()) {
             binaryRegistrationService.sendBinaryRegistrationEmail(registrationPerson, registrationPerson.getId());
