@@ -16,5 +16,5 @@ public interface RegistrationPersonRepository extends JpaRepository<Registration
 
     List<RegistrationPerson> getAllBySubscriptionExpirationDate(LocalDate date);
 
-
+    Optional<RegistrationPerson> findByEmail(String email);
 }

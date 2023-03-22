@@ -6,12 +6,14 @@ import com.example.piramidadjii.baseModule.enums.Description;
 import com.example.piramidadjii.configModule.ConfigurationService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
+import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
@@ -21,6 +23,8 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
     private BankAccountRepository bankAccountRepository;
     @Autowired
     private ConfigurationService configurationService;
+    @Autowired
+    private RegistrationPersonRepository registrationPersonRepository;
     private static final long BOSS_BANK_ACCOUNT_ID = 1;
 
     @Override
@@ -34,7 +38,9 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
     }
 
     @Override
-    public void upgradeSubscriptionPlan(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan) {
+    public void upgradeSubscriptionPlan(String email,SubscriptionPlan subscriptionPlan) {
+        RegistrationPerson registrationPerson = registrationPersonRepository.findByEmail(email).orElseThrow();
+
         BankAccount bossBankAccount = bankAccountRepository.findById(BOSS_BANK_ACCOUNT_ID).orElseThrow();
 
         if (isUpdateUnavailable(registrationPerson, subscriptionPlan)) {

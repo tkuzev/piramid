@@ -1,5 +1,6 @@
 package com.example.piramidadjii.facade;
 
+import com.example.piramidadjii.facade.dto.EditPersonDTO;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 
@@ -18,4 +19,6 @@ public interface FacadeService {
     void upgradeSubscriptionPlan(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan);
 
     void createTransaction(RegistrationPerson registrationPerson, BigDecimal price);
+
+    void editProfile(EditPersonDTO editPersonDTO);
 }

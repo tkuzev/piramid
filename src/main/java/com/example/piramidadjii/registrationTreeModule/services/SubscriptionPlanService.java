@@ -7,6 +7,6 @@ import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan
 public interface SubscriptionPlanService {
     void createSubscriptionPlan(SubscriptionPlan subscriptionPlan);
 
-    void upgradeSubscriptionPlan(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan);
+    void upgradeSubscriptionPlan(String email, SubscriptionPlan subscriptionPlan);
 
 }

@@ -3,6 +3,7 @@ package com.example.piramidadjii.facade.impl;
 import com.example.piramidadjii.bankAccountModule.services.BankService;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.facade.FacadeService;
+import com.example.piramidadjii.facade.dto.EditPersonDTO;
 import com.example.piramidadjii.orchestraModule.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
@@ -49,13 +50,14 @@ public class FacadeServiceImpl implements FacadeService {
         bankService.withdraw(id, money);
     }
 
-    @Override
-    public void upgradeSubscriptionPlan(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan) {
-        subscriptionPlanService.upgradeSubscriptionPlan(registrationPerson, subscriptionPlan);
-    }
 
     @Override
     public void createTransaction(RegistrationPerson registrationPerson, BigDecimal price) {
         transactionService.createTransaction(registrationPerson, price);
+    }
+
+    @Override
+    public void editProfile(EditPersonDTO editPersonDTO) {
+        orchestraService.editProfile(editPersonDTO);
     }
 }

@@ -4,10 +4,7 @@ import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.facade.FacadeService;
-import com.example.piramidadjii.facade.dto.BinaryPersonDTO;
-import com.example.piramidadjii.facade.dto.DepositDTO;
-import com.example.piramidadjii.facade.dto.RegisterPersonDTO;
-import com.example.piramidadjii.facade.dto.UpgradeSubscriptionPlanDTO;
+import com.example.piramidadjii.facade.dto.*;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
@@ -59,11 +56,9 @@ public class FacadeController {
         facadeService.withdraw(depositDTO.getId(), depositDTO.getMoney());
     }
 
-    @PostMapping("/user/subscription-plan/upgrade")
-    public void upgradeSubscriptionPlan(@RequestBody UpgradeSubscriptionPlanDTO upgradeSubscriptionPlanDTO) {
-        facadeService.
-                upgradeSubscriptionPlan(upgradeSubscriptionPlanDTO.getRegistrationPerson(),
-                        upgradeSubscriptionPlanDTO.getSubscriptionPlan());
+    @PostMapping("/profile/edit")
+    public void edit(@RequestBody EditPersonDTO editPersonDTO){
+        facadeService.editProfile(editPersonDTO);
     }
 
 

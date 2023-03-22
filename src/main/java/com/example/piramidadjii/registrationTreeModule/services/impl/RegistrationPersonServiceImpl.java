@@ -4,6 +4,7 @@ import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
 import com.example.piramidadjii.baseModule.enums.Description;
 import com.example.piramidadjii.configModule.ConfigurationService;
+import com.example.piramidadjii.facade.dto.EditPersonDTO;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class RegistrationPersonServiceImpl implements RegistrationPersonService {
@@ -88,11 +90,15 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
                 getSubscriptionPlan(), Description.REGISTRATION_FEE, registrationPerson.getSubscriptionPlan().getRegistrationFee());
     }
 
-    private RegistrationPerson setPersonDetails(String name, String email, Long parentId) {
-        return RegistrationPerson.builder()
-                .name(name)
-                .email(email)
-                .parent(registrationPersonRepository.findById(parentId).orElseThrow())
-                .build();
+    @Override
+    public void editPerson(EditPersonDTO editPersonDTO) {
+        RegistrationPerson personToEdit = registrationPersonRepository.findByEmail(editPersonDTO.getEmail()).orElseThrow();
+
+        personToEdit.setEmail(editPersonDTO.getEmail());
+        personToEdit.setName(editPersonDTO.getName());
+        personToEdit.setIsSubscriptionEnabled(editPersonDTO.isSubscriptionEnabled());
+        registrationPersonRepository.save(personToEdit);
     }
+
+
 }

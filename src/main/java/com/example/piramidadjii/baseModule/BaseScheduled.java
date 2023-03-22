@@ -11,6 +11,7 @@ import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonReposi
 import com.example.piramidadjii.configModule.ConfigurationService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
+import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -97,6 +98,7 @@ public class BaseScheduled {
         bankRepository.save(creditTransaction);
     }
 
+    @Transactional
     private void updateMoney(BinaryPerson binaryPerson) {
         if (binaryPerson.getId() == 1) {
             return;
