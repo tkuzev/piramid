@@ -1,6 +1,5 @@
 package com.example.piramidadjii.facade.dto;
 
-import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import lombok.Getter;
 import lombok.Setter;
 

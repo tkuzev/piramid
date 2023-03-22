@@ -1,10 +1,12 @@
 package com.example.piramidadjii.facade.controller;
 
-import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.facade.FacadeService;
-import com.example.piramidadjii.facade.dto.*;
+import com.example.piramidadjii.facade.dto.BinaryPersonDTO;
+import com.example.piramidadjii.facade.dto.DepositDTO;
+import com.example.piramidadjii.facade.dto.EditPersonDTO;
+import com.example.piramidadjii.facade.dto.RegisterPersonDTO;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
@@ -63,15 +65,15 @@ public class FacadeController {
     }
 
     @PostMapping("/profile/edit")
-    public void edit(@RequestBody EditPersonDTO editPersonDTO){
+    public void edit(@RequestBody EditPersonDTO editPersonDTO) {
         facadeService.editProfile(editPersonDTO);
+    }
 
-
-        private static RegistrationPerson customModelMapper(RegisterPersonDTO registerPersonDTO, RegistrationPerson parent) {
-            RegistrationPerson person = new RegistrationPerson();
-            person.setParent(parent);
-            person.setName(registerPersonDTO.getName());
-            person.setEmail(registerPersonDTO.getEmail());
-            return person;
-        }
+    private static RegistrationPerson customModelMapper(RegisterPersonDTO registerPersonDTO, RegistrationPerson parent) {
+        RegistrationPerson person = new RegistrationPerson();
+        person.setParent(parent);
+        person.setName(registerPersonDTO.getName());
+        person.setEmail(registerPersonDTO.getEmail());
+        return person;
+    }
 }

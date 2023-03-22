@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @Service
 public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
@@ -38,7 +37,7 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
     }
 
     @Override
-    public void upgradeSubscriptionPlan(Long id,SubscriptionPlan subscriptionPlan) {
+    public void upgradeSubscriptionPlan(Long id, SubscriptionPlan subscriptionPlan) {
         RegistrationPerson registrationPerson = registrationPersonRepository.findById(id).orElseThrow();
 
         BankAccount bossBankAccount = bankAccountRepository.findById(BOSS_BANK_ACCOUNT_ID).orElseThrow();
