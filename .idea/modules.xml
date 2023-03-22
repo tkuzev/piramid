@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../v2/frontend/frontend.iml" filepath="$PROJECT_DIR$/../v2/frontend/frontend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/frontend/frontend.iml" filepath="$PROJECT_DIR$/frontend/frontend.iml" />
       <module fileurl="file://$PROJECT_DIR$/backend/piramidadjii.iml" filepath="$PROJECT_DIR$/backend/piramidadjii.iml" />
     </modules>
   </component>
