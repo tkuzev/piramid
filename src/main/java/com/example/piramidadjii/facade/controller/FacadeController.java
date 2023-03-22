@@ -35,12 +35,13 @@ public class FacadeController {
         RegistrationPerson parent = registrationPersonRepository.findById(registerPersonDTO.getParentId()).orElseThrow();
         BigDecimal money = registerPersonDTO.getMoney();
         RegistrationPerson person = customModelMapper(registerPersonDTO, parent);
-        facadeService.registerPerson(person, parent.getId(), money);
+        facadeService.registerPerson(person, money);
     }
 
     @PostMapping("/register/binary/{childId}")
     public void registerBinaryPerson(@PathVariable Long childId, @RequestBody BinaryPersonDTO binaryPersonDTO) {
-        binaryRegistrationService.registerNewBinaryPerson(binaryPersonDTO.getParent(), childId, binaryPersonDTO.getBinaryPersonToPutItOnId(), false);
+        RegistrationPerson person = registrationPersonRepository.findById(childId).orElseThrow();
+        binaryRegistrationService.registerNewBinaryPerson(person, binaryPersonDTO.getBinaryPersonToPutItOnId(), binaryPersonDTO.isPreferredDirection());
     }
 
     @GetMapping("/income/{id}")
