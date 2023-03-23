@@ -1,0 +1,74 @@
+.container-fluid{
+  background-color: #1E242A;
+  background-size: cover;
+  padding: 0;
+  height: 100vh;
+  position: absolute;
+  display: flex;
+  z-index: -2;
+}
+
+.hand {
+  height:82vh;
+  background-image: url("../../assets/images/ruka cherna.png");
+  background-repeat: no-repeat;
+  position: absolute;
+  bottom: -100%;
+  left: 30%;
+  animation: anim 2s forwards, anim2 3s forwards 3s;
+}
+
+.hand:after {
+  content: url("../../assets/images/ruka cvetna.png");
+  position: absolute;
+  width: 530px;
+  height: 625px;
+  left: 0;
+  z-index: -1;
+}
+
+@keyframes anim {
+  from {
+    bottom: -50%;
+  }
+  to {
+    bottom: 0;
+  }
+}
+
+@keyframes anim2 {
+  from{
+    left: 30%;
+    width: 530px;
+  }
+  to {
+    width: 0;
+    left: 50%
+  }
+}
+
+.text{
+  font-family: 'Bahnschrift Condensed',serif;
+  animation: anim3 2s forwards 3s;
+  left: -110%;
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  position: absolute;
+}
+
+h1{
+  font-size: 160px;
+  color: white;
+  font-weight: 500;
+  line-height: 130px;
+}
+
+@keyframes anim3 {
+  from{
+    left: -100%;
+  }
+  to{
+    left: 0;
+  }
+}
