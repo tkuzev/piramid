@@ -48,16 +48,12 @@
 }
 
 .text{
-  font-family: 'Bahnschrift Condensed',serif;
   animation: anim3 2s forwards 3s;
   left: -110%;
   display: flex;
   height: 100vh;
   align-items: center;
   position: absolute;
-}
-
-h1{
   font-size: 160px;
   color: white;
   font-weight: 500;
