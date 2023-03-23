@@ -1,5 +1,6 @@
 package com.example.piramidadjii.binaryTreeModule.services.impl;
 
+import com.example.piramidadjii.baseModule.MailSenderService;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
@@ -18,7 +19,8 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     private BinaryPersonRepository binaryPersonRepository;
     @Autowired
     private RegistrationPersonRepository registrationPersonRepository;
-
+    @Autowired
+    private MailSenderService mailSenderService;
 
     @Override
     public void registerNewBinaryPerson(RegistrationPerson person, Long personToPutItOn, boolean preferredDirection) {
@@ -27,11 +29,11 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
 
     @Override
     public void sendBinaryRegistrationEmail(RegistrationPerson registrationPerson, Long parentId) {
-//        try {
-//            mailSenderService.sendEmailWithoutAttachment(findSuitableParent(registrationPerson).getEmail(), "Chigani s mechove", "http://localhost:8080/register/binary/" + parentId);
-//        } catch (MessagingException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            mailSenderService.sendEmailWithoutAttachment(findSuitableParent(registrationPerson).getEmail(), "Chigani s mechove", "http://localhost:8080/register/binary/" + parentId);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public RegistrationPerson findSuitableParent(RegistrationPerson node) {
