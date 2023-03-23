@@ -12,11 +12,13 @@ import {MatIconModule} from "@angular/material/icon";
 import {FormsModule} from "@angular/forms";
 import {AppRoutingModule} from "./app-routing.module";
 import { MatInputModule } from '@angular/material/input';
+import { HomePageComponent } from './home-page/home-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
+    HomePageComponent,
   ],
   imports: [
     BrowserModule,
