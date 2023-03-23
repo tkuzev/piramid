@@ -8,8 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 @Entity
 @Table(name = "registration_person")
@@ -22,6 +24,8 @@ public class RegistrationPerson extends Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String password;
 
     @ManyToOne
     private RegistrationPerson parent;
@@ -37,4 +41,10 @@ public class RegistrationPerson extends Person {
     private LocalDate subscriptionExpirationDate;
     private Boolean isSubscriptionEnabled;
 
+    @ManyToOne
+    private Role role;
+
+    public RegistrationPerson(String email, String password, Collection<SimpleGrantedAuthority> simpleGrantedAuthorities) {
+
+    }
 }

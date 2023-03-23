@@ -98,7 +98,6 @@ public class BaseScheduled {
         bankRepository.save(creditTransaction);
     }
 
-    @Transactional
     private void updateMoney(BinaryPerson binaryPerson) {
         if (binaryPerson.getId() == 1) {
             return;

@@ -13,5 +13,6 @@ public class RegisterPersonDTO {
     String email;
     Long parentId;
     BigDecimal money;
+    String password;
 
 }
