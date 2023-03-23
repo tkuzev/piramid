@@ -6,7 +6,6 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from "@angular/material/button";
 import {RouterLink} from "@angular/router";
 import {MatGridListModule} from "@angular/material/grid-list";
-import { RegisterComponent } from './register/register.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material/form-field";
 import {MatIconModule} from "@angular/material/icon";
@@ -18,7 +17,6 @@ import { MatInputModule } from '@angular/material/input';
   declarations: [
     AppComponent,
     NavBarComponent,
-    RegisterComponent
   ],
   imports: [
     BrowserModule,
