@@ -42,7 +42,7 @@ public class JWTGenerator {
             Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-            throw e;
+            throw new AuthenticationCredentialsNotFoundException("kur");
         }
     }
 }
