@@ -4,7 +4,9 @@
 }
 
 .container-fluid{
-  background-color: #1E242A;
+  background: #1E242A;
+  background: -webkit-linear-gradient(to bottom, #000000, #232c31);
+  background: linear-gradient(to bottom, #000000, #232c31);
   background-size: cover;
   padding: 0;
   height: 100vh;

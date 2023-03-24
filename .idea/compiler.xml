@@ -12,7 +12,6 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="piramida" target="17" />
-      <module name="piramidadjii" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
