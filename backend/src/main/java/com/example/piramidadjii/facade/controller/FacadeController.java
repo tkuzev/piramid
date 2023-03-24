@@ -37,7 +37,6 @@ public class FacadeController {
 
     @PostMapping("/register")
     public void registerPerson(@RequestBody RegisterPersonDTO registerPersonDTO) {
-        System.out.println(registerPersonDTO.getPassword());
         RegistrationPerson parent = registrationPersonRepository.findById(registerPersonDTO.getParentId()).orElseThrow();
         BigDecimal money = registerPersonDTO.getMoney();
         RegistrationPerson person = customModelMapper(registerPersonDTO, parent);

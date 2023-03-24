@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/login","/register").permitAll()
-                .requestMatchers("/register/binary").hasAnyAuthority("klient")
+                .requestMatchers("/**").hasAuthority("klient")
                 .requestMatchers("/**").hasAuthority("ebach")
                 .anyRequest().authenticated()
                 .and()

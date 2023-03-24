@@ -47,6 +47,7 @@ public class AuthController {
         this.modelMapper = modelMapper;
         this.jwtGenerator = jwtGenerator;
     }
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDTO loginDTO) {
         Authentication authentication = authenticationManager.authenticate(
