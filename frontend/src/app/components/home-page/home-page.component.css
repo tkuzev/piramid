@@ -1,5 +1,12 @@
+@font-face {
+  font-family: 'CustomFont';
+  src: url('/assets/fonts/Remark-gA36.ttf') format('truetype');
+}
+
 .container-fluid{
-  background-color: #1E242A;
+  background: #1E242A;
+  background: -webkit-linear-gradient(to bottom, #000000, #232c31);
+  background: linear-gradient(to bottom, #000000, #232c31);
   background-size: cover;
   padding: 0;
   height: 100vh;
@@ -10,7 +17,7 @@
 
 .hand {
   height:82vh;
-  background-image: url("../../assets/images/ruka cherna.png");
+  background-image: url("src/assets/images/ruka cherna.png");
   background-repeat: no-repeat;
   position: absolute;
   bottom: -100%;
@@ -19,7 +26,7 @@
 }
 
 .hand:after {
-  content: url("../../assets/images/ruka cvetna.png");
+  content: url("src/assets/images/ruka cvetna.png");
   position: absolute;
   width: 530px;
   height: 625px;
@@ -51,13 +58,20 @@
   animation: anim3 2s forwards 3s;
   left: -110%;
   display: flex;
+  flex-direction: column;
   height: 100vh;
   align-items: center;
+  justify-content: center;
   position: absolute;
-  font-size: 160px;
+  font-size: 150px;
   color: white;
   font-weight: 500;
   line-height: 130px;
+}
+
+.custom{
+  font-family: 'CustomFont', sans-serif;
+  font-size: 115px;
 }
 
 @keyframes anim3 {
