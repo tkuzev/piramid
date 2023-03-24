@@ -8,10 +8,12 @@ import com.example.piramidadjii.facade.dto.EditPersonDTO;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
+import com.example.piramidadjii.registrationTreeModule.repositories.RoleRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationPersonService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -30,10 +32,13 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
     private BankAccountRepository bankAccountRepository;
     @Autowired
     private ConfigurationService configurationService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleRepository roleRepository;
     private static final long BOSS_BANK_ACCOUNT_ID = 1;
 
     @Override
-    @Transactional
     public RegistrationPerson registerPerson(RegistrationPerson registrationPerson, BigDecimal money) {
         List<SubscriptionPlan> subscriptionPlans = subscriptionPlanRepository.findAll().stream().sorted
                 (Comparator.comparing(SubscriptionPlan::getRegistrationFee).reversed()).toList();
@@ -43,7 +48,9 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         bankAccount.setBalance(money);
         bankAccountRepository.save(bankAccount);
         registrationPerson.setBankAccount(bankAccount);
+        registrationPerson.setPassword(passwordEncoder.encode(registrationPerson.getPassword()));
         registrationPerson.setIsSubscriptionEnabled(true);
+        registrationPerson.setRole(roleRepository.getRoleByName("klient").orElseThrow());
         registrationPersonRepository.save(registrationPerson);
         subscriptionPlans.stream()
                 .filter(x -> checkBalance(registrationPerson.getBankAccount().getBalance(), x.getId()) >= 0)

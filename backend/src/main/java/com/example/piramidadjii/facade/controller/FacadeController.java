@@ -27,12 +27,14 @@ public class FacadeController {
 
     @PostMapping("/user/sell")
     public void makeSell(@RequestBody SellDTO sellDTO){
+
         RegistrationPerson person = registrationPersonRepository.findById(sellDTO.getId()).orElseThrow();
         facadeService.createTransaction(person,sellDTO.getPrice());
     }
 
     @PostMapping("/register")
     public void registerPerson(@RequestBody RegisterPersonDTO registerPersonDTO) {
+        System.out.println(registerPersonDTO.getPassword());
         RegistrationPerson parent = registrationPersonRepository.findById(registerPersonDTO.getParentId()).orElseThrow();
         BigDecimal money = registerPersonDTO.getMoney();
         RegistrationPerson person = customModelMapper(registerPersonDTO, parent);
@@ -76,6 +78,7 @@ public class FacadeController {
         person.setParent(parent);
         person.setName(registerPersonDTO.getName());
         person.setEmail(registerPersonDTO.getEmail());
+        person.setPassword(registerPersonDTO.getPassword());
         return person;
     }
 }
