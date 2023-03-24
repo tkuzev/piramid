@@ -26,6 +26,8 @@
   border-style: solid;
   border-color: black;
   border-left-color: white;
+  outline: none;
+  box-shadow: none;
 }
 
 .nav-bar-btn:hover {
@@ -34,7 +36,13 @@
   background-position: -100% 100%;
   animation: progress-hover 0.2s linear;
 }
-
+.home-btn{
+  background-color: black;
+  box-shadow: none;
+  height:50px;
+  width:50px;
+  border: none
+}
 
 @keyframes progress-hover {
   0% {
@@ -62,3 +70,4 @@
     background-position: 0 50%;
   }
 }
+
