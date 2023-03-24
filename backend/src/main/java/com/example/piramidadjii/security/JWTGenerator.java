@@ -12,8 +12,8 @@ import java.util.Date;
 
 @Component
 public class JWTGenerator {
-    public static Long JWT_EXPIRATION = 70000L;
-    public static final String JWT_SECRET = "neshtotaino";
+    public static Long JWT_EXPIRATION = 7000000000000000000L;
+    public static final String JWT_SECRET = "topsecret";
 
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
@@ -33,15 +33,16 @@ public class JWTGenerator {
                 .setSigningKey(JWT_SECRET)
                 .parseClaimsJws(token)
                 .getBody();
+
         return claims.getSubject();
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJwt(token);
+            Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-            throw new AuthenticationCredentialsNotFoundException("JWT has expired or is not valid - kurec");
+            throw e;
         }
     }
 }
