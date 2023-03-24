@@ -17,8 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private JWTAuthEntryPoint authEntryPoint;
-    private CustomUserDetailsService userDetailsService;
+    private final JWTAuthEntryPoint authEntryPoint;
+    private final CustomUserDetailsService userDetailsService;
 
     @Autowired
     public SecurityConfig(JWTAuthEntryPoint authEntryPoint, CustomUserDetailsService userDetailsService) {
@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/login","/register").permitAll()
-                .requestMatchers("/**").hasAnyAuthority("klient")
+                .requestMatchers("/register/binary").hasAnyAuthority("klient")
                 .requestMatchers("/**").hasAuthority("ebach")
                 .anyRequest().authenticated()
                 .and()

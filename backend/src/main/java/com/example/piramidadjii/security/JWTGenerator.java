@@ -12,8 +12,8 @@ import java.util.Date;
 
 @Component
 public class JWTGenerator {
-    public static Long JWT_EXPIRATION = 70000L;
-    public static final String JWT_SECRET = "neshtotaino";
+    public static Long JWT_EXPIRATION = 7000000000000000000L;
+    public static final String JWT_SECRET = "topsecret";
 
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
@@ -33,6 +33,7 @@ public class JWTGenerator {
                 .setSigningKey(JWT_SECRET)
                 .parseClaimsJws(token)
                 .getBody();
+
         return claims.getSubject();
     }
 
