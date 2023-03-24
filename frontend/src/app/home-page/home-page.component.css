@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'CustomFont';
+  src: url('/assets/fonts/Remark-gA36.ttf') format('truetype');
+}
+
 .container-fluid{
   background-color: #1E242A;
   background-size: cover;
@@ -51,13 +56,20 @@
   animation: anim3 2s forwards 3s;
   left: -110%;
   display: flex;
+  flex-direction: column;
   height: 100vh;
   align-items: center;
+  justify-content: center;
   position: absolute;
-  font-size: 160px;
+  font-size: 150px;
   color: white;
   font-weight: 500;
   line-height: 130px;
+}
+
+.custom{
+  font-family: 'CustomFont', sans-serif;
+  font-size: 115px;
 }
 
 @keyframes anim3 {
