@@ -15,7 +15,7 @@
 
 .hand {
   height:82vh;
-  background-image: url("../../assets/images/ruka cherna.png");
+  background-image: url("src/assets/images/ruka cherna.png");
   background-repeat: no-repeat;
   position: absolute;
   bottom: -100%;
@@ -24,7 +24,7 @@
 }
 
 .hand:after {
-  content: url("../../assets/images/ruka cvetna.png");
+  content: url("src/assets/images/ruka cvetna.png");
   position: absolute;
   width: 530px;
   height: 625px;
