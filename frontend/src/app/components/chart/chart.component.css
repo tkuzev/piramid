@@ -1,0 +1,14 @@
+canvas{
+  height: 700px;
+  width: 700px;
+}
+.chart-text-row{
+  height: 100vh;
+  display: flex;
+}
+.left{
+  padding: 40px;
+}
+.right{
+  padding: 40px;
+}
