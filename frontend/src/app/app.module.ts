@@ -1,4 +1,5 @@
 import {NgModule} from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -30,20 +31,21 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
     LoginFormComponent,
     WalletComponent,
   ],
-    imports: [
-        MatToolbarModule,
-        MatButtonModule,
-        RouterLink,
-        MatGridListModule,
-        BrowserAnimationsModule,
-        MatFormFieldModule,
-        MatIconModule,
-        FormsModule,
-        AppRoutingModule,
-        MatInputModule,
-        MatProgressBarModule,
-        ReactiveFormsModule
-    ],
+  imports: [
+    BrowserModule,
+    MatToolbarModule,
+    MatButtonModule,
+    RouterLink,
+    MatGridListModule,
+    BrowserAnimationsModule,
+    MatFormFieldModule,
+    MatIconModule,
+    FormsModule,
+    AppRoutingModule,
+    MatInputModule,
+    MatProgressBarModule,
+    ReactiveFormsModule
+  ],
   providers: [{provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}}],
   bootstrap: [AppComponent]
 })
