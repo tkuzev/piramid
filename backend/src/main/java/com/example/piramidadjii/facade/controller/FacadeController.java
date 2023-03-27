@@ -1,22 +1,17 @@
 package com.example.piramidadjii.facade.controller;
 
-import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.facade.FacadeService;
 import com.example.piramidadjii.facade.dto.*;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
-import jakarta.annotation.PostConstruct;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate5.SpringSessionContext;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 
 @RestController
@@ -29,10 +24,10 @@ public class FacadeController {
     private BinaryRegistrationService binaryRegistrationService;
 
     @PostMapping("/user/sell")
-    public void makeSell(@RequestBody SellDTO sellDTO){
+    public void makeSell(@RequestBody SellDTO sellDTO) {
 
         RegistrationPerson person = registrationPersonRepository.findById(sellDTO.getId()).orElseThrow();
-        facadeService.createTransaction(person,sellDTO.getPrice());
+        facadeService.createTransaction(person, sellDTO.getPrice());
     }
 
     @PostMapping("/register")
