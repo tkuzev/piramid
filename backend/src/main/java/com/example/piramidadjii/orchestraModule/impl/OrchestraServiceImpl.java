@@ -31,12 +31,12 @@ public class OrchestraServiceImpl implements OrchestraService {
 
     @Override
     public void registerPerson(RegistrationPerson registrationPerson, BigDecimal money) {
-        if (registrationPersonRepository.existsByEmail(registrationPerson.getEmail())){
+        if (registrationPersonRepository.existsByEmail(registrationPerson.getEmail())) {
             throw new RuntimeException("Emaila trqq da e unique");
         }
-        registrationPersonService.registerPerson(registrationPerson, money);
+        RegistrationPerson registrationPerson1 = registrationPersonService.registerPerson(registrationPerson, money);
         if (registrationPerson.getSubscriptionPlan().isEligibleForBinary()) {
-            binaryRegistrationService.sendBinaryRegistrationEmail(registrationPerson, registrationPerson.getId());
+            binaryRegistrationService.sendBinaryRegistrationEmail(registrationPerson1, registrationPerson1.getId());
         }
     }
 

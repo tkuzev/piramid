@@ -7,6 +7,7 @@ import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationServ
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import jakarta.mail.MessagingException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,6 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     private RegistrationPersonRepository registrationPersonRepository;
     @Autowired
     private MailSenderService mailSenderService;
-
     @Override
     public void registerNewBinaryPerson(RegistrationPerson person, Long personToPutItOn, boolean preferredDirection) {
         addBinaryPerson(binParent(findSuitableParent(person)), person.getId(), personToPutItOn, preferredDirection);
@@ -39,7 +39,11 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     public RegistrationPerson findSuitableParent(RegistrationPerson node) {
         Objects.requireNonNull(node, "nema node");
         RegistrationPerson parent = node.getParent();
-        return (Objects.isNull(/*root*/parent.getParent())) ? parent : findSuitableParent(parent);
+        if(Objects.isNull(parent) || binaryPersonRepository.existsById(parent.getId())) {
+            return parent;
+        }
+        return findSuitableParent(parent);
+        //throw new RuntimeException("nestho se osra");
     }
 
     //todo i toq shte hodi da sviri
@@ -56,8 +60,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     private BinaryPerson binParent(RegistrationPerson parent) {
         return binaryPersonRepository.findById(parent.getId()).orElseThrow();
     }
-
-    private void addBinaryPerson(BinaryPerson binParent, Long childId, Long toqDetoMuGoTikatId, boolean preferredSide) {
+public void addBinaryPerson(BinaryPerson binParent, Long childId, Long toqDetoMuGoTikatId, boolean preferredSide) {
 
         RegistrationPerson child = registrationPersonRepository.findById(childId).orElseThrow();
 
@@ -69,11 +72,14 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
 
             if (preferredSide) {
                 binParent.setRightChild(binChild);
+                System.out.println(binParent.getRightContainer());
             } else {
                 binParent.setLeftChild(binChild);
+                System.out.println(binParent.getLeftChild());
             }
 
             binChild.setParent(binParent);
+            System.out.println(binParent);
             binaryPersonRepository.save(binParent);
             binaryPersonRepository.save(binChild);
             return;

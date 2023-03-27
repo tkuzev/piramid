@@ -41,7 +41,7 @@ public class RegistrationPerson extends Person {
     private LocalDate subscriptionExpirationDate;
     private Boolean isSubscriptionEnabled;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Role role;
 
     public RegistrationPerson(String email, String password, Collection<SimpleGrantedAuthority> simpleGrantedAuthorities) {

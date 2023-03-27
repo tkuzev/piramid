@@ -11,7 +11,6 @@ import com.example.piramidadjii.registrationTreeModule.repositories.Registration
 import com.example.piramidadjii.registrationTreeModule.repositories.RoleRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationPersonService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -105,6 +104,5 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         personToEdit.setIsSubscriptionEnabled(editPersonDTO.isSubscriptionEnabled());
         registrationPersonRepository.save(personToEdit);
     }
-
 
 }

@@ -3,7 +3,6 @@ package com.example.piramidadjii.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,12 +17,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
     private final JWTAuthEntryPoint authEntryPoint;
-    private final CustomUserDetailsService userDetailsService;
-
     @Autowired
     public SecurityConfig(JWTAuthEntryPoint authEntryPoint, CustomUserDetailsService userDetailsService) {
         this.authEntryPoint = authEntryPoint;
-        this.userDetailsService = userDetailsService;
     }
 
     @Bean
@@ -37,7 +33,7 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/login","/register").permitAll()
+                .requestMatchers("/auth/login", "/register").permitAll()
                 .requestMatchers("/**").hasAuthority("klient")
                 .requestMatchers("/**").hasAuthority("ebach")
                 .anyRequest().authenticated()

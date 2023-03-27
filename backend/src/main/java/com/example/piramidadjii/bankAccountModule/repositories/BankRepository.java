@@ -13,6 +13,6 @@ import java.util.List;
 public interface BankRepository extends JpaRepository<Bank, Long> {
     List<Bank> findAllByDstAccIdAndTransactionDateBetween(BankAccount bankAccount, LocalDateTime date, LocalDateTime date2);
 
-    List<Bank> findAllByDescriptionAndDstAccIdAndTransactionDateBetween(Description description,BankAccount bankAccount, LocalDateTime date, LocalDateTime date2);
+    List<Bank> findAllByDescriptionAndDstAccIdAndTransactionDateBetween(Description description, BankAccount bankAccount, LocalDateTime date, LocalDateTime date2);
 
 }

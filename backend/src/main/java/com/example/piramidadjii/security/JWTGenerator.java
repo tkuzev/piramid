@@ -7,13 +7,12 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-
 import java.util.Date;
 
 @Component
 public class JWTGenerator {
     public static Long JWT_EXPIRATION = 7000000000000000000L;
-    public static final String JWT_SECRET = "topsecret";
+    public static final String JWT_SECRET = "kurkurkur";
 
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();

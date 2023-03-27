@@ -77,7 +77,7 @@ create table subscription_plan
 );
 
 insert into registration_person (id, name, email, bank_account_id)
-values (1, 'Boss', 'piramidajii@gmail.com', 1);
+values (1, 'Boss', 'navasililievbratmu@gmail.com', 1);
 
 insert into bank_account(id, balance)
 values (1, 0);
@@ -86,7 +86,7 @@ insert into bank_account(id, balance)
 values (-1, 0);
 
 insert into binary_person (id, left_container, right_container, name, email, bank_account_id)
-values (1, 0, 0, 'Boss', 'piramidajii@gmail.com', 1);
+values (1, 0, 0, 'Boss', 'navasililievbratmu@gmail.com', 1);
 
 insert into subscription_plan (id, name, percents, registration_fee, is_eligible_for_binary)
 values (1, 'Bronze', '2', 200, false);
