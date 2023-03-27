@@ -1,0 +1,69 @@
+@font-face {
+  font-family: 'Poppins';
+  src: url('/assets/fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+*{
+  font-family: "Poppins", sans-serif;
+}
+
+.container-fluid{
+  background: #ececec;
+  padding: 0 20px 0 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.side-image{
+  background-image: url('/assets/images/login.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+  border-radius: 10px 0 0 10px;
+}
+
+img{
+  top: 20px;
+  left: 10px;
+  position: relative;
+  width: 35px;
+}
+
+.row{
+  width: 900px;
+  height: 550px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.5);
+}
+
+.login-header{
+  align-items: center;
+  color: #099FFF;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.right{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form{
+  width:50%;
+}
+
+.login-form h1{
+  padding-bottom: 40px;
+}
+
+.btn{
+  background: #099FFF;
+  color: white;
+}

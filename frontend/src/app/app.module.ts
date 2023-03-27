@@ -8,7 +8,7 @@ import {RouterLink} from "@angular/router";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material/form-field";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AppRoutingModule} from "./app-routing.module";
 import { MatInputModule } from '@angular/material/input';
 import { HomePageComponent } from './components/home-page/home-page.component';
@@ -43,7 +43,8 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
     FormsModule,
     AppRoutingModule,
     MatInputModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    ReactiveFormsModule
   ],
   providers: [{provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}}],
   bootstrap: [AppComponent]

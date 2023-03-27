@@ -15,7 +15,7 @@ import java.util.Map;
 
 
 @RestController
-public class FacadeController {
+public class    FacadeController {
     @Autowired
     private FacadeService facadeService;
     @Autowired
