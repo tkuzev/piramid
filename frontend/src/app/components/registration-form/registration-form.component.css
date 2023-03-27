@@ -3,6 +3,11 @@
   src: url('/assets/fonts/Poppins-Regular.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'Neon';
+  src: url('/assets/fonts/NeoncityScript-K77Je.otf') format('truetype');
+}
+
 *{
   font-family: "Poppins", sans-serif;
 }
@@ -51,7 +56,13 @@ mat-form-field{
 h1{
   width: 100%;
   color: #099FFF;
-  padding-bottom: 30px;
+  padding-bottom: 5px;
+  font-family: "Neon", sans-serif;
+  font-size: 60px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 img{
   top: 20px;
