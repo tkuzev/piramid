@@ -3,6 +3,11 @@
   src: url('/assets/fonts/Poppins-Regular.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'Neon';
+  src: url('/assets/fonts/NeoncityScript-K77Je.otf') format('truetype');
+}
+
 *{
   font-family: "Poppins", sans-serif;
 }
@@ -61,6 +66,8 @@ img{
 
 .login-form h1{
   padding-bottom: 40px;
+  font-size: 80px;
+  font-family: "Neon", sans-serif;
 }
 
 .btn{
