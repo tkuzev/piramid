@@ -1,1 +1,61 @@
-<p>registration-form works!</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6 side-image">
+      <div class="image">
+        <img src="assets/images/LOGO.png" alt="nema logo">
+      </div>
+    </div>
+    <div class="col-md-6 right align-items-center justify-content-center">
+      <form [formGroup]="newReg" *ngIf="newReg" class="fields-form">
+        <h1 class="align-self-center">Registration</h1>
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input
+            formControlName="name"
+            matInput
+            name="name">
+          <mat-error *ngIf="newReg.get('name')?.hasError('required')">Name required!</mat-error>
+          <mat-error *ngIf="newReg.get('name')?.hasError('pattern')">Enter valid name!</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Email</mat-label>
+          <input
+            formControlName="email"
+            matInput
+            name="email">
+          <mat-error *ngIf="newReg.get('email')?.hasError('required')">Email required!</mat-error>
+          <mat-error *ngIf="newReg.get('email')?.hasError('pattern')">Enter valid email!</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Id</mat-label>
+          <input
+            formControlName="parentId"
+            matInput
+            name="parentId">
+          <mat-error *ngIf="newReg.get('parentId')?.hasError('required')">Id required!</mat-error>
+          <mat-error *ngIf="newReg.get('parentId')?.hasError('pattern')">Enter valid id!</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Money</mat-label>
+          <input
+            formControlName="money"
+            matInput
+            name="money">
+          <mat-error *ngIf="newReg.get('money')?.hasError('required')">Money required!</mat-error>
+          <mat-error *ngIf="newReg.get('money')?.hasError('pattern')">Enter valid amount of money!</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Password</mat-label>
+          <input
+            formControlName="password"
+            matInput
+            name="password">
+          <mat-error *ngIf="newReg.get('password')?.hasError('required')">Password required!</mat-error>
+          <mat-error *ngIf="newReg.get('password')?.hasError('pattern')">Enter valid password!</mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+  </div>
+</div>
+
+

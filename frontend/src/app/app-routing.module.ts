@@ -12,7 +12,8 @@ const routes: Routes = [
   {path:'wallet', component: WalletComponent},
   {path:'profile', component: ProfileInfoComponent},
   {path:'register', component: RegistrationFormComponent},
-  {path:'income', component: IncomePageComponent}
+  {path:'income', component: IncomePageComponent},
+
 ];
 
 @NgModule({
