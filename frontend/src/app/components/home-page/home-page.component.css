@@ -16,7 +16,7 @@
 }
 
 .hand {
-  height:76vh;
+  height:75.8vh;
   background-image: url("src/assets/images/ruka cherna.png");
   background-repeat: no-repeat;
   position: absolute;
@@ -59,7 +59,6 @@
   left: -110%;
   display: flex;
   flex-direction: column;
-  height: 100vh;
   align-items: center;
   justify-content: center;
   position: absolute;
@@ -67,6 +66,7 @@
   color: white;
   font-weight: 500;
   line-height: 130px;
+  height:100vh;
 }
 
 .custom{
