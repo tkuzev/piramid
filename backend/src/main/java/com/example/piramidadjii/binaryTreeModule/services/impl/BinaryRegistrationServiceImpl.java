@@ -7,6 +7,7 @@ import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationServ
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import jakarta.mail.MessagingException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,62 +57,57 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
         binaryPersonRepository.save(binPerson);
         return binPerson;
     }
+
     private BinaryPerson binParent(RegistrationPerson parent) {
         return binaryPersonRepository.findById(parent.getId()).orElseThrow();
     }
 
-    public void addBinaryPerson(BinaryPerson binParent, Long childId, Long toqDetoMuGoTikatId, boolean preferredSide) {
-
+    @Transactional
+    public void addBinaryPerson(BinaryPerson binaryParent, Long childId, Long toqDetoMuGoTikatId, boolean preferredSide) {
         RegistrationPerson child = registrationPersonRepository.findById(childId).orElseThrow();
         BinaryPerson binChild = createBinaryPerson(child);
+        BinaryPerson toqDetoMuGoTikat = binaryPersonRepository.findById(toqDetoMuGoTikatId).orElseThrow();
 
-        if (Objects.isNull(binParent)) return;
+        if (Objects.isNull(binaryParent)) return;
 
-        if (Objects.equals(binParent.getId(), toqDetoMuGoTikatId)) {
-            if (preferredSide) {
-                binParent.setRightChild(binChild);
-            } else {
-                binParent.setLeftChild(binChild);
-            }
-            binChild.setParent(binParent);
-            System.out.println(binParent);
-            binaryPersonRepository.save(binParent);
-            binaryPersonRepository.save(binChild);
+        if (toqDetoMuGoTikatId.equals(binaryParent.getId())) {
+            setProperties(binaryParent, preferredSide, binChild, toqDetoMuGoTikat);
             return;
         }
 
-        addBinaryPerson(binParent.getRightChild(), childId, toqDetoMuGoTikatId, preferredSide);
-        addBinaryPerson(binParent.getLeftChild(), childId, toqDetoMuGoTikatId, preferredSide);
+        boolean isPersonInSubtree = false;
+        Stack<BinaryPerson> stack = new Stack<>();
+        stack.push(binaryParent);
+        while (!stack.isEmpty()) {
+            BinaryPerson curr = stack.pop();
+            if (curr.equals(binaryParent)) {
+                isPersonInSubtree = true;
+                break;
+            }
+            if (curr.getLeftChild() != null) {
+                stack.push(curr.getLeftChild());
+            }
+            if (curr.getRightChild() != null) {
+                stack.push(curr.getRightChild());
+            }
+        }
+        if (isPersonInSubtree) {
+            setProperties(binaryParent, preferredSide, binChild, toqDetoMuGoTikat);
+        }
     }
 
-//    public void addBinaryPerson(BinaryPerson binaryParent, Long childId, Long toqDetoMuGoTikatId, boolean preferredSide){
-//        RegistrationPerson child = registrationPersonRepository.findById(childId).orElseThrow();
-//        BinaryPerson binChild = createBinaryPerson(child);
-//
-//        if(Objects.isNull(binaryParent) || Objects.isNull(toqDetoMuGoTikatId)) return;
-//
-//        if (toqDetoMuGoTikatId.equals(binaryParent.getId()) || toqDetoMuGoTikatId.equals(childId)) return;
-//
-//        boolean isPersonInSubtree = false;
-//        Stack<BinaryPerson> stack = new Stack<>();
-//        stack.push(binaryParent);
-//        while (!stack.isEmpty()) {
-//            BinaryPerson curr = stack.pop();
-//            if (curr.equals(binaryParent)) {
-//                isPersonInSubtree = true;
-//                break;
-//            }
-//            if (curr.getLeftChild() != null) {
-//                stack.push(curr.getLeftChild());
-//            }
-//            if (curr.getRightChild() != null) {
-//                stack.push(curr.getRightChild());
-//            }
-//        }
-//        if (isPersonInSubtree) {
-//            child.setName(person.getName());
-//            child.setEmail(person.getEmail());
-//        }
-//    }
-
+    private void setProperties(BinaryPerson binaryParent, boolean preferredSide, BinaryPerson binChild, BinaryPerson toqDetoMuGoTikat) {
+        if (preferredSide) {
+            if (Objects.nonNull(toqDetoMuGoTikat.getRightChild()))
+                throw new RuntimeException("choveka deto e podaden mu e zaeta taq pozichiq");
+            toqDetoMuGoTikat.setRightChild(binChild);
+        } else {
+            if (Objects.nonNull(toqDetoMuGoTikat.getLeftChild()))
+                throw new RuntimeException("choveka deto e podaden mu e zaeta taq pozichiq");
+            toqDetoMuGoTikat.setLeftChild(binChild);
+        }
+        binChild.setParent(toqDetoMuGoTikat);
+        binaryPersonRepository.save(binaryParent);
+        binaryPersonRepository.save(binChild);
+    }
 }
