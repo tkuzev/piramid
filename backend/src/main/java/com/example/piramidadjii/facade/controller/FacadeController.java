@@ -14,7 +14,7 @@ import java.util.Map;
 
 
 @RestController
-public class    FacadeController {
+public class FacadeController {
     @Autowired
     private FacadeService facadeService;
     @Autowired
@@ -29,7 +29,7 @@ public class    FacadeController {
         facadeService.createTransaction(person, sellDTO.getPrice());
     }
 
-    @PostMapping("/register")
+    @PostMapping("/register/registrationTree")
     public void registerPerson(@RequestBody RegisterPersonDTO registerPersonDTO) {
         RegistrationPerson parent = registrationPersonRepository.findById(registerPersonDTO.getParentId()).orElseThrow();
         BigDecimal money = registerPersonDTO.getMoney();
@@ -43,7 +43,7 @@ public class    FacadeController {
         binaryRegistrationService.registerNewBinaryPerson(person, binaryPersonDTO.getBinaryPersonToPutItOnId(), binaryPersonDTO.isPreferredDirection());
     }
 
-    @GetMapping("/income/{id}")
+    @GetMapping("/user/income/{id}")
     public Map<String, BigDecimal> monthlyIncome(@PathVariable Long id) {
         return facadeService.monthlyIncome(id);
     }
@@ -69,7 +69,7 @@ public class    FacadeController {
     }
 
     @GetMapping("user/email")
-    public String username(@RequestBody tokenDTO tokenDTO){
+    public String username(@RequestBody tokenDTO tokenDTO) {
         return facadeService.getEmailFromJWT(tokenDTO.getToken());
     }
 

@@ -32,13 +32,10 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     private BankRepository bankRepository;
-
     @Autowired
     private RegistrationPersonRepository registrationPersonRepository;
-
     @Autowired
     private BankAccountRepository bankAccountRepository;
-
     @Autowired
     private SubscriptionPlanRepository subscriptionPlanRepository;
     @Autowired
@@ -74,7 +71,6 @@ public class TransactionServiceImpl implements TransactionService {
         List<Long> percents = mapFromStringToLong(node.getSubscriptionPlan().getPercents());
 
         if (LocalDate.now().isAfter(registrationPerson.getSubscriptionExpirationDate())) {
-            //todo: dali da zapisvame tranzakciq ili da mu eba maikata?1?1?
             return;
         }
 
@@ -106,7 +102,6 @@ public class TransactionServiceImpl implements TransactionService {
         BankAccount personBankAccount = registrationPerson.getBankAccount();
         BankAccount helperBankAccount = bankAccountRepository.findById(HELPER_BANK_ID).orElseThrow();
 
-
         if (registrationPerson.getId() != 1L && registrationPerson.getId() != HELPER_BANK_ID) {
             configurationService.transactionBoiler(helperBankAccount, registrationPerson, description, price, counter.get() - 1, percent);
         }
@@ -116,7 +111,6 @@ public class TransactionServiceImpl implements TransactionService {
         personBankAccount.setBalance(personBankAccount.getBalance().add(newDebitBalance));
         bankAccountRepository.save(personBankAccount);
         registrationPersonRepository.save(registrationPerson);
-
         BigDecimal newCreditBalance = helperBankAccount.getBalance().subtract(amount);
         helperBankAccount.setBalance(helperBankAccount.getBalance().subtract(newCreditBalance));
         bankAccountRepository.save(helperBankAccount);
@@ -132,11 +126,9 @@ public class TransactionServiceImpl implements TransactionService {
             Long longInt = Long.valueOf(string);
             list.add(longInt);
         }
-
         return list;
     }
 
-    //todo
     @Override
     public Map<String, BigDecimal> monthlyIncome(Long id) {
         Map<String, BigDecimal> income = new HashMap<>();
@@ -145,9 +137,9 @@ public class TransactionServiceImpl implements TransactionService {
         for (SubscriptionPlan s : subscriptionPlans) {
             income.put(s.getName(), BigDecimal.ZERO);
         }
-        income.put("SOLD",BigDecimal.ZERO);
+        income.put("SOLD", BigDecimal.ZERO);
         BankAccount bankAccount = bankAccountRepository.findById(id).orElseThrow();
-        List<Bank> allBonusTransactions = bankRepository.findAllByDescriptionAndDstAccIdAndTransactionDateBetweenAndOperationType(Description.BONUS, bankAccount, LocalDateTime.now().minusMonths(1), LocalDateTime.now(),OperationType.DT);
+        List<Bank> allBonusTransactions = bankRepository.findAllByDescriptionAndDstAccIdAndTransactionDateBetweenAndOperationType(Description.BONUS, bankAccount, LocalDateTime.now().minusMonths(1), LocalDateTime.now(), OperationType.DT);
 
         for (Bank transactions : allBonusTransactions) {
             for (SubscriptionPlan s : subscriptionPlans) {
@@ -160,10 +152,10 @@ public class TransactionServiceImpl implements TransactionService {
                 }
             }
         }
-        List<Bank> allSoldTransactions = bankRepository.findAllByDescriptionAndDstAccIdAndTransactionDateBetweenAndOperationType(Description.SOLD,bankAccount,LocalDateTime.now().minusMonths(1), LocalDateTime.now(), OperationType.DT);
-        for (Bank transaction: allSoldTransactions){
+        List<Bank> allSoldTransactions = bankRepository.findAllByDescriptionAndDstAccIdAndTransactionDateBetweenAndOperationType(Description.SOLD, bankAccount, LocalDateTime.now().minusMonths(1), LocalDateTime.now(), OperationType.DT);
+        for (Bank transaction : allSoldTransactions) {
             BigDecimal oldSum = income.get("SOLD");
-            income.put("SOLD",oldSum.add(transaction.getAmount()));
+            income.put("SOLD", oldSum.add(transaction.getAmount()));
         }
         return income;
     }

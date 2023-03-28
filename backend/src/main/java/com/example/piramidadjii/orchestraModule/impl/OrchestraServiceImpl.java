@@ -39,6 +39,7 @@ public class OrchestraServiceImpl implements OrchestraService {
             binaryRegistrationService.sendBinaryRegistrationEmail(registrationPerson1, registrationPerson1.getId());
         }
     }
+
     @Override
     public void editProfile(EditPersonDTO editPersonDTO) {
         SubscriptionPlan plan = subscriptionPlanRepository.findById(editPersonDTO.getSubscriptionPlanId()).orElseThrow();

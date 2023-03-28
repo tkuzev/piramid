@@ -28,6 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private Collection<SimpleGrantedAuthority> mapRolesToAuthorities(List<Authority> authorities) {
         return authorities.parallelStream().map(authority -> new SimpleGrantedAuthority(authority.getName())).toList();
     }
+
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

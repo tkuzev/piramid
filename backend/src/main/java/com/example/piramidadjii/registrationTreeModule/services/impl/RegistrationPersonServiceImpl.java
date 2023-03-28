@@ -101,6 +101,7 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
 
         personToEdit.setEmail(editPersonDTO.getEmail());
         personToEdit.setName(editPersonDTO.getName());
+        personToEdit.setPassword(editPersonDTO.getPassword());
         personToEdit.setIsSubscriptionEnabled(editPersonDTO.isSubscriptionEnabled());
         registrationPersonRepository.save(personToEdit);
     }
