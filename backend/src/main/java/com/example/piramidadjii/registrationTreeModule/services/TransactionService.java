@@ -11,7 +11,7 @@ import java.util.Map;
 public interface TransactionService {
     void createTransaction(RegistrationPerson registrationPerson, BigDecimal price);
 
-    Map<SubscriptionPlan, BigDecimal> monthlyIncome(Long id);
+    Map<String, BigDecimal> monthlyIncome(Long id);
 
     List<BigDecimal> wallet(Long registrationPersonId);
 }

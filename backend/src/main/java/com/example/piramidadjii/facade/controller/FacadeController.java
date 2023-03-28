@@ -45,7 +45,7 @@ public class FacadeController {
     }
 
     @GetMapping("/income/{id}")
-    public Map<SubscriptionPlan, BigDecimal> monthlyIncome(@PathVariable Long id) {
+    public Map<String, BigDecimal> monthlyIncome(@PathVariable Long id) {
         return facadeService.monthlyIncome(id);
     }
 
@@ -58,7 +58,6 @@ public class FacadeController {
     public void withdraw(@RequestBody DepositDTO depositDTO) {
         facadeService.withdraw(depositDTO.getId(), depositDTO.getMoney());
     }
-
 
     @GetMapping("user/wallet/balance")
     public List<BigDecimal> balance(@RequestParam Long registrationPersonId) {

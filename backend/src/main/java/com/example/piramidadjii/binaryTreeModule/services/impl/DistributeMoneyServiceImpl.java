@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 public class DistributeMoneyServiceImpl implements DistributeMoneyService {
     @Autowired
     BinaryPersonRepository binaryPersonRepository;
-
     @Override
     public void distributeMoney(BinaryPerson person, BigDecimal money) {
         if (person.getParent().getId() == 1L) {
@@ -22,8 +21,6 @@ public class DistributeMoneyServiceImpl implements DistributeMoneyService {
             distributeMoney(person.getParent(), money);
         }
     }
-
-    ;
 
     //helper methods
     private void fillingContainer(BinaryPerson person, BigDecimal money) {

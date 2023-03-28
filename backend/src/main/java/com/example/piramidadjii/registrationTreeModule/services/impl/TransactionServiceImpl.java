@@ -5,6 +5,7 @@ import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
 import com.example.piramidadjii.bankAccountModule.repositories.BankRepository;
 import com.example.piramidadjii.baseModule.enums.Description;
+import com.example.piramidadjii.baseModule.enums.OperationType;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.configModule.ConfigurationService;
@@ -135,31 +136,35 @@ public class TransactionServiceImpl implements TransactionService {
         return list;
     }
 
+    //todo
     @Override
-    public Map<SubscriptionPlan, BigDecimal> monthlyIncome(Long id) {
-        Map<SubscriptionPlan, BigDecimal> income = new HashMap<>();
+    public Map<String, BigDecimal> monthlyIncome(Long id) {
+        Map<String, BigDecimal> income = new HashMap<>();
         List<SubscriptionPlan> subscriptionPlans = subscriptionPlanRepository.findAll();
 
         for (SubscriptionPlan s : subscriptionPlans) {
-            income.put(s, BigDecimal.ZERO);
+            income.put(s.getName(), BigDecimal.ZERO);
         }
+        income.put("SOLD",BigDecimal.ZERO);
         BankAccount bankAccount = bankAccountRepository.findById(id).orElseThrow();
+        List<Bank> allBonusTransactions = bankRepository.findAllByDescriptionAndDstAccIdAndTransactionDateBetweenAndOperationType(Description.BONUS, bankAccount, LocalDateTime.now().minusMonths(1), LocalDateTime.now(),OperationType.DT);
 
-
-        List<Bank> allTransactions = bankRepository.findAllByDescriptionAndDstAccIdAndTransactionDateBetween(Description.BONUS, bankAccount, LocalDateTime.now().minusMonths(1), LocalDateTime.now());
-
-        for (Bank transactions : allTransactions) {
+        for (Bank transactions : allBonusTransactions) {
             for (SubscriptionPlan s : subscriptionPlans) {
                 List<Long> percentages = mapFromStringToLong(s.getPercents());
 
-                if (!transactions.getDescription().equals(Description.REGISTRATION_FEE) && transactions.getLevel() - 1 < percentages.size()) {
-                    BigDecimal oldSum = income.get(s);
+                if (transactions.getLevel() - 1 < percentages.size()) {
+                    BigDecimal oldSum = income.get(s.getName());
                     BigDecimal valueToAdd = transactions.getItemPrice().multiply(BigDecimal.valueOf(percentages.get(Math.toIntExact(transactions.getLevel() - 1)))).divide(BigDecimal.valueOf(100)).setScale(2);
-                    income.put(s, oldSum.add(valueToAdd));
+                    income.put(s.getName(), oldSum.add(valueToAdd));
                 }
             }
         }
-
+        List<Bank> allSoldTransactions = bankRepository.findAllByDescriptionAndDstAccIdAndTransactionDateBetweenAndOperationType(Description.SOLD,bankAccount,LocalDateTime.now().minusMonths(1), LocalDateTime.now(), OperationType.DT);
+        for (Bank transaction: allSoldTransactions){
+            BigDecimal oldSum = income.get("SOLD");
+            income.put("SOLD",oldSum.add(transaction.getAmount()));
+        }
         return income;
     }
 

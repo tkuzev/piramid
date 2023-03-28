@@ -11,7 +11,7 @@ import java.util.Map;
 public interface FacadeService {
     void registerPerson(RegistrationPerson registrationPerson, BigDecimal money);
 
-    Map<SubscriptionPlan, BigDecimal> monthlyIncome(Long id);
+    Map<String, BigDecimal> monthlyIncome(Long id);
 
     void deposit(Long id, BigDecimal money);
 

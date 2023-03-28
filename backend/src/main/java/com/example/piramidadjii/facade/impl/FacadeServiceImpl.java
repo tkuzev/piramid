@@ -26,10 +26,8 @@ public class FacadeServiceImpl implements FacadeService {
     private BankService bankService;
     @Autowired
     SubscriptionPlanService subscriptionPlanService;
-
     @Autowired
     BinaryRegistrationService binaryRegistrationService;
-
 
     @Override
     public void registerPerson(RegistrationPerson registrationPerson, BigDecimal money) {
@@ -37,10 +35,9 @@ public class FacadeServiceImpl implements FacadeService {
     }
 
     @Override
-    public Map<SubscriptionPlan, BigDecimal> monthlyIncome(Long id) {
+    public Map<String, BigDecimal> monthlyIncome(Long id) {
         return transactionService.monthlyIncome(id);
     }
-
     @Override
     public void deposit(Long id, BigDecimal money) {
         bankService.deposit(id, money);
@@ -50,7 +47,6 @@ public class FacadeServiceImpl implements FacadeService {
     public void withdraw(Long id, BigDecimal money) {
         bankService.withdraw(id, money);
     }
-
 
     @Override
     public void createTransaction(RegistrationPerson registrationPerson, BigDecimal price) {
