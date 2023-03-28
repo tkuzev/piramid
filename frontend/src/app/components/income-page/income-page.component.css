@@ -1,0 +1,12 @@
+.chart-text-row{
+  height: 100vh;
+  display: flex;
+  width: 100vw;
+}
+.left{
+  padding: 40px;
+}
+.right{
+  padding: 40px;
+}
+
