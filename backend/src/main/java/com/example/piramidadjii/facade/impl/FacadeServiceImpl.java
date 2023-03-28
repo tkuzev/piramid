@@ -6,9 +6,9 @@ import com.example.piramidadjii.facade.FacadeService;
 import com.example.piramidadjii.facade.dto.EditPersonDTO;
 import com.example.piramidadjii.orchestraModule.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
-import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
 import com.example.piramidadjii.registrationTreeModule.services.TransactionService;
+import com.example.piramidadjii.security.JWTGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +28,8 @@ public class FacadeServiceImpl implements FacadeService {
     SubscriptionPlanService subscriptionPlanService;
     @Autowired
     BinaryRegistrationService binaryRegistrationService;
+    @Autowired
+    JWTGenerator jwtGenerator;
 
     @Override
     public void registerPerson(RegistrationPerson registrationPerson, BigDecimal money) {
@@ -61,5 +63,10 @@ public class FacadeServiceImpl implements FacadeService {
     @Override
     public List<BigDecimal> wallet(Long registrationPersonId) {
         return transactionService.wallet(registrationPersonId);
+    }
+
+    @Override
+    public String getEmailFromJWT(String token) {
+        return jwtGenerator.getEmailFromJWT(token);
     }
 }

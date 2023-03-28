@@ -2,7 +2,6 @@ package com.example.piramidadjii.facade;
 
 import com.example.piramidadjii.facade.dto.EditPersonDTO;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
-import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,4 +21,6 @@ public interface FacadeService {
     void editProfile(EditPersonDTO editPersonDTO);
 
     List<BigDecimal> wallet(Long registrationPersonId);
+
+    String getEmailFromJWT(String token);
 }
