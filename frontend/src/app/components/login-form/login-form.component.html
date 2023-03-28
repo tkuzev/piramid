@@ -1,1 +1,33 @@
-<p>login-form works!</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6 side-image">
+      <img src="assets/images/LOGO.png" alt="nema logo">
+    </div>
+    <div class="col-md-6 right">
+      <div class="login-form">
+        <form [formGroup]="newLog" *ngIf="newLog">
+          <h1 class="login-header">Log In</h1>
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input
+              formControlName="email"
+              matInput
+              name="email">
+            <mat-error *ngIf="newLog.get('email')?.hasError('required')">Email required!</mat-error>
+            <mat-error *ngIf="newLog.get('email')?.hasError('pattern')">Enter valid email!</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input
+              formControlName="password"
+              matInput
+              name="password">
+            <mat-error *ngIf="newLog.get('password')?.hasError('required')">Password required!</mat-error>
+            <mat-error *ngIf="newLog.get('password')?.hasError('pattern')">Enter valid password!</mat-error>
+          </mat-form-field>
+          <button mat-raised-button class="btn">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

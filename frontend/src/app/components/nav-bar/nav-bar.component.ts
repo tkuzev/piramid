@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Observable, Observer} from "rxjs";
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
