@@ -29,7 +29,7 @@ public class FacadeController {
         facadeService.createTransaction(person, sellDTO.getPrice());
     }
 
-    @PostMapping("/register")
+    @PostMapping("/register/registrationTree")
     public void registerPerson(@RequestBody RegisterPersonDTO registerPersonDTO) {
         RegistrationPerson parent = registrationPersonRepository.findById(registerPersonDTO.getParentId()).orElseThrow();
         BigDecimal money = registerPersonDTO.getMoney();
@@ -43,7 +43,7 @@ public class FacadeController {
         binaryRegistrationService.registerNewBinaryPerson(person, binaryPersonDTO.getBinaryPersonToPutItOnId(), binaryPersonDTO.isPreferredDirection());
     }
 
-    @GetMapping("/income/{id}")
+    @GetMapping("/user/income/{id}")
     public Map<String, BigDecimal> monthlyIncome(@PathVariable Long id) {
         return facadeService.monthlyIncome(id);
     }
