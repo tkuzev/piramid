@@ -1,7 +1,7 @@
 .navbar-container{
   background: black;
   width: 100%;
-  height: 9vh;
+  height: 9.5vh;
   margin:0;
   padding: 0;
   position: fixed;
@@ -11,7 +11,7 @@
 }
 .sub-nav-div{
   width: 100%;
-  height: 80px;
+  height: 75px;
   margin: 0;
   padding: 0;
 }
@@ -42,9 +42,15 @@
   box-shadow: none;
   height:50px;
   width:50px;
-  border: none
-}
+  border: none;
 
+}
+/*.line-row{*/
+/*  */
+/*}*/
+.home-btn:focus{
+  outline: none;
+}
 @keyframes progress-hover {
   0% {
     background-position: 100% 0;
