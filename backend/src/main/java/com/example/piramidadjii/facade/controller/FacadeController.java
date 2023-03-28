@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-
 @RestController
 public class FacadeController {
     @Autowired
@@ -29,7 +28,7 @@ public class FacadeController {
         facadeService.createTransaction(person, sellDTO.getPrice());
     }
 
-    @PostMapping("/register/registrationTree")
+    @PostMapping("/user/register/registrationTree")
     public void registerPerson(@RequestBody RegisterPersonDTO registerPersonDTO) {
         RegistrationPerson parent = registrationPersonRepository.findById(registerPersonDTO.getParentId()).orElseThrow();
         BigDecimal money = registerPersonDTO.getMoney();
@@ -37,7 +36,7 @@ public class FacadeController {
         facadeService.registerPerson(person, money);
     }
 
-    @PostMapping("/register/binary/{childId}")
+    @PostMapping("/user/register/binary/{childId}")
     public void registerBinaryPerson(@PathVariable Long childId, @RequestBody BinaryPersonDTO binaryPersonDTO) {
         RegistrationPerson person = registrationPersonRepository.findById(childId).orElseThrow();
         binaryRegistrationService.registerNewBinaryPerson(person, binaryPersonDTO.getBinaryPersonToPutItOnId(), binaryPersonDTO.isPreferredDirection());

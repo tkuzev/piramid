@@ -5,7 +5,7 @@
     </div>
     <div class="col-md-6 right">
       <div class="login-form">
-        <form [formGroup]="newLog" *ngIf="newLog">
+        <form (ngSubmit)="onSubmit()" [formGroup]="newLog" *ngIf="newLog">
           <h1 class="login-header">Log In</h1>
           <mat-form-field>
             <mat-label>Email</mat-label>
@@ -25,7 +25,7 @@
             <mat-error *ngIf="newLog.get('password')?.hasError('required')">Password required!</mat-error>
             <mat-error *ngIf="newLog.get('password')?.hasError('pattern')">Enter valid password!</mat-error>
           </mat-form-field>
-          <button mat-raised-button class="btn">Login</button>
+          <button type="submit" mat-raised-button class="btn">Login</button>
         </form>
       </div>
     </div>
