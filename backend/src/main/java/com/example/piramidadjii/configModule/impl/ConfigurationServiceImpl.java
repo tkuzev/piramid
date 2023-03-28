@@ -24,6 +24,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
     @Autowired
     BankRepository bankRepository;
+
     @Override
     public Bank transactionBoiler(BankAccount helperBankAccount, RegistrationPerson registrationPerson,
                                   SubscriptionPlan registrationPerson1, Description registrationFee, BigDecimal amount) {

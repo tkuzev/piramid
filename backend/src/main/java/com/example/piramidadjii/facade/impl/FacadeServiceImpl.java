@@ -40,6 +40,7 @@ public class FacadeServiceImpl implements FacadeService {
     public Map<String, BigDecimal> monthlyIncome(Long id) {
         return transactionService.monthlyIncome(id);
     }
+
     @Override
     public void deposit(Long id, BigDecimal money) {
         bankService.deposit(id, money);

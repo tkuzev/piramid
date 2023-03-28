@@ -14,7 +14,7 @@ import java.util.Map;
 
 
 @RestController
-public class    FacadeController {
+public class FacadeController {
     @Autowired
     private FacadeService facadeService;
     @Autowired
@@ -69,7 +69,7 @@ public class    FacadeController {
     }
 
     @GetMapping("user/email")
-    public String username(@RequestBody tokenDTO tokenDTO){
+    public String username(@RequestBody tokenDTO tokenDTO) {
         return facadeService.getEmailFromJWT(tokenDTO.getToken());
     }
 

@@ -7,5 +7,6 @@ import java.math.BigDecimal;
 
 public interface OrchestraService {
     void registerPerson(RegistrationPerson registrationPerson, BigDecimal money);
+
     void editProfile(EditPersonDTO editPersonDTO);
 }
