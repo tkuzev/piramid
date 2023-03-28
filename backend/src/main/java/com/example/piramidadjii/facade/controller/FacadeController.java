@@ -4,7 +4,6 @@ import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationServ
 import com.example.piramidadjii.facade.FacadeService;
 import com.example.piramidadjii.facade.dto.*;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
-import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +44,7 @@ public class    FacadeController {
     }
 
     @GetMapping("/income/{id}")
-    public Map<SubscriptionPlan, BigDecimal> monthlyIncome(@PathVariable Long id) {
+    public Map<String, BigDecimal> monthlyIncome(@PathVariable Long id) {
         return facadeService.monthlyIncome(id);
     }
 
@@ -59,7 +58,6 @@ public class    FacadeController {
         facadeService.withdraw(depositDTO.getId(), depositDTO.getMoney());
     }
 
-
     @GetMapping("user/wallet/balance")
     public List<BigDecimal> balance(@RequestParam Long registrationPersonId) {
         return facadeService.wallet(registrationPersonId);
@@ -68,6 +66,11 @@ public class    FacadeController {
     @PostMapping("/profile/edit")
     public void edit(@RequestBody EditPersonDTO editPersonDTO) {
         facadeService.editProfile(editPersonDTO);
+    }
+
+    @GetMapping("user/email")
+    public String username(@RequestBody tokenDTO tokenDTO){
+        return facadeService.getEmailFromJWT(tokenDTO.getToken());
     }
 
     private static RegistrationPerson customModelMapper(RegisterPersonDTO registerPersonDTO, RegistrationPerson parent) {

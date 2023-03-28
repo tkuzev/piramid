@@ -27,7 +27,7 @@ public class JWTGenerator {
                 .compact();
     }
 
-    public String getUsernameFromJWT(String token) {
+    public String getEmailFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(JWT_SECRET)
                 .parseClaimsJws(token)

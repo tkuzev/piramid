@@ -43,7 +43,6 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
             return parent;
         }
         return findSuitableParent(parent);
-        //throw new RuntimeException("nestho se osra");
     }
 
     //todo i toq shte hodi da sviri
