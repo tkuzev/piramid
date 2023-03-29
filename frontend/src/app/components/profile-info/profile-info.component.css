@@ -1,0 +1,36 @@
+.container-fluid{
+  background: #ececec;
+  padding: 0 20px 0 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.card-up{
+  width: 600px;
+  height: 260px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.5);
+  background: linear-gradient(to bottom right, #90caf9, #ce93d8);
+}
+
+.card-down{
+  width: 600px;
+  height: 160px;
+  border-radius: 10px;
+  background: linear-gradient(to bottom right, #90caf9, #ce93d8);
+  box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.5);
+}
+
+.profile-header h1{
+  font-size: 100px;
+  font-family: "Neon", sans-serif;
+  align-items: center;
+  color: #ce93d8;
+}
+
+.text{
+  font-family: "Poppins", sans-serif;
+}

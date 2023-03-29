@@ -1,17 +1,3 @@
-@font-face {
-  font-family: 'Poppins';
-  src: url('/assets/fonts/Poppins-Regular.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Neon';
-  src: url('/assets/fonts/NeoncityScript-K77Je.otf') format('truetype');
-}
-
-*{
-  font-family: "Poppins", sans-serif;
-}
-
 .container-fluid{
   background: #ececec;
   padding: 0 20px 0 20px;
@@ -62,6 +48,10 @@ img{
 
 .login-form{
   width:50%;
+}
+
+.login-form mat-label{
+  font-family: "Poppins", sans-serif;
 }
 
 .login-form h1{

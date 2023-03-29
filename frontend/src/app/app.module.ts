@@ -1,5 +1,6 @@
 import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
+import { HttpClientModule } from '@angular/common/http';
 import {NavBarComponent} from './components/nav-bar/nav-bar.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from "@angular/material/button";
@@ -41,6 +42,7 @@ import {MatDialogModule} from "@angular/material/dialog";
   imports: [
     MatToolbarModule,
     MatButtonModule,
+    HttpClientModule,
     RouterLink,
     MatGridListModule,
     BrowserAnimationsModule,
