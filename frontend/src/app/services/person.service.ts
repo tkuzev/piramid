@@ -4,7 +4,6 @@ import {Sell} from "../models/sell";
 import {BinaryPerson} from "../models/binary-person";
 import {LoginPerson} from "../models/login-person";
 import {map, Observable} from "rxjs";
-import { JwtHelperService } from '@auth0/angular-jwt';
 
 
 @Injectable({
