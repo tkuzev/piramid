@@ -23,6 +23,9 @@ import {BrowserModule} from "@angular/platform-browser";
 import { ChartComponent } from './components/chart/chart.component';
 import {NgChartsModule} from "ng2-charts";
 import {MatSelectModule} from "@angular/material/select";
+import {MatMenuModule} from "@angular/material/menu";
+import { DepositWithdrawComponent } from './components/deposit-withdraw/deposit-withdraw.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
@@ -35,6 +38,7 @@ import {MatSelectModule} from "@angular/material/select";
     LoginFormComponent,
     WalletComponent,
     ChartComponent,
+    DepositWithdrawComponent,
   ],
   imports: [
     MatToolbarModule,
@@ -52,7 +56,9 @@ import {MatSelectModule} from "@angular/material/select";
     ReactiveFormsModule,
     NgChartsModule,
     BrowserModule,
-    MatSelectModule
+    MatSelectModule,
+    MatMenuModule,
+    MatDialogModule
   ],
   providers: [{provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}}],
   bootstrap: [AppComponent]

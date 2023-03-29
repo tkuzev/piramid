@@ -9,7 +9,6 @@
   display: flex;
   z-index: -2;
 }
-
 .hand {
   background-position: left bottom;
   background-image: url("src/assets/images/ruka cherna.png");
@@ -21,6 +20,7 @@
   display: flex;
   animation: anim 2s forwards, anim2 3s forwards 3s;
   align-items: end;
+  padding: 0;
 }
 .hand:after {
   content: url("src/assets/images/ruka cvetna.png");
@@ -31,6 +31,7 @@
   z-index: -1;
   align-items: end;
   display: flex;
+  padding: 0;
 }
 
 @keyframes anim {

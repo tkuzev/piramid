@@ -10,7 +10,40 @@
       <button mat-button class="nav-bar-btn" style="color: white" routerLink="/login">Login</button>
       <button mat-button class="nav-bar-btn" style="color: white" routerLink="/profile">Profile</button>
       <button mat-button class="nav-bar-btn" style="color: white" routerLink="/income">Income</button>
-      <button mat-button class="nav-bar-btn" style="color: white" routerLink="/wallet">Wallet</button>
+      <button mat-button [matMenuTriggerFor]="menu" class="nav-bar-btn" style="color: white">Wallet</button>
+      <mat-menu class="mat-menu" #menu="matMenu">
+        <div class="col-auto">
+          <div class="row justify-content-center align-items-center dropdowns">
+            <div class="col-auto">
+              Balance: 1000
+            </div>
+          </div>
+          <div class="row justify-content-between dropdowns">
+            <div class="col-auto">
+              <div class="col-auto">
+                Left: 300/
+              </div>
+              <div class="col-auto">
+                Right: 300
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center dropdowns">
+            <div class="col-auto">
+              <button mat-menu-item (click)="deposit()" class="deposit">
+                <span>Deposit</span>
+              </button>
+            </div>
+          </div>
+          <div class="row justify-content-center dropdowns">
+            <div class="col-auto">
+              <button mat-menu-item (click)="withdraw()" class="withdraw" >
+                <span>Withdraw</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-menu>
     </div>
   </div>
   <div class="row">
