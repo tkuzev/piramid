@@ -1,8 +1,3 @@
-@font-face {
-  font-family: 'CustomFont';
-  src: url('/assets/fonts/Remark-gA36.ttf') format('truetype');
-}
-
 .container-fluid{
   background: #1E242A;
   background: -webkit-linear-gradient(to bottom, #000000, #232c31);
