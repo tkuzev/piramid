@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {RegistrationPerson} from "../models/registration-person";
 import {Sell} from "../models/sell";
 import {BinaryPerson} from "../models/binary-person";
 import {LoginPerson} from "../models/login-person";
 import {map, Observable} from "rxjs";
 import { JwtHelperService } from '@auth0/angular-jwt';
-import jwt_decode from 'jwt-decode';
 
 
 @Injectable({
@@ -32,10 +30,7 @@ export class PersonService {
 
 
   public getLoggedPersonId(){
-    const helper = new JwtHelperService();
-    const token = localStorage.getItem('CurrentUser')
-    const decodedToken = helper.decodeToken(token);
-    console.log(decodedToken)
+
   }
 
   public logout(){
