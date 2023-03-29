@@ -14,8 +14,6 @@
   border-radius: 10px;
   box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.5);
   background: linear-gradient(to bottom right, #90caf9, #ce93d8);
-  justify-content: center;
-  align-items: center;
 }
 
 .card-down{
@@ -38,15 +36,36 @@
 }
 
 .icon{
-  color: #ececec;
+  color: black;
   margin-top: 6%;
 }
 
 .profile_form mat-form-field{
   width: 260px;
-  padding-left: 10px;
+  padding-left: 20px;
 }
 
 .profile-form mat-label{
   font-family: "Poppins", sans-serif;
+}
+
+.btn{
+  background: #90caf9;
+  color: black;
+}
+
+.profile_form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonEdit{
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  padding-top: 30px;
+  height: 77%;
 }
