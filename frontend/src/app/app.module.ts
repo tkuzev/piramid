@@ -22,6 +22,7 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {BrowserModule} from "@angular/platform-browser";
 import { ChartComponent } from './components/chart/chart.component';
 import {NgChartsModule} from "ng2-charts";
+import { BinaryRegistrationComponent } from './components/binary-registration/binary-registration.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import {NgChartsModule} from "ng2-charts";
     LoginFormComponent,
     WalletComponent,
     ChartComponent,
+    BinaryRegistrationComponent,
   ],
   imports: [
     MatToolbarModule,

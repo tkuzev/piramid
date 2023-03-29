@@ -7,6 +7,7 @@ import {RegistrationFormComponent} from "./components/registration-form/registra
 import {IncomePageComponent} from "./components/income-page/income-page.component";
 import {LoginFormComponent} from "./components/login-form/login-form.component";
 import {ChartComponent} from "./components/chart/chart.component";
+import {BinaryRegistrationComponent} from "./components/binary-registration/binary-registration.component";
 
 
 const routes: Routes = [
@@ -16,7 +17,8 @@ const routes: Routes = [
   {path:'register', component: RegistrationFormComponent},
   {path:'income', component: IncomePageComponent},
   {path:'login', component: LoginFormComponent},
-  {path: 'chart', component: ChartComponent}
+  {path: 'chart', component: ChartComponent},
+  {path:'register/binary',component: BinaryRegistrationComponent}
 ];
 
 @NgModule({
