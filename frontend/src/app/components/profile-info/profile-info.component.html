@@ -4,15 +4,75 @@
   </div>
 
   <div class="row mb-5 card-up">
-    <div class="col-auto">
-      <mat-icon>face</mat-icon>
+    <div class="col-auto profile_form">
+      <form [formGroup]="profileForm">
+        <div class="row name">
+          <mat-icon class="icon">face</mat-icon>
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input [readonly]="true"
+                   formControlName="name"
+                   matInput
+                   name="name">
+            <mat-error *ngIf="profileForm.get('name')?.hasError('required')">Required field!</mat-error>
+            <mat-error *ngIf="profileForm.get('name')?.hasError('pattern')">Letters only!</mat-error>
+            <mat-error *ngIf="profileForm.get('name')?.hasError('maxlength')">Field should be between 1 and
+              25 characters!
+            </mat-error>
+          </mat-form-field>
+        </div>
 
+        <div class="row email">
+          <mat-icon class="icon">email</mat-icon>
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input [readonly]="true"
+                   formControlName="email"
+                   matInput
+                   name="email">
+            <mat-error *ngIf="profileForm.get('email')?.hasError('required')">Required field!</mat-error>
+            <mat-error *ngIf="profileForm.get('email')?.hasError('email')">Not a valid email!</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="row password">
+          <mat-icon class="icon">password</mat-icon>
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input [readonly]="true"
+                   formControlName="password"
+                   matInput
+                   name="password">
+            <mat-icon matSuffix
+                      (click)="togglePasswordVisibility()">{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <mat-error *ngIf="profileForm.get('password')?.hasError('required')">Required field!</mat-error>
+            <mat-error *ngIf="profileForm.get('password')?.hasError('pattern')">Minimum eight characters, at
+              least one letter, one number and one special character!
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="row subscription_plan">
+          <mat-icon class="icon">card_membership</mat-icon>
+          <mat-form-field>
+            <mat-label>Subscription Plan</mat-label>
+            <mat-select formControlName="plan">
+              <!--                      [(ngModel)]="planovete.dto">-->
+              <mat-option value=0>Bronze</mat-option>
+              <mat-option value=1>Silver</mat-option>
+              <mat-option value=2>Gold</mat-option>
+              <mat-option value=3>Platinum</mat-option>
+            </mat-select>
+            <mat-error *ngIf="profileForm.get('plan')?.hasError('required')">Required field!</mat-error>
+          </mat-form-field>
+        </div>
+      </form>
     </div>
   </div>
 
   <div class="row card-down">
     <div class="col-auto">
-
+      <mat-icon class="icon">cache</mat-icon>
     </div>
   </div>
 </div>

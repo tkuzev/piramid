@@ -22,6 +22,7 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {BrowserModule} from "@angular/platform-browser";
 import { ChartComponent } from './components/chart/chart.component';
 import {NgChartsModule} from "ng2-charts";
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import {NgChartsModule} from "ng2-charts";
     MatProgressBarModule,
     ReactiveFormsModule,
     NgChartsModule,
-    BrowserModule
+    BrowserModule,
+    MatSelectModule
   ],
   providers: [{provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}}],
   bootstrap: [AppComponent]
