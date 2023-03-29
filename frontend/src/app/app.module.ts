@@ -22,6 +22,10 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {BrowserModule} from "@angular/platform-browser";
 import { ChartComponent } from './components/chart/chart.component';
 import {NgChartsModule} from "ng2-charts";
+import {MatSelectModule} from "@angular/material/select";
+import {MatMenuModule} from "@angular/material/menu";
+import { DepositWithdrawComponent } from './components/deposit-withdraw/deposit-withdraw.component';
+import {MatDialogModule} from "@angular/material/dialog";
 import { BinaryRegistrationComponent } from './components/binary-registration/binary-registration.component';
 
 @NgModule({
@@ -35,6 +39,7 @@ import { BinaryRegistrationComponent } from './components/binary-registration/bi
     LoginFormComponent,
     WalletComponent,
     ChartComponent,
+    DepositWithdrawComponent,
     BinaryRegistrationComponent,
   ],
   imports: [
@@ -52,7 +57,10 @@ import { BinaryRegistrationComponent } from './components/binary-registration/bi
     MatProgressBarModule,
     ReactiveFormsModule,
     NgChartsModule,
-    BrowserModule
+    BrowserModule,
+    MatSelectModule,
+    MatMenuModule,
+    MatDialogModule
   ],
   providers: [{provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}}],
   bootstrap: [AppComponent]

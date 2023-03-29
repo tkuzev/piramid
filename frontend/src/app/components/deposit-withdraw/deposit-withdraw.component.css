@@ -1,0 +1,35 @@
+.mat-dialog-container {
+  background-image: linear-gradient(to bottom, rgba(224, 136, 251, 0.40), rgba(116, 247, 255, 0.40)),
+  url("src/assets/images/card.png");
+  background-size: cover;
+  display: flex;
+  height: 100%;
+}
+.container-col {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 35px;
+}
+.input {
+  padding: 20px;
+}
+.buttons {
+  padding: 20px;
+}
+.btn-dep{
+  height: 50px;
+  width: 100px;
+  border-radius: 10px;
+  background-color: #099FFF;
+  color: white;
+}
+.btn-wdr{
+  height: 50px;
+  width: 100px;
+  border-radius: 10px;
+  background-color: #f72585;
+  color: white;
+}
+
+

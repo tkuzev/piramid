@@ -9,15 +9,15 @@
 }
 
 .card-up{
-  width: 600px;
-  height: 260px;
+  width: 680px;
+  height: 360px;
   border-radius: 10px;
   box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.5);
   background: linear-gradient(to bottom right, #90caf9, #ce93d8);
 }
 
 .card-down{
-  width: 600px;
+  width: 680px;
   height: 160px;
   border-radius: 10px;
   background: linear-gradient(to bottom right, #90caf9, #ce93d8);
@@ -33,4 +33,39 @@
 
 .text{
   font-family: "Poppins", sans-serif;
+}
+
+.icon{
+  color: black;
+  margin-top: 6%;
+}
+
+.profile_form mat-form-field{
+  width: 260px;
+  padding-left: 20px;
+}
+
+.profile-form mat-label{
+  font-family: "Poppins", sans-serif;
+}
+
+.btn{
+  background: #90caf9;
+  color: black;
+}
+
+.profile_form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonEdit{
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  padding-top: 30px;
+  height: 77%;
 }

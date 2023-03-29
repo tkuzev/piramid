@@ -10,6 +10,13 @@
 .home-icon{
   padding: 0;
 }
+.dropdowns{
+  height: 60px;
+  display: flex;
+}
+.mat-menu{
+  width:200px;
+}
 .sub-nav-div{
   width: 100%;
   height: 75px;

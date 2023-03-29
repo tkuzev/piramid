@@ -1,0 +1,18 @@
+<div class="mat-dialog-container container-fluid">
+  <div class="col justify-content-center align-items-center container-col">
+    <form (ngSubmit)="submitForm()">
+      <div class="row justify-content-center input">
+        <input>
+      </div>
+      <div class="row justify-content-center buttons">
+        <button mat-raised-button class="btn-wdr" type="submit" *ngIf="displayedButton === 1">
+          Withdraw
+        </button>
+        <button mat-raised-button class="btn-dep" type="submit" *ngIf="displayedButton === 2">
+          Deposit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
