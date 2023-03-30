@@ -26,6 +26,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatMenuModule} from "@angular/material/menu";
 import { DepositWithdrawComponent } from './components/deposit-withdraw/deposit-withdraw.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import { BinaryRegistrationComponent } from './components/binary-registration/binary-registration.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
 
 @NgModule({
@@ -40,6 +41,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     WalletComponent,
     ChartComponent,
     DepositWithdrawComponent,
+    BinaryRegistrationComponent,
   ],
     imports: [
         MatToolbarModule,

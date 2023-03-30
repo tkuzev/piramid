@@ -1,6 +1,8 @@
 package com.example.piramidadjii.facade.impl;
 
 import com.example.piramidadjii.bankAccountModule.services.BankService;
+import com.example.piramidadjii.binaryTreeModule.dtos.BinaryRegistrationDTO;
+import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.facade.FacadeService;
 import com.example.piramidadjii.facade.dto.EditPersonDTO;
@@ -69,5 +71,10 @@ public class FacadeServiceImpl implements FacadeService {
     @Override
     public String getEmailFromJWT(String token) {
         return jwtGenerator.getEmailFromJWT(token);
+    }
+
+    @Override
+    public List<BinaryRegistrationDTO> getAllKids(BinaryPerson binaryPerson) {
+        return binaryRegistrationService.getAllKids(binaryPerson);
     }
 }
