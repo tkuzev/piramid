@@ -26,5 +26,5 @@ public interface FacadeService {
 
     String getEmailFromJWT(String token);
 
-    List<BinaryRegistrationDTO> getAllKids(BinaryPerson binaryPerson);
+    List<BinaryPerson> getTree(BinaryPerson binaryPerson);
 }

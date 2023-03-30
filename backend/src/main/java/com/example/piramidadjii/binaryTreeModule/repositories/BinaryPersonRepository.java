@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface BinaryPersonRepository extends JpaRepository<BinaryPerson, Long> {
     Optional<BinaryPerson> findById(Long id);
+
+    Optional<BinaryPerson> findByEmail(String email);
 }

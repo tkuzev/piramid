@@ -1,6 +1,5 @@
 package com.example.piramidadjii.facade.controller;
 
-import com.example.piramidadjii.binaryTreeModule.dtos.BinaryRegistrationDTO;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
@@ -9,6 +8,7 @@ import com.example.piramidadjii.facade.dto.*;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -79,10 +79,15 @@ public class FacadeController {
         return facadeService.getEmailFromJWT(tokenDTO.getToken());
     }
 
-    @GetMapping("/getKids/{id}")
-    public List<BinaryRegistrationDTO> getKids(@PathVariable Long id){
-        BinaryPerson binPerson = binaryPersonRepository.findById(id).orElseThrow();
-        return facadeService.getAllKids(binPerson);
+    @GetMapping("/getTree")
+    public List<BinaryPerson> getTree(@RequestParam BinaryDTO binaryDTO){
+        BinaryPerson binaryPersonRepositoryByEmail = binaryPersonRepository.findByEmail(binaryDTO.getEmail()).orElseThrow();
+        return facadeService.getTree(binaryPersonRepositoryByEmail);
+    }
+    @GetMapping("binary/getById/")
+    public BinaryPerson getBinaryById(@RequestParam Long id){
+        BinaryPerson binaryPerson = binaryPersonRepository.findById(id).orElseThrow();
+        return binaryPerson;
     }
 
     private static RegistrationPerson customModelMapper(RegisterPersonDTO registerPersonDTO, RegistrationPerson parent) {

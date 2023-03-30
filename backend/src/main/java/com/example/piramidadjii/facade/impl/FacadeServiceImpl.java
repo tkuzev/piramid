@@ -74,7 +74,7 @@ public class FacadeServiceImpl implements FacadeService {
     }
 
     @Override
-    public List<BinaryRegistrationDTO> getAllKids(BinaryPerson binaryPerson) {
-        return binaryRegistrationService.getAllKids(binaryPerson);
+    public List<BinaryPerson> getTree(BinaryPerson binaryPerson) {
+        return binaryRegistrationService.getTree(binaryPerson);
     }
 }
