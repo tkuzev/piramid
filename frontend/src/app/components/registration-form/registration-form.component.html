@@ -27,15 +27,6 @@
           <mat-error *ngIf="newReg.get('email')?.hasError('pattern')">Enter valid email!</mat-error>
         </mat-form-field>
         <mat-form-field>
-          <mat-label>Id</mat-label>
-          <input
-            formControlName="parentId"
-            matInput
-            name="parentId">
-          <mat-error *ngIf="newReg.get('parentId')?.hasError('required')">Id required!</mat-error>
-          <mat-error *ngIf="newReg.get('parentId')?.hasError('pattern')">Enter valid id!</mat-error>
-        </mat-form-field>
-        <mat-form-field>
           <mat-label>Money</mat-label>
           <input
             formControlName="money"

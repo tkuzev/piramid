@@ -1,5 +1,7 @@
 package com.example.piramidadjii.facade;
 
+import com.example.piramidadjii.binaryTreeModule.dtos.BinaryRegistrationDTO;
+import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.facade.dto.EditPersonDTO;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 
@@ -23,4 +25,6 @@ public interface FacadeService {
     List<BigDecimal> wallet(Long registrationPersonId);
 
     String getEmailFromJWT(String token);
+
+    List<BinaryRegistrationDTO> getAllKids(BinaryPerson binaryPerson);
 }

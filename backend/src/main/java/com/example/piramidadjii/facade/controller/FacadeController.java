@@ -1,5 +1,8 @@
 package com.example.piramidadjii.facade.controller;
 
+import com.example.piramidadjii.binaryTreeModule.dtos.BinaryRegistrationDTO;
+import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
+import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.facade.FacadeService;
 import com.example.piramidadjii.facade.dto.*;
@@ -11,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 @CrossOrigin
 @RestController
 public class FacadeController {
@@ -20,6 +25,8 @@ public class FacadeController {
     private RegistrationPersonRepository registrationPersonRepository;
     @Autowired
     private BinaryRegistrationService binaryRegistrationService;
+    @Autowired
+    private BinaryPersonRepository binaryPersonRepository;
 
 
     @PostMapping("/user/sell")
@@ -71,6 +78,12 @@ public class FacadeController {
     @GetMapping("user/email")
     public String username(@RequestBody tokenDTO tokenDTO) {
         return facadeService.getEmailFromJWT(tokenDTO.getToken());
+    }
+
+    @GetMapping("/getKids/{id}")
+    public List<BinaryRegistrationDTO> getKids(@PathVariable Long id){
+        BinaryPerson binPerson = binaryPersonRepository.findById(id).orElseThrow();
+        return facadeService.getAllKids(binPerson);
     }
 
     private static RegistrationPerson customModelMapper(RegisterPersonDTO registerPersonDTO, RegistrationPerson parent) {
