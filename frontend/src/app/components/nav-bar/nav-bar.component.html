@@ -14,8 +14,8 @@
       <mat-menu class="mat-menu" #menu="matMenu">
         <div class="col-auto">
           <div class="row justify-content-center align-items-center dropdowns">
-            <div class="col-auto">
-              Balance: 1000
+            <div class="col-auto" *ngIf="person">
+              Balance: {{person.money}}
             </div>
           </div>
           <div class="row justify-content-between dropdowns">

@@ -4,6 +4,7 @@ import {Sell} from "../models/sell";
 import {BinaryPerson} from "../models/binary-person";
 import {LoginPerson} from "../models/login-person";
 import {map, Observable} from "rxjs";
+import {RegistrationPerson} from "../models/registration-person";
 
 
 @Injectable({
@@ -27,10 +28,9 @@ export class PersonService {
       }));
   }
 
-
   public getLoggedPersonId(){
-
   }
+
 
   public logout(){
     localStorage.removeItem('currentUser');
@@ -48,5 +48,9 @@ export class PersonService {
 
   public registerBinaryPerson(binaryPerson: BinaryPerson){
     return this.http.post<BinaryPerson>(this.usersUrl+'/register/binary/${this.binaryPersonId}',binaryPerson);
+  }
+
+  public getRegisteredPerson(): Observable<RegistrationPerson>{
+    return this.http.get<RegistrationPerson>(this.usersUrl+'' )
   }
 }

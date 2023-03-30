@@ -21,6 +21,7 @@ public class FacadeController {
     @Autowired
     private BinaryRegistrationService binaryRegistrationService;
 
+
     @PostMapping("/user/sell")
     public void makeSell(@RequestBody SellDTO sellDTO) {
 
