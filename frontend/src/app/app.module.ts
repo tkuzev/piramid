@@ -26,6 +26,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatMenuModule} from "@angular/material/menu";
 import { DepositWithdrawComponent } from './components/deposit-withdraw/deposit-withdraw.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [
@@ -40,26 +41,27 @@ import {MatDialogModule} from "@angular/material/dialog";
     ChartComponent,
     DepositWithdrawComponent,
   ],
-  imports: [
-    MatToolbarModule,
-    MatButtonModule,
-    HttpClientModule,
-    RouterLink,
-    MatGridListModule,
-    BrowserAnimationsModule,
-    MatFormFieldModule,
-    MatIconModule,
-    FormsModule,
-    AppRoutingModule,
-    MatInputModule,
-    MatProgressBarModule,
-    ReactiveFormsModule,
-    NgChartsModule,
-    BrowserModule,
-    MatSelectModule,
-    MatMenuModule,
-    MatDialogModule
-  ],
+    imports: [
+        MatToolbarModule,
+        MatButtonModule,
+        HttpClientModule,
+        RouterLink,
+        MatGridListModule,
+        BrowserAnimationsModule,
+        MatFormFieldModule,
+        MatIconModule,
+        FormsModule,
+        AppRoutingModule,
+        MatInputModule,
+        MatProgressBarModule,
+        ReactiveFormsModule,
+        NgChartsModule,
+        BrowserModule,
+        MatSelectModule,
+        MatMenuModule,
+        MatDialogModule,
+        MatCheckboxModule
+    ],
   providers: [{provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}}],
   bootstrap: [AppComponent]
 })

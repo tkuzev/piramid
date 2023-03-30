@@ -7,9 +7,9 @@
     <div class="col-10 profile_form">
       <form [formGroup]="profileForm">
         <div class="row name">
-          <mat-icon class="icon">face</mat-icon>
+          <mat-icon class="icon">sentiment_very_satisfied</mat-icon>
           <mat-form-field>
-            <mat-label>Name</mat-label>
+            <mat-label class="color">Name</mat-label>
             <input formControlName="name"
                    matInput
                    name="name">
@@ -39,7 +39,7 @@
                    formControlName="password"
                    matInput
                    name="password">
-            <mat-icon matSuffix
+            <mat-icon class="icon" matSuffix
                       (click)="togglePasswordVisibility()">{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
             <mat-error *ngIf="profileForm.get('password')?.hasError('required')">Required field!</mat-error>
             <mat-error *ngIf="profileForm.get('password')?.hasError('pattern')">Minimum eight characters, at
@@ -66,17 +66,23 @@
 
     <div class="col-2 ">
       <div class="row buttonEdit">
-        <button type="submit" mat-raised-button class="btn">Edit</button>
-      </div>
-      <div class="row">
-        <button type="submit" [disabled]="true" mat-raised-button class="btn">Save</button>
+        <button type="submit" mat-mini-fab class="btn">
+          <mat-icon class="icon">edit</mat-icon>
+        </button>
       </div>
     </div>
   </div>
 
   <div class="row card-down">
-    <div class="col-auto">
-      <mat-icon class="icon">cache</mat-icon>
+    <div class="col-10 renew">
+      <mat-icon>autorenew</mat-icon>
+      <mat-checkbox [color]=color>
+        <p>Pay subscription plan automatically!</p>
+      </mat-checkbox>
+    </div>
+
+    <div class="col-2 buttonSave">
+      <button type="submit" [disabled]="true" mat-mini-fab class="btn"><mat-icon class="icon">check</mat-icon></button>
     </div>
   </div>
 </div>
