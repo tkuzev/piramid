@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
-
+import {ThemePalette} from "@angular/material/core";
 
 @Component({
   selector: 'app-profile-info',
@@ -8,6 +8,7 @@ import {FormBuilder, FormControl, Validators} from "@angular/forms";
   styleUrls: ['./profile-info.component.css']
 })
 export class ProfileInfoComponent {
+  color: ThemePalette = "primary";
   public showPassword: boolean = false;
   constructor(private fb: FormBuilder) {
   }

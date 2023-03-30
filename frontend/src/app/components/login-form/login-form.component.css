@@ -27,40 +27,46 @@ img{
   width: 900px;
   height: 550px;
   border-radius: 10px;
-  background: #fff;
+  background: #232c31;
   box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.5);
 }
 
 .login-header{
   align-items: center;
-  color: #099FFF;
+  color: #7f06cc;
   display: flex;
   flex-direction: column;
   position: relative;
 }
 
 .right{
-  position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
 }
 
-.login-form{
+.right{
   width:50%;
 }
 
-.login-form mat-label{
+.right mat-label{
   font-family: "Poppins", sans-serif;
 }
 
-.login-form h1{
+.right h1{
   padding-bottom: 40px;
   font-size: 80px;
   font-family: "Neon", sans-serif;
 }
 
 .btn{
-  background: #099FFF;
+  background: #7f06cc;
   color: white;
+}
+
+.fields-form{
+  width:235px;
+}
+
+mat-form-field{
+  width:100%;
 }

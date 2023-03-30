@@ -27,6 +27,7 @@ import {MatMenuModule} from "@angular/material/menu";
 import { DepositWithdrawComponent } from './components/deposit-withdraw/deposit-withdraw.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import { BinaryRegistrationComponent } from './components/binary-registration/binary-registration.component';
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [
@@ -42,26 +43,27 @@ import { BinaryRegistrationComponent } from './components/binary-registration/bi
     DepositWithdrawComponent,
     BinaryRegistrationComponent,
   ],
-  imports: [
-    MatToolbarModule,
-    MatButtonModule,
-    HttpClientModule,
-    RouterLink,
-    MatGridListModule,
-    BrowserAnimationsModule,
-    MatFormFieldModule,
-    MatIconModule,
-    FormsModule,
-    AppRoutingModule,
-    MatInputModule,
-    MatProgressBarModule,
-    ReactiveFormsModule,
-    NgChartsModule,
-    BrowserModule,
-    MatSelectModule,
-    MatMenuModule,
-    MatDialogModule
-  ],
+    imports: [
+        MatToolbarModule,
+        MatButtonModule,
+        HttpClientModule,
+        RouterLink,
+        MatGridListModule,
+        BrowserAnimationsModule,
+        MatFormFieldModule,
+        MatIconModule,
+        FormsModule,
+        AppRoutingModule,
+        MatInputModule,
+        MatProgressBarModule,
+        ReactiveFormsModule,
+        NgChartsModule,
+        BrowserModule,
+        MatSelectModule,
+        MatMenuModule,
+        MatDialogModule,
+        MatCheckboxModule
+    ],
   providers: [{provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}}],
   bootstrap: [AppComponent]
 })

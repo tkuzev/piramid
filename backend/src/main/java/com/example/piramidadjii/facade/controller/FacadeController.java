@@ -90,6 +90,12 @@ public class FacadeController {
         return binaryPerson;
     }
 
+    @GetMapping("user/getPersonId")
+    public Long getPersonId(@RequestBody kurDto email){
+        RegistrationPerson registrationPerson = registrationPersonRepository.findByEmail(email.getEmail()).orElseThrow();
+        return registrationPerson.getId();
+    }
+
     private static RegistrationPerson customModelMapper(RegisterPersonDTO registerPersonDTO, RegistrationPerson parent) {
         RegistrationPerson person = new RegistrationPerson();
         person.setParent(parent);
