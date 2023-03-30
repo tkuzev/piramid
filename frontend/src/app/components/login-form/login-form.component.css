@@ -40,21 +40,19 @@ img{
 }
 
 .right{
-  position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
 }
 
-.login-form{
+.right{
   width:50%;
 }
 
-.login-form mat-label{
+.right mat-label{
   font-family: "Poppins", sans-serif;
 }
 
-.login-form h1{
+.right h1{
   padding-bottom: 40px;
   font-size: 80px;
   font-family: "Neon", sans-serif;
@@ -63,4 +61,12 @@ img{
 .btn{
   background: #7f06cc;
   color: white;
+}
+
+.fields-form{
+  width:235px;
+}
+
+mat-form-field{
+  width:100%;
 }

@@ -3,9 +3,8 @@
     <div class="col-md-6 side-image">
       <img src="assets/images/LOGO.png" alt="nema logo">
     </div>
-    <div class="col-md-6 right">
-      <div class="login-form">
-        <form (ngSubmit)="onSubmit()" [formGroup]="newLog" *ngIf="newLog">
+    <div class="col-md-6 right align-items-center justify-content-center">
+        <form class="fields-form" (ngSubmit)="onSubmit()" [formGroup]="newLog" *ngIf="newLog">
           <h1 class="login-header">Log In</h1>
           <mat-form-field>
             <mat-label>Email</mat-label>
@@ -25,9 +24,8 @@
             <mat-error *ngIf="newLog.get('password')?.hasError('required')">Password required!</mat-error>
             <mat-error *ngIf="newLog.get('password')?.hasError('pattern')">Enter valid password!</mat-error>
           </mat-form-field>
-          <button type="submit" mat-raised-button class="btn">Login</button>
         </form>
+        <button type="submit" mat-raised-button class="btn">Login</button>
       </div>
-    </div>
   </div>
 </div>

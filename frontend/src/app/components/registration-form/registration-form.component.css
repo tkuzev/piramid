@@ -32,6 +32,7 @@
 
 .right{
   display: flex;
+  flex-direction: column;
 }
 
 .right mat-label{
