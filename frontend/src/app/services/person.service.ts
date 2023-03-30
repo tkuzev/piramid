@@ -28,9 +28,14 @@ export class PersonService {
       }));
   }
 
-  public getLoggedPersonId(){
-  }
 
+  // public getLoggedPersonId(){
+  //   return this.http.post(this.usersUrl+"/getPersonId",) localStorage.getItem("currentUserEmail")
+  // }
+
+  public registerPerson(registerPerson: RegistrationPerson){
+    return this.http.post<RegistrationPerson>(this.usersUrl+"register",registerPerson);
+  }
 
   public logout(){
     localStorage.removeItem('currentUser');
