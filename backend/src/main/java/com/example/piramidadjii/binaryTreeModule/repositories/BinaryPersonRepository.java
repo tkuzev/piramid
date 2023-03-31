@@ -4,6 +4,7 @@ import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -11,4 +12,5 @@ public interface BinaryPersonRepository extends JpaRepository<BinaryPerson, Long
     Optional<BinaryPerson> findById(Long id);
 
     Optional<BinaryPerson> findByEmail(String email);
+
 }

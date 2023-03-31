@@ -108,11 +108,12 @@ public class TransactionServiceImpl implements TransactionService {
 
         BigDecimal amount = price.multiply(BigDecimal.valueOf(percent)).divide(BigDecimal.valueOf(100).setScale(2, RoundingMode.FLOOR));
         BigDecimal newDebitBalance = personBankAccount.getBalance().add(amount);
-        personBankAccount.setBalance(personBankAccount.getBalance().add(newDebitBalance));
+        personBankAccount.setBalance(newDebitBalance);
+
         bankAccountRepository.save(personBankAccount);
         registrationPersonRepository.save(registrationPerson);
         BigDecimal newCreditBalance = helperBankAccount.getBalance().subtract(amount);
-        helperBankAccount.setBalance(helperBankAccount.getBalance().subtract(newCreditBalance));
+        helperBankAccount.setBalance(newCreditBalance);
         bankAccountRepository.save(helperBankAccount);
     }
 

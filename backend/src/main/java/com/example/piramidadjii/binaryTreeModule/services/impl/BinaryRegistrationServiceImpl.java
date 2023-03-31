@@ -58,6 +58,9 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
 
     private void traverseHelper(BinaryPerson binaryPerson, List<BinaryDTO> tree) {
         if (Objects.isNull(binaryPerson)) return;
+
+        if (!Objects.isNull(binaryPerson.getLeftChild()) && !Objects.isNull(binaryPerson.getRightChild())) return;
+
         BinaryDTO dto = mapper.map(binaryPerson, BinaryDTO.class);
         tree.add(dto);
         traverseHelper(binaryPerson.getLeftChild(),tree);
