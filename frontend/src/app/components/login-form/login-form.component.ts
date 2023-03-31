@@ -32,12 +32,13 @@ export class LoginFormComponent {
       error => {
         this.error = error;
         this.loading = false;
-      }
-    );
+      },
+      ()=>{this.router.navigate(['/'])}
+    )
   }
 
   gotoHomePage() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/']).then(()=>{window.location.reload()})
   };
 
   newLog = this.fb.group({
