@@ -35,7 +35,6 @@ public class FacadeController {
 
     @PostMapping("/user/sell")
     public void makeSell(@RequestBody SellDTO sellDTO) {
-
         RegistrationPerson person = registrationPersonRepository.findById(sellDTO.getId()).orElseThrow();
         facadeService.createTransaction(person, sellDTO.getPrice());
     }

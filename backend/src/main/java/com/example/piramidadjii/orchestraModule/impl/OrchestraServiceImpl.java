@@ -1,6 +1,9 @@
 package com.example.piramidadjii.orchestraModule.impl;
 
+import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
+import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
+import com.example.piramidadjii.binaryTreeModule.services.DistributeMoneyService;
 import com.example.piramidadjii.facade.dto.EditPersonDTO;
 import com.example.piramidadjii.orchestraModule.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
@@ -9,10 +12,13 @@ import com.example.piramidadjii.registrationTreeModule.repositories.Registration
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationPersonService;
 import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
+import com.example.piramidadjii.registrationTreeModule.services.TransactionService;
+import com.example.piramidadjii.registrationTreeModule.services.impl.TransactionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 public class OrchestraServiceImpl implements OrchestraService {
@@ -27,6 +33,12 @@ public class OrchestraServiceImpl implements OrchestraService {
     private SubscriptionPlanRepository subscriptionPlanRepository;
     @Autowired
     private RegistrationPersonRepository registrationPersonRepository;
+    @Autowired
+    private TransactionService transactionService;
+    @Autowired
+    private DistributeMoneyService distributeMoneyService;
+    @Autowired
+    private BinaryPersonRepository binaryPersonRepository;
 
 
     @Override
@@ -45,5 +57,14 @@ public class OrchestraServiceImpl implements OrchestraService {
         SubscriptionPlan plan = subscriptionPlanRepository.findById(editPersonDTO.getSubscriptionPlanId()).orElseThrow();
         subscriptionPlanService.upgradeSubscriptionPlan(editPersonDTO.getId(), plan);
         registrationPersonService.editPerson(editPersonDTO);
+    }
+
+    @Override
+    public void createTransaction(RegistrationPerson person, BigDecimal money) {
+        transactionService.createTransaction(person,money);
+        if (binaryPersonRepository.existsById(person.getId())){
+            BinaryPerson binaryPerson = binaryPersonRepository.findById(person.getId()).orElseThrow();
+            distributeMoneyService.distributeMoney(binaryPerson,money);
+        }
     }
 }
