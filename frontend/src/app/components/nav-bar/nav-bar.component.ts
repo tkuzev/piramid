@@ -1,18 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Observable, Observer} from "rxjs";
+import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import {DepositWithdrawComponent} from "../deposit-withdraw/deposit-withdraw.component";
 import {MatDialog} from "@angular/material/dialog";
-import {Person} from "../../models/person";
 import {PersonService} from "../../services/person.service";
-import {RegistrationPerson} from "../../models/registration-person";
+
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css']
 })
-export class NavBarComponent implements OnInit{
+export class NavBarComponent implements AfterViewInit{
 
-  person: RegistrationPerson;
+  balance: number[];
 
   buttonValue !: number
   constructor(public dialog: MatDialog, private personService: PersonService) {
@@ -33,9 +31,8 @@ export class NavBarComponent implements OnInit{
       data: {buttonValue: this.buttonValue}
     });
   }
-  ngOnInit(): void{
-    this.personService.getRegisteredPerson().subscribe(
-      person=>this.person = person
+  ngAfterViewInit(): void{
+    this.personService.getRegisteredPersonBalance().then(value => {value.subscribe(data=>this.balance[0]=data)}
     )
   }
 }

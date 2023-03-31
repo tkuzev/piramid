@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@CrossOrigin
+
 @RestController
 public class FacadeController {
     @Autowired
@@ -66,7 +66,7 @@ public class FacadeController {
     }
 
     @GetMapping("user/wallet/balance")
-    public List<BigDecimal> balance(@RequestParam Long registrationPersonId) {
+    public List<BigDecimal> balance(@RequestParam("id") Long registrationPersonId) {
         return facadeService.wallet(registrationPersonId);
     }
 
@@ -87,8 +87,8 @@ public class FacadeController {
     }
 
     @GetMapping("user/getPersonId")
-    public Long getPersonId(@RequestBody kurDto email){
-        RegistrationPerson registrationPerson = registrationPersonRepository.findByEmail(email.getEmail()).orElseThrow();
+    public Long getPersonId(@RequestParam("email") String email){
+        RegistrationPerson registrationPerson = registrationPersonRepository.findByEmail(email).orElseThrow();
         return registrationPerson.getId();
     }
 

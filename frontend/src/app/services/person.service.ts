@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Sell} from "../models/sell";
 import {BinaryPerson} from "../models/binary-person";
 import {LoginPerson} from "../models/login-person";
-import {map, Observable} from "rxjs";
+import {firstValueFrom, map, Observable} from "rxjs";
 import {RegistrationPerson} from "../models/registration-person";
 
 
@@ -13,12 +13,17 @@ import {RegistrationPerson} from "../models/registration-person";
 export class PersonService {
 
   private readonly usersUrl: string;
+  private readonly authUrl: string;
+
+  id:number
+  email: string = localStorage.getItem('currentUserEmail')
   constructor(private http: HttpClient) {
-    this.usersUrl = 'http://localhost:8080/auth';
+    this.usersUrl = 'http://localhost:8080/user';
+    this.authUrl = 'http://localhost:8080/auth';
   }
 
   public login(loginPerson: LoginPerson):Observable<any>{
-      return this.http.post<LoginPerson>(this.usersUrl+"/login",loginPerson).pipe(map(response =>{
+      return this.http.post<LoginPerson>(this.authUrl+"/login",loginPerson).pipe(map(response =>{
         const token = response;
         if(token){
           localStorage.setItem('currentUserEmail',loginPerson.email)
@@ -27,7 +32,11 @@ export class PersonService {
         return response;
       }));
   }
-
+  personGetId(): Observable<number>{
+    let requestParams = new HttpParams();
+    requestParams = requestParams.append("email", this.email)
+    return this.http.get<number>(this.usersUrl+'/getPersonId', {params:requestParams})
+  }
 
   // public getLoggedPersonId(){
   //   return this.http.post(this.usersUrl+"/getPersonId",) localStorage.getItem("currentUserEmail")
@@ -55,7 +64,21 @@ export class PersonService {
     return this.http.post<BinaryPerson>(this.usersUrl+'/register/binary/${this.binaryPersonId}',binaryPerson);
   }
 
-  public getRegisteredPerson(): Observable<RegistrationPerson>{
-    return this.http.get<RegistrationPerson>(this.usersUrl+'' )
+  async getRegisteredPersonBalance(): Promise<Observable<number>>{
+    let requestParams = new HttpParams();
+    this.id = await firstValueFrom(this.personGetId());
+    requestParams = requestParams.append('id', this.id);
+    // this.personGetId().subscribe(
+    //   (id)=> {
+    //     this.id = id
+    //   },
+    //   (err)=>{console.log("err")},
+    //   ()=>{
+    //     requestParams = requestParams.append('id', this.id)
+    //     console.log(requestParams)
+    //
+    //   })
+    console.log(requestParams)
+    return this.http.get<any>(this.usersUrl + '/wallet/balance', {params: requestParams});
   }
 }
