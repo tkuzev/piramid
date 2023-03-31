@@ -64,7 +64,7 @@ export class PersonService {
     return this.http.post<BinaryPerson>(this.usersUrl+'/register/binary/${this.binaryPersonId}',binaryPerson);
   }
 
-  async getRegisteredPersonBalance(): Promise<Observable<number>>{
+  async getRegisteredPersonBalance(): Promise<Observable<Array<number>>>{
     let requestParams = new HttpParams();
     this.id = await firstValueFrom(this.personGetId());
     requestParams = requestParams.append('id', this.id);

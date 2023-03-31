@@ -8,14 +8,19 @@ import {PersonService} from "../../services/person.service";
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css']
 })
-export class NavBarComponent implements AfterViewInit{
+export class NavBarComponent implements AfterViewInit {
 
-  balance: number[];
+  money: Array<number>;
+  balance: number;
+  leftC: number = 0;
+  rightC: number = 0;
 
-  buttonValue !: number
+  buttonValue : number
+
   constructor(public dialog: MatDialog, private personService: PersonService) {
   }
-  withdraw():void{
+
+  withdraw(): void {
     this.buttonValue = 1;
     this.dialog.open(DepositWithdrawComponent, {
       height: '250px',
@@ -23,7 +28,8 @@ export class NavBarComponent implements AfterViewInit{
       data: {buttonValue: this.buttonValue}
     });
   }
-  deposit():void{
+
+  deposit(): void {
     this.buttonValue = 2;
     this.dialog.open(DepositWithdrawComponent, {
       height: '250px',
@@ -31,8 +37,22 @@ export class NavBarComponent implements AfterViewInit{
       data: {buttonValue: this.buttonValue}
     });
   }
-  ngAfterViewInit(): void{
-    this.personService.getRegisteredPersonBalance().then(value => {value.subscribe(data=>this.balance[0]=data)}
+
+  ngAfterViewInit(): void {
+    this.personService.getRegisteredPersonBalance().then(value => {
+        value.subscribe(
+          data => {
+            this.money = data
+            this.balance=this.money[0]
+            if(this.money[1] != null) {
+              this.leftC = this.money[1]
+            }
+            if(this.money[1] != null) {
+              this.rightC=this.money[2]
+            }
+          }
+        )
+      }
     )
   }
 }
