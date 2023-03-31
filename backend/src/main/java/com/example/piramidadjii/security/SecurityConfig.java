@@ -34,9 +34,16 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
+
+                .requestMatchers("/auth/login", "/user/register/registrationTree").permitAll()
+//                .requestMatchers("/**").hasAuthority("klient")
+//                .requestMatchers("/**").hasAuthority("ebach")
+                .requestMatchers("/**").permitAll()
+
                 .requestMatchers("/auth/login", "/user/register/registrationTree").anonymous()
                 .requestMatchers("/**").permitAll()
                 .requestMatchers("/**").hasAuthority("ebach")
+
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();
