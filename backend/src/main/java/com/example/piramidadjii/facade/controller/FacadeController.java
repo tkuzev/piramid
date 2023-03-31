@@ -1,6 +1,5 @@
 package com.example.piramidadjii.facade.controller;
 
-import com.example.piramidadjii.binaryTreeModule.dtos.BinaryRegistrationDTO;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
@@ -8,7 +7,10 @@ import com.example.piramidadjii.facade.FacadeService;
 import com.example.piramidadjii.facade.dto.*;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -27,6 +29,8 @@ public class FacadeController {
     private BinaryRegistrationService binaryRegistrationService;
     @Autowired
     private BinaryPersonRepository binaryPersonRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     @PostMapping("/user/sell")
@@ -80,10 +84,17 @@ public class FacadeController {
         return facadeService.getEmailFromJWT(tokenDTO.getToken());
     }
 
-    @GetMapping("/getKids/{id}")
-    public List<BinaryRegistrationDTO> getKids(@PathVariable Long id){
-        BinaryPerson binPerson = binaryPersonRepository.findById(id).orElseThrow();
-        return facadeService.getAllKids(binPerson);
+    @GetMapping("/getTree")
+    public ResponseEntity<List<BinaryDTO>> getTree(@RequestParam Long id){
+        BinaryPerson binaryPerson = binaryPersonRepository.findById(id).orElseThrow();
+        List<BinaryDTO> tree = facadeService.getTree(binaryPerson);
+        return new ResponseEntity<>(tree, HttpStatus.OK);
+    }
+    @GetMapping("binary/getById")
+    public ResponseEntity<BinaryDTO> getBinaryById(@RequestParam Long id){
+        BinaryPerson binaryPerson = binaryPersonRepository.findById(id).orElseThrow();
+        BinaryDTO dto = modelMapper.map(binaryPerson, BinaryDTO.class);
+        return new ResponseEntity<>(dto,HttpStatus.OK);
     }
 
     @GetMapping("user/getPersonId")

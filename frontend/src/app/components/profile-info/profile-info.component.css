@@ -18,10 +18,11 @@
 
 .card-down{
   width: 680px;
-  height: 160px;
+  height: 90px;
   border-radius: 10px;
   background: linear-gradient(to bottom right, #90caf9, #ce93d8);
   box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.5);
+  align-items: center;
 }
 
 .profile-header h1{
@@ -36,7 +37,7 @@
 }
 
 .icon{
-  color: black;
+  color: white;
   margin-top: 6%;
 }
 
@@ -51,7 +52,7 @@
 
 .btn{
   background: #90caf9;
-  color: black;
+  color: white;
 }
 
 .profile_form{
@@ -62,10 +63,39 @@
 }
 
 .buttonEdit{
-  display: flex;
   flex-direction: column;
-  justify-content: start;
-  align-items: start;
+  align-items: center;
   padding-top: 30px;
-  height: 77%;
+}
+
+.buttonSave{
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+::ng-deep.mdc-menu-surface{
+  background-color:  white;
+}
+
+::ng-deep.mat-mdc-option .mdc-list-item__primary-text {
+  color:black;
+}
+
+::ng-deep.mat-mdc-option:hover:not(.mdc-list-item--disabled){
+  background: rgb(198, 179, 255);
+}
+
+.renew{
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  color: white;
+  margin: 0;
+}
+
+.renew p{
+  font-size: medium;
+  margin-bottom: 0;
+  margin-top: 7px;
 }

@@ -18,7 +18,7 @@ const routes: Routes = [
   {path:'income', component: IncomePageComponent},
   {path:'login', component: LoginFormComponent},
   {path: 'chart', component: ChartComponent},
-  {path:'register/binary',component: BinaryRegistrationComponent}
+  {path:'register/binary/:fatherId/:childId',component: BinaryRegistrationComponent}
 ];
 
 @NgModule({

@@ -5,6 +5,7 @@ import com.example.piramidadjii.binaryTreeModule.dtos.BinaryRegistrationDTO;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
+import com.example.piramidadjii.facade.dto.BinaryDTO;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import jakarta.mail.MessagingException;
@@ -26,6 +27,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     @Autowired
     private MailSenderService mailSenderService;
 
+    @Autowired
     private ModelMapper mapper;
 
     @Override
@@ -36,13 +38,10 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     @Override
     public void sendBinaryRegistrationEmail(RegistrationPerson registrationPerson, Long parentId) {
         try {
-            SecureRandom random=new SecureRandom();
-            byte[] tokenBytes=new byte[16];
-            random.nextBytes(tokenBytes);
-            String verificationToken= Base64.getUrlEncoder().withoutPadding().encodeToString(tokenBytes);
+
             mailSenderService.sendEmailWithoutAttachment(findSuitableParent(registrationPerson).getEmail(),
                     "Register a person in this binary tree:", "Click here to register him ->" +
-                            "http://localhost:8080/register/binary/verify?token=" + verificationToken);
+                            "http://localhost:8080/register/b=");
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
@@ -51,19 +50,18 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
 
 
     @Override
-    public List<BinaryRegistrationDTO> getAllKids(BinaryPerson binaryPerson) {
-        List<BinaryRegistrationDTO> children = new ArrayList<>();
-        if (binaryPerson.getLeftChild() != null) {
-            BinaryRegistrationDTO mapped = mapper.map(binaryPerson.getLeftChild(), BinaryRegistrationDTO.class);
-            children.add(mapped);
-            children.addAll(getAllKids(binaryPerson.getLeftChild()));
-        }
-        if (binaryPerson.getRightChild() != null) {
-            BinaryRegistrationDTO mapped = mapper.map(binaryPerson.getRightChild(), BinaryRegistrationDTO.class);
-            children.add(mapped);
-            children.addAll(getAllKids(binaryPerson.getRightChild()));
-        }
-        return children;
+    public List<BinaryDTO> getTree(BinaryPerson binaryPerson) {
+        List<BinaryDTO> tree=new ArrayList<>();
+        traverseHelper(binaryPerson,tree);
+        return tree;
+    }
+
+    private void traverseHelper(BinaryPerson binaryPerson, List<BinaryDTO> tree) {
+        if (Objects.isNull(binaryPerson)) return;
+        BinaryDTO dto = mapper.map(binaryPerson, BinaryDTO.class);
+        tree.add(dto);
+        traverseHelper(binaryPerson.getLeftChild(),tree);
+        traverseHelper(binaryPerson.getRightChild(),tree);
     }
 
 
