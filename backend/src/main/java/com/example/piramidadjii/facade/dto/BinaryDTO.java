@@ -14,4 +14,6 @@ public class BinaryDTO {
     private Long parentId;
     private String name;
     private String email;
+
+    private Boolean direction;
 }
