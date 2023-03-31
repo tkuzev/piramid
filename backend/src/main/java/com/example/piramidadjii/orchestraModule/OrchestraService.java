@@ -9,4 +9,6 @@ public interface OrchestraService {
     void registerPerson(RegistrationPerson registrationPerson, BigDecimal money);
 
     void editProfile(EditPersonDTO editPersonDTO);
+
+    void createTransaction(RegistrationPerson person, BigDecimal money);
 }

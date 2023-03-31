@@ -52,16 +52,27 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     @Override
     public List<BinaryDTO> getTree(BinaryPerson binaryPerson) {
         List<BinaryDTO> tree=new ArrayList<>();
-        traverseHelper(binaryPerson,tree);
+        BinaryDTO map = mapper.map(binaryPerson, BinaryDTO.class);
+        tree.add(map);
+        traverseHelper(binaryPerson.getLeftChild(),tree,false);
+        traverseHelper(binaryPerson.getRightChild(),tree,true);
         return tree;
     }
 
-    private void traverseHelper(BinaryPerson binaryPerson, List<BinaryDTO> tree) {
+
+
+    private void traverseHelper(BinaryPerson binaryPerson, List<BinaryDTO> tree, Boolean direction) {
         if (Objects.isNull(binaryPerson)) return;
+
+
         BinaryDTO dto = mapper.map(binaryPerson, BinaryDTO.class);
-        tree.add(dto);
-        traverseHelper(binaryPerson.getLeftChild(),tree);
-        traverseHelper(binaryPerson.getRightChild(),tree);
+        if (Objects.isNull(binaryPerson.getRightChild()) || Objects.isNull(binaryPerson.getLeftChild())){
+            dto.setDirection(direction);
+            tree.add(dto);
+        }
+
+        traverseHelper(binaryPerson.getLeftChild(),tree,direction);
+        traverseHelper(binaryPerson.getRightChild(),tree,direction);
     }
 
 

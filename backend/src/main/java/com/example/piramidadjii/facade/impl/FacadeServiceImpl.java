@@ -56,7 +56,7 @@ public class FacadeServiceImpl implements FacadeService {
 
     @Override
     public void createTransaction(RegistrationPerson registrationPerson, BigDecimal price) {
-        transactionService.createTransaction(registrationPerson, price);
+        orchestraService.createTransaction(registrationPerson,price);
     }
 
     @Override
