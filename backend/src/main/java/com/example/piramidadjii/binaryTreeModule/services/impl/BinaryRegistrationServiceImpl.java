@@ -71,8 +71,8 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
             tree.add(dto);
         }
 
-        traverseHelper(binaryPerson.getLeftChild(),tree,false);
-        traverseHelper(binaryPerson.getRightChild(),tree,true);
+        traverseHelper(binaryPerson.getLeftChild(),tree,direction);
+        traverseHelper(binaryPerson.getRightChild(),tree,direction);
     }
 
 
