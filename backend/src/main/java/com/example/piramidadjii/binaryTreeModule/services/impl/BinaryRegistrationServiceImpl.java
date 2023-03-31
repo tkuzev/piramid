@@ -5,6 +5,7 @@ import com.example.piramidadjii.binaryTreeModule.dtos.BinaryRegistrationDTO;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
+import com.example.piramidadjii.facade.dto.BinaryDTO;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import jakarta.mail.MessagingException;
@@ -26,6 +27,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     @Autowired
     private MailSenderService mailSenderService;
 
+    @Autowired
     private ModelMapper mapper;
 
     @Override
@@ -48,16 +50,16 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
 
 
     @Override
-    public List<BinaryPerson> getTree(BinaryPerson binaryPerson) {
-        List<BinaryPerson> tree=new ArrayList<>();
+    public List<BinaryDTO> getTree(BinaryPerson binaryPerson) {
+        List<BinaryDTO> tree=new ArrayList<>();
         traverseHelper(binaryPerson,tree);
         return tree;
     }
 
-    private void traverseHelper(BinaryPerson binaryPerson, List<BinaryPerson> tree) {
+    private void traverseHelper(BinaryPerson binaryPerson, List<BinaryDTO> tree) {
         if (Objects.isNull(binaryPerson)) return;
-
-        tree.add(binaryPerson);
+        BinaryDTO dto = mapper.map(binaryPerson, BinaryDTO.class);
+        tree.add(dto);
         traverseHelper(binaryPerson.getLeftChild(),tree);
         traverseHelper(binaryPerson.getRightChild(),tree);
     }

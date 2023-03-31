@@ -1,6 +1,7 @@
 package com.example.piramidadjii.binaryTreeModule.entities;
 
 import com.example.piramidadjii.baseModule.baseEntites.Person;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,8 +23,10 @@ public class BinaryPerson extends Person {
     @Id
     private Long id;
 
+
     @OneToOne
     private BinaryPerson leftChild;
+
 
     @OneToOne
     private BinaryPerson rightChild;
@@ -31,6 +34,7 @@ public class BinaryPerson extends Person {
     private BigDecimal leftContainer;
 
     private BigDecimal rightContainer;
+
 
     @ManyToOne
     private BinaryPerson parent;

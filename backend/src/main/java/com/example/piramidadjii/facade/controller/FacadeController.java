@@ -7,7 +7,9 @@ import com.example.piramidadjii.facade.FacadeService;
 import com.example.piramidadjii.facade.dto.*;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,8 @@ public class FacadeController {
     private BinaryRegistrationService binaryRegistrationService;
     @Autowired
     private BinaryPersonRepository binaryPersonRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @PostMapping("/user/sell")
     public void makeSell(@RequestBody SellDTO sellDTO) {
@@ -80,14 +84,16 @@ public class FacadeController {
     }
 
     @GetMapping("/getTree")
-    public List<BinaryPerson> getTree(@RequestParam BinaryDTO binaryDTO){
-        BinaryPerson binaryPersonRepositoryByEmail = binaryPersonRepository.findByEmail(binaryDTO.getEmail()).orElseThrow();
-        return facadeService.getTree(binaryPersonRepositoryByEmail);
-    }
-    @GetMapping("binary/getById/")
-    public BinaryPerson getBinaryById(@RequestParam Long id){
+    public ResponseEntity<List<BinaryDTO>> getTree(@RequestParam Long id){
         BinaryPerson binaryPerson = binaryPersonRepository.findById(id).orElseThrow();
-        return binaryPerson;
+        List<BinaryDTO> tree = facadeService.getTree(binaryPerson);
+        return new ResponseEntity<>(tree, HttpStatus.OK);
+    }
+    @GetMapping("binary/getById")
+    public ResponseEntity<BinaryDTO> getBinaryById(@RequestParam Long id){
+        BinaryPerson binaryPerson = binaryPersonRepository.findById(id).orElseThrow();
+        BinaryDTO dto = modelMapper.map(binaryPerson, BinaryDTO.class);
+        return new ResponseEntity<>(dto,HttpStatus.OK);
     }
 
     @GetMapping("user/getPersonId")

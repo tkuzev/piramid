@@ -17,21 +17,16 @@ export class BinaryService{
   private subTree:Observable<BinPerson[]>
 
 
-  constructor(private http: HttpClient, private route:ActivatedRoute) {
+  constructor(private http: HttpClient) {
     this.treeUrl = 'http://localhost:8080/getTree';
-    this.getBinaryById='http://localhost:8080/binary/getById/';
+    this.getBinaryById='http://localhost:8080/binary/getById';
   }
 
-  public getTree(binPerson: BinPerson): Observable<BinPerson[]> {
+  public getTree(id: number): Observable<BinPerson[]> {
 
     let requestParams = new HttpParams();
-    debugger
-    requestParams = requestParams.append("email", binPerson.email)
-      .append("name", binPerson.name)
-      .append("id", binPerson.id)
-      .append("parent", binPerson.parent.id)
-      .append("leftChild", binPerson.leftChild.id)
-      .append("rightChild", binPerson.rightChild.id);
+
+    requestParams = requestParams.append("id", id)
 
     return this.http.get<BinPerson[]>(this.treeUrl, {params: requestParams}).pipe(map(response =>{
       if (response){

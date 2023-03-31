@@ -3,11 +3,11 @@
 export class BinPerson{
     id:number
 
-    leftChild: BinPerson
+    leftChildId: number
 
-    rightChild: BinPerson
+    rightChildId: number
 
-    parent: BinPerson
+    parentId: number
 
     name: string
     email: string

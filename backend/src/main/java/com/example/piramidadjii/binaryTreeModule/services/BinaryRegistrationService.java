@@ -1,6 +1,7 @@
 package com.example.piramidadjii.binaryTreeModule.services;
 
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
+import com.example.piramidadjii.facade.dto.BinaryDTO;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 
 import java.util.List;
@@ -10,5 +11,5 @@ public interface BinaryRegistrationService {
 
     void sendBinaryRegistrationEmail(RegistrationPerson registrationPerson, Long parentId);
 
-    List<BinaryPerson> getTree(BinaryPerson binaryPerson);
+    List<BinaryDTO> getTree(BinaryPerson binaryPerson);
 }

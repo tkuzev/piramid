@@ -11,7 +11,7 @@ import {BinPerson} from "../../models/bin-person";
 export class BinaryRegistrationComponent implements OnInit{
   public parent:BinPerson;
   public child:BinPerson;
-  public subTree:BinPerson[];
+  public subTree:Array<BinPerson>;
 
 
   constructor(private binaryService:BinaryService, private route:ActivatedRoute) {
@@ -19,12 +19,14 @@ export class BinaryRegistrationComponent implements OnInit{
 
   ngOnInit(): void {
     this.route.params.subscribe(params=>{
-      const fatherId=params['fatherId'];
+      const fatherId:number=params['fatherId'];
       const childId=params['childId'];
       this.binaryService.getBinaryPersonById(fatherId).subscribe(value => this.parent=value)
       this.binaryService.getBinaryPersonById(childId).subscribe(value => this.child=value)
-      this.binaryService.getTree(this.parent).subscribe(value => this.subTree=value)
-      console.log(this.subTree)
+      this.binaryService.getTree(fatherId).subscribe(value => this.subTree = value);
+
+
+
     })
 
   }

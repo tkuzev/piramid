@@ -9,9 +9,9 @@ import lombok.Setter;
 public class BinaryDTO {
     private Long id;
 
-    private BinaryPerson leftChild;
-    private BinaryPerson rightChild;
-    private BinaryPerson parent;
+    private Long leftChildId;
+    private Long rightChildId;
+    private Long parentId;
     private String name;
     private String email;
 }
