@@ -47,7 +47,7 @@ export class PersonService {
   }
 
   public logout(){
-    localStorage.removeItem('currentUser');
+    localStorage.clear();
   }
 
   isLoggedIn() {
@@ -64,7 +64,7 @@ export class PersonService {
     return this.http.post<BinaryPerson>(this.usersUrl+'/register/binary/${this.binaryPersonId}',binaryPerson);
   }
 
-  async getRegisteredPersonBalance(): Promise<Observable<Array<number>>>{
+  async getRegisteredPersonBalance(){
     let requestParams = new HttpParams();
     this.id = await firstValueFrom(this.personGetId());
     requestParams = requestParams.append('id', this.id);
