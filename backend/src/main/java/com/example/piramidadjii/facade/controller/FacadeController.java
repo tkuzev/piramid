@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 
 @RestController
@@ -84,20 +83,21 @@ public class FacadeController {
     }
 
     @GetMapping("/getTree")
-    public ResponseEntity<List<BinaryDTO>> getTree(@RequestParam Long id){
+    public ResponseEntity<Map<BinaryPerson, Boolean>> getTree(@RequestParam Long id) {
         BinaryPerson binaryPerson = binaryPersonRepository.findById(id).orElseThrow();
-        List<BinaryDTO> tree = facadeService.getTree(binaryPerson);
+        Map<BinaryPerson, Boolean> tree = facadeService.getTree(binaryPerson);
         return new ResponseEntity<>(tree, HttpStatus.OK);
     }
+
     @GetMapping("binary/getById")
-    public ResponseEntity<BinaryDTO> getBinaryById(@RequestParam Long id){
+    public ResponseEntity<BinaryDTO> getBinaryById(@RequestParam Long id) {
         BinaryPerson binaryPerson = binaryPersonRepository.findById(id).orElseThrow();
         BinaryDTO dto = modelMapper.map(binaryPerson, BinaryDTO.class);
-        return new ResponseEntity<>(dto,HttpStatus.OK);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping("user/getPersonId")
-    public Long getPersonId(@RequestParam("email") String email){
+    public Long getPersonId(@RequestParam("email") String email) {
         RegistrationPerson registrationPerson = registrationPersonRepository.findByEmail(email).orElseThrow();
         return registrationPerson.getId();
     }

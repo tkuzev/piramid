@@ -1,7 +1,6 @@
 package com.example.piramidadjii.binaryTreeModule.entities;
 
 import com.example.piramidadjii.baseModule.baseEntites.Person;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

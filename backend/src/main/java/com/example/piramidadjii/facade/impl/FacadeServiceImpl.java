@@ -1,11 +1,9 @@
 package com.example.piramidadjii.facade.impl;
 
 import com.example.piramidadjii.bankAccountModule.services.BankService;
-import com.example.piramidadjii.binaryTreeModule.dtos.BinaryRegistrationDTO;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.facade.FacadeService;
-import com.example.piramidadjii.facade.dto.BinaryDTO;
 import com.example.piramidadjii.facade.dto.EditPersonDTO;
 import com.example.piramidadjii.orchestraModule.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
@@ -56,7 +54,7 @@ public class FacadeServiceImpl implements FacadeService {
 
     @Override
     public void createTransaction(RegistrationPerson registrationPerson, BigDecimal price) {
-        orchestraService.createTransaction(registrationPerson,price);
+        orchestraService.createTransaction(registrationPerson, price);
     }
 
     @Override
@@ -75,7 +73,7 @@ public class FacadeServiceImpl implements FacadeService {
     }
 
     @Override
-    public List<BinaryDTO> getTree(BinaryPerson binaryPerson) {
+    public Map<BinaryPerson, Boolean> getTree(BinaryPerson binaryPerson) {
         return binaryRegistrationService.getTree(binaryPerson);
     }
 }

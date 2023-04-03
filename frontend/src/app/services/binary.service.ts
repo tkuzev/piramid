@@ -12,11 +12,6 @@ export class BinaryService{
   private readonly treeUrl: string
   private readonly getBinaryById:string
 
-  private parent:Observable<BinPerson>
-  private child:Observable<BinPerson>
-  private subTree:Observable<BinPerson[]>
-
-
   constructor(private http: HttpClient) {
     this.treeUrl = 'http://localhost:8080/getTree';
     this.getBinaryById='http://localhost:8080/binary/getById';
