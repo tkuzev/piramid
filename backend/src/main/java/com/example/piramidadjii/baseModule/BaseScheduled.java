@@ -70,7 +70,7 @@ public class BaseScheduled {
         this.formatter = DateTimeFormatter.ofPattern("MMMM", new Locale("bg"));
     }
 
-    @Scheduled(cron = "00 33 16 * * *", zone = "Europe/Sofia")
+    @Scheduled(cron = "00 00 00 1 * *", zone = "Europe/Sofia")
     public void binaryDistributeMoney(){
         DistributeMoneyEvent distributeMoneyEvent=new DistributeMoneyEvent(DistributeMoneyEvent.class.getSimpleName());
         applicationEventPublisher.publishEvent(distributeMoneyEvent);
