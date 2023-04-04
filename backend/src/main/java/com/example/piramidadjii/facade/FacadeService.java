@@ -19,11 +19,13 @@ public interface FacadeService {
 
     void createTransaction(RegistrationPerson registrationPerson, BigDecimal price);
 
-    void editProfile(EditPersonDTO editPersonDTO);
+    void editProfile(RegistrationPerson registrationPerson);
 
     List<BigDecimal> wallet(Long registrationPersonId);
 
     String getEmailFromJWT(String token);
 
     Map<BinaryPerson, Boolean> getTree(BinaryPerson binaryPerson);
+
+    RegistrationPerson displayPersonDetails(String email);
 }

@@ -74,8 +74,7 @@ public class FacadeController {
 
     @PostMapping("/profile/edit")
     public void edit(@RequestBody EditPersonDTO editPersonDTO) {
-        RegistrationPerson mapped = modelMapper.map(editPersonDTO, RegistrationPerson.class);
-        facadeService.editProfile(editPersonDTO);
+        facadeService.editProfile(customModelMapperShowUserData(editPersonDTO));
     }
 
     @GetMapping("user/email")
@@ -101,6 +100,20 @@ public class FacadeController {
     public Long getPersonId(@RequestParam("email") String email) {
         RegistrationPerson registrationPerson = registrationPersonRepository.findByEmail(email).orElseThrow();
         return registrationPerson.getId();
+    }
+
+    @GetMapping("user/getPersonDetails")
+    public RegistrationPerson getPersonDetails(@RequestParam("email") String email){
+        return facadeService.displayPersonDetails(email);
+    }
+
+    private static RegistrationPerson customModelMapperShowUserData(EditPersonDTO editPersonDTO){
+        RegistrationPerson person = new RegistrationPerson();
+        person.setName(editPersonDTO.getName());
+        person.setEmail(editPersonDTO.getEmail());
+        person.setPassword(editPersonDTO.getPassword());
+        person.setIsSubscriptionEnabled(editPersonDTO.isSubscriptionEnabled());
+        return person;
     }
 
     private static RegistrationPerson customModelMapper(RegisterPersonDTO registerPersonDTO, RegistrationPerson parent) {

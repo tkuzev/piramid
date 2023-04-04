@@ -9,6 +9,7 @@ import com.example.piramidadjii.orchestraModule.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
 import com.example.piramidadjii.registrationTreeModule.services.TransactionService;
+import com.example.piramidadjii.registrationTreeModule.services.impl.RegistrationPersonServiceImpl;
 import com.example.piramidadjii.security.JWTGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ public class FacadeServiceImpl implements FacadeService {
     SubscriptionPlanService subscriptionPlanService;
     @Autowired
     BinaryRegistrationService binaryRegistrationService;
+    @Autowired
+    RegistrationPersonServiceImpl registrationPersonService;
     @Autowired
     JWTGenerator jwtGenerator;
 
@@ -58,8 +61,8 @@ public class FacadeServiceImpl implements FacadeService {
     }
 
     @Override
-    public void editProfile(EditPersonDTO editPersonDTO) {
-        orchestraService.editProfile(editPersonDTO);
+    public void editProfile(RegistrationPerson registrationPerson) {
+        orchestraService.editProfile(registrationPerson);
     }
 
     @Override
@@ -75,5 +78,10 @@ public class FacadeServiceImpl implements FacadeService {
     @Override
     public Map<BinaryPerson, Boolean> getTree(BinaryPerson binaryPerson) {
         return binaryRegistrationService.getTree(binaryPerson);
+    }
+
+    @Override
+    public RegistrationPerson displayPersonDetails(String email) {
+        return registrationPersonService.displayPersonDetails(email);
     }
 }
