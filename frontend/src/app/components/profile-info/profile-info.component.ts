@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {ThemePalette} from "@angular/material/core";
 
@@ -24,3 +24,4 @@ export class ProfileInfoComponent {
     this.showPassword = !this.showPassword;
   }
 }
+

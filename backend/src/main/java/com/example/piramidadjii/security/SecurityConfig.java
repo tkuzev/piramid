@@ -40,10 +40,6 @@ public class SecurityConfig {
 //                .requestMatchers("/**").hasAuthority("ebach")
                 .requestMatchers("/**").permitAll()
 
-                .requestMatchers("/auth/login", "/user/register/registrationTree").anonymous()
-                .requestMatchers("/**").permitAll()
-                .requestMatchers("/**").hasAuthority("ebach")
-
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();
