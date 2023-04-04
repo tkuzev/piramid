@@ -1,16 +1,16 @@
 package com.example.piramidadjii.facade.impl;
 
 import com.example.piramidadjii.bankAccountModule.services.BankService;
-import com.example.piramidadjii.binaryTreeModule.dtos.BinaryRegistrationDTO;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
 import com.example.piramidadjii.facade.FacadeService;
-import com.example.piramidadjii.facade.dto.BinaryDTO;
 import com.example.piramidadjii.facade.dto.EditPersonDTO;
 import com.example.piramidadjii.orchestraModule.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
+import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
 import com.example.piramidadjii.registrationTreeModule.services.TransactionService;
+import com.example.piramidadjii.registrationTreeModule.services.impl.RegistrationPersonServiceImpl;
 import com.example.piramidadjii.security.JWTGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +31,8 @@ public class FacadeServiceImpl implements FacadeService {
     SubscriptionPlanService subscriptionPlanService;
     @Autowired
     BinaryRegistrationService binaryRegistrationService;
+    @Autowired
+    RegistrationPersonServiceImpl registrationPersonService;
     @Autowired
     JWTGenerator jwtGenerator;
 
@@ -56,12 +58,12 @@ public class FacadeServiceImpl implements FacadeService {
 
     @Override
     public void createTransaction(RegistrationPerson registrationPerson, BigDecimal price) {
-        orchestraService.createTransaction(registrationPerson,price);
+        orchestraService.createTransaction(registrationPerson, price);
     }
 
     @Override
-    public void editProfile(EditPersonDTO editPersonDTO) {
-        orchestraService.editProfile(editPersonDTO);
+    public void editProfile(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan) {
+        orchestraService.editProfile(registrationPerson,subscriptionPlan);
     }
 
     @Override
@@ -75,7 +77,12 @@ public class FacadeServiceImpl implements FacadeService {
     }
 
     @Override
-    public List<BinaryDTO> getTree(BinaryPerson binaryPerson) {
+    public Map<BinaryPerson, Boolean> getTree(BinaryPerson binaryPerson) {
         return binaryRegistrationService.getTree(binaryPerson);
+    }
+
+    @Override
+    public RegistrationPerson displayPersonDetails(String email) {
+        return registrationPersonService.displayPersonDetails(email);
     }
 }

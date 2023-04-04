@@ -8,7 +8,7 @@
       <form [formGroup]="profileForm">
         <div class="row name">
           <mat-icon class="icon">sentiment_very_satisfied</mat-icon>
-          <mat-form-field>
+          <mat-form-field >
             <mat-label class="color">Name</mat-label>
             <input formControlName="name"
                    matInput
@@ -35,7 +35,7 @@
           <mat-icon class="icon">password</mat-icon>
           <mat-form-field>
             <mat-label>Password</mat-label>
-            <input [type]="showPassword ? 'text' : 'password'"
+            <input [type]="!showPassword ? 'text' : 'password'"
                    formControlName="password"
                    matInput
                    name="password">
@@ -51,7 +51,7 @@
           <mat-icon class="icon">card_membership</mat-icon>
           <mat-form-field>
             <mat-label>Subscription Plan</mat-label>
-            <mat-select formControlName="plan">
+            <mat-select formControlName="subscriptionPlan">
               <!--                      [(ngModel)]="planovete.dto">-->
               <mat-option value=1>Bronze</mat-option>
               <mat-option value=2>Silver</mat-option>
@@ -66,7 +66,7 @@
 
     <div class="col-2 ">
       <div class="row buttonEdit">
-        <button type="submit" mat-mini-fab class="btn">
+        <button type="submit" mat-mini-fab class="btn" (click)="toggleEditMode()">
           <mat-icon class="icon">edit</mat-icon>
         </button>
       </div>

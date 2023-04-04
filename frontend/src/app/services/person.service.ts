@@ -82,4 +82,15 @@ export class PersonService {
     return this.http.get<any>(this.usersUrl + '/income', {params: requestParams})
   }
 
+
+  getProfileInfo(): Observable<any>{
+    let requestParams = new HttpParams();
+    requestParams = requestParams.append('email', this.email);
+    console.log(requestParams)
+    return this.http.get<any>(this.usersUrl + '/getPersonDetails', {params: requestParams});
+  }
+
+  editProfile(personData: any): Observable<any>{
+    return this.http.put<any>(this.usersUrl + '/edit', personData);
+  }
 }

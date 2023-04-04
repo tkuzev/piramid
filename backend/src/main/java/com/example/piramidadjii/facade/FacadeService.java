@@ -1,10 +1,9 @@
 package com.example.piramidadjii.facade;
 
-import com.example.piramidadjii.binaryTreeModule.dtos.BinaryRegistrationDTO;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
-import com.example.piramidadjii.facade.dto.BinaryDTO;
 import com.example.piramidadjii.facade.dto.EditPersonDTO;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
+import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,11 +20,13 @@ public interface FacadeService {
 
     void createTransaction(RegistrationPerson registrationPerson, BigDecimal price);
 
-    void editProfile(EditPersonDTO editPersonDTO);
+    void editProfile(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan);
 
     List<BigDecimal> wallet(Long registrationPersonId);
 
     String getEmailFromJWT(String token);
 
-    List<BinaryDTO> getTree(BinaryPerson binaryPerson);
+    Map<BinaryPerson, Boolean> getTree(BinaryPerson binaryPerson);
+
+    RegistrationPerson displayPersonDetails(String email);
 }

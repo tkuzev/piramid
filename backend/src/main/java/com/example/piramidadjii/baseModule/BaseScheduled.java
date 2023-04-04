@@ -6,6 +6,9 @@ import com.example.piramidadjii.bankAccountModule.repositories.BankAccountReposi
 import com.example.piramidadjii.bankAccountModule.repositories.BankRepository;
 import com.example.piramidadjii.baseModule.enums.Description;
 import com.example.piramidadjii.baseModule.enums.OperationType;
+import com.example.piramidadjii.baseModule.events.DistributeMoneyEvent;
+import com.example.piramidadjii.baseModule.events.EventService;
+import com.example.piramidadjii.baseModule.events.RenewSubscriptionPlansEvent;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.configModule.ConfigurationService;
@@ -17,7 +20,9 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -48,7 +53,6 @@ public class BaseScheduled {
 
     @Autowired
     ConfigurationService configurationService;
-
     private BigDecimal moneyToGive = BigDecimal.ZERO;
 
     private static final long HELPER_BANK_ID = -1;
@@ -59,19 +63,40 @@ public class BaseScheduled {
     private final DateTimeFormatter formatter;
     private final LocalDate date;
 
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+    @Autowired
+    private EventService eventService;
+
     public BaseScheduled() {
         this.date = LocalDate.now();
         this.formatter = DateTimeFormatter.ofPattern("MMMM", new Locale("bg"));
     }
 
     @Scheduled(cron = "00 00 00 1 * *", zone = "Europe/Sofia")
+    public void binaryDistributeMoney(){
+        eventService.distributeMoney();
+    }
+    @Scheduled(cron = "00 00 00 * * *", zone = "Europe/Sofia")
+    public void renewSubscriptionPlans(){
+        eventService.renewSubscriptionPlan();
+    }
+
+
+    @EventListener(RenewSubscriptionPlansEvent.class)
+    public void getTax() {
+        List<RegistrationPerson> allBySubscriptionExpirationDateFalse =
+                registrationPersonRepository.getAllBySubscriptionExpirationDate(LocalDate.now());
+        allBySubscriptionExpirationDateFalse.forEach(this::getTax);
+    }
+
+    @EventListener(DistributeMoneyEvent.class)
     public void binaryTree() {
         List<BinaryPerson> binaryPersonList = binaryPersonRepository.findAll();
-        binaryPersonList.forEach(this::updateMoney);
+        binaryPersonList.parallelStream().forEach(this::updateMoney);
         updateBossMoney();
         moneyToGive = BigDecimal.ZERO;
     }
-
     private void updateBossMoney() {
 
         BankAccount helperBankAccount = bankAccountRepository.findById(HELPER_BANK_ID).orElseThrow();
@@ -146,13 +171,7 @@ public class BaseScheduled {
     }
 
 
-    @Scheduled(cron = "00 00 00 * * *", zone = "Europe/Sofia")
-    public void getTax() {
-        List<RegistrationPerson> allBySubscriptionExpirationDateFalse =
-                registrationPersonRepository.getAllBySubscriptionExpirationDate(LocalDate.now());
-        allBySubscriptionExpirationDateFalse.forEach(this::getTax);
 
-    }
 
     @SneakyThrows
     private void getTax(RegistrationPerson registrationPerson) {

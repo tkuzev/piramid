@@ -6,7 +6,9 @@ import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationServ
 import com.example.piramidadjii.facade.FacadeService;
 import com.example.piramidadjii.facade.dto.*;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
+import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
+import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +33,8 @@ public class FacadeController {
     private BinaryPersonRepository binaryPersonRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private SubscriptionPlanRepository subscriptionPlanRepository;
 
 
     @PostMapping("/user/sell")
@@ -75,7 +79,9 @@ public class FacadeController {
 
     @PostMapping("/profile/edit")
     public void edit(@RequestBody EditPersonDTO editPersonDTO) {
-        facadeService.editProfile(editPersonDTO);
+        SubscriptionPlan subscriptionPlan=subscriptionPlanRepository.findById(editPersonDTO.getSubscriptionPlanId()).orElseThrow();
+        System.out.println(subscriptionPlan.getName());
+        facadeService.editProfile(customModelMapperShowUserData(editPersonDTO), subscriptionPlan);
     }
 
     @GetMapping("user/email")
@@ -84,22 +90,40 @@ public class FacadeController {
     }
 
     @GetMapping("/getTree")
-    public ResponseEntity<List<BinaryDTO>> getTree(@RequestParam Long id){
+    public ResponseEntity<Map<BinaryPerson, Boolean>> getTree(@RequestParam Long id) {
         BinaryPerson binaryPerson = binaryPersonRepository.findById(id).orElseThrow();
-        List<BinaryDTO> tree = facadeService.getTree(binaryPerson);
+        Map<BinaryPerson, Boolean> tree = facadeService.getTree(binaryPerson);
         return new ResponseEntity<>(tree, HttpStatus.OK);
     }
+
     @GetMapping("binary/getById")
-    public ResponseEntity<BinaryDTO> getBinaryById(@RequestParam Long id){
+    public ResponseEntity<BinaryDTO> getBinaryById(@RequestParam Long id) {
         BinaryPerson binaryPerson = binaryPersonRepository.findById(id).orElseThrow();
         BinaryDTO dto = modelMapper.map(binaryPerson, BinaryDTO.class);
-        return new ResponseEntity<>(dto,HttpStatus.OK);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @GetMapping("user/getPersonId")
-    public Long getPersonId(@RequestParam("email") String email){
+    public Long getPersonId(@RequestParam("email") String email) {
         RegistrationPerson registrationPerson = registrationPersonRepository.findByEmail(email).orElseThrow();
         return registrationPerson.getId();
+    }
+
+    @GetMapping("user/getPersonDetails")
+    public RegisterPersonDTO getPersonDetails(@RequestParam("email") String email){
+        registrationPersonRepository.findByEmail(email);
+        RegistrationPerson person = facadeService.displayPersonDetails(email);
+        return modelMapper.map(person,RegisterPersonDTO.class);
+    }
+
+    private  RegistrationPerson customModelMapperShowUserData(EditPersonDTO editPersonDTO){
+        RegistrationPerson person=new RegistrationPerson();
+        person.setId(editPersonDTO.getId());
+        person.setName(editPersonDTO.getName());
+        person.setEmail(editPersonDTO.getEmail());
+        person.setPassword(editPersonDTO.getPassword());
+        person.setIsSubscriptionEnabled(editPersonDTO.isSubscriptionEnabled());
+        return person;
     }
 
     private static RegistrationPerson customModelMapper(RegisterPersonDTO registerPersonDTO, RegistrationPerson parent) {

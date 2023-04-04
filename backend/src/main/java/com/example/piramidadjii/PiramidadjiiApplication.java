@@ -1,6 +1,5 @@
 package com.example.piramidadjii;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +20,7 @@ public class PiramidadjiiApplication {
             }
         };
     }
+
     public static void main(String[] args) {
 
         SpringApplication.run(PiramidadjiiApplication.class, args);

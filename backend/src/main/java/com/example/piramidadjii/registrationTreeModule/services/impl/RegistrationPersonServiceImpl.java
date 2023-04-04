@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class RegistrationPersonServiceImpl implements RegistrationPersonService {
@@ -96,14 +97,19 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
     }
 
     @Override
-    public void editPerson(EditPersonDTO editPersonDTO) {
-        RegistrationPerson personToEdit = registrationPersonRepository.findById(editPersonDTO.getId()).orElseThrow();
-
-        personToEdit.setEmail(editPersonDTO.getEmail());
-        personToEdit.setName(editPersonDTO.getName());
-        personToEdit.setPassword(editPersonDTO.getPassword());
-        personToEdit.setIsSubscriptionEnabled(editPersonDTO.isSubscriptionEnabled());
+    public void editPerson(RegistrationPerson registrationPerson) {
+        RegistrationPerson personToEdit = registrationPersonRepository.findById(registrationPerson.getId()).orElseThrow();
+        personToEdit.setEmail(registrationPerson.getEmail());
+        personToEdit.setName(registrationPerson.getName());
+        personToEdit.setPassword(registrationPerson.getPassword());
+        personToEdit.setIsSubscriptionEnabled(registrationPerson.getIsSubscriptionEnabled());
         registrationPersonRepository.save(personToEdit);
     }
+
+    @Override
+    public RegistrationPerson displayPersonDetails(String email) {
+        return registrationPersonRepository.getByEmail(email).orElseThrow();
+    }
+
 
 }

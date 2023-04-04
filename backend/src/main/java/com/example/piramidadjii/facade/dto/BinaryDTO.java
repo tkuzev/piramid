@@ -1,6 +1,5 @@
 package com.example.piramidadjii.facade.dto;
 
-import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import lombok.Getter;
 import lombok.Setter;
 

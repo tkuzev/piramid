@@ -13,14 +13,14 @@ import com.example.piramidadjii.registrationTreeModule.repositories.Subscription
 import com.example.piramidadjii.registrationTreeModule.services.RegistrationPersonService;
 import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
 import com.example.piramidadjii.registrationTreeModule.services.TransactionService;
-import com.example.piramidadjii.registrationTreeModule.services.impl.TransactionServiceImpl;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @Service
+@Transactional
 public class OrchestraServiceImpl implements OrchestraService {
 
     @Autowired
@@ -46,6 +46,7 @@ public class OrchestraServiceImpl implements OrchestraService {
         if (registrationPersonRepository.existsByEmail(registrationPerson.getEmail())) {
             throw new RuntimeException("Emaila trqq da e unique");
         }
+
         RegistrationPerson registrationPerson1 = registrationPersonService.registerPerson(registrationPerson, money);
         if (registrationPerson.getSubscriptionPlan().isEligibleForBinary()) {
             binaryRegistrationService.sendBinaryRegistrationEmail(registrationPerson1, registrationPerson1.getId());
@@ -53,18 +54,17 @@ public class OrchestraServiceImpl implements OrchestraService {
     }
 
     @Override
-    public void editProfile(EditPersonDTO editPersonDTO) {
-        SubscriptionPlan plan = subscriptionPlanRepository.findById(editPersonDTO.getSubscriptionPlanId()).orElseThrow();
-        subscriptionPlanService.upgradeSubscriptionPlan(editPersonDTO.getId(), plan);
-        registrationPersonService.editPerson(editPersonDTO);
+    public void editProfile(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan) {
+        subscriptionPlanService.upgradeSubscriptionPlan(registrationPerson.getId(), subscriptionPlan);
+        registrationPersonService.editPerson(registrationPerson);
     }
 
     @Override
     public void createTransaction(RegistrationPerson person, BigDecimal money) {
-        transactionService.createTransaction(person,money);
-        if (binaryPersonRepository.existsById(person.getId())){
+        transactionService.createTransaction(person, money);
+        if (binaryPersonRepository.existsById(person.getId())) {
             BinaryPerson binaryPerson = binaryPersonRepository.findById(person.getId()).orElseThrow();
-            distributeMoneyService.distributeMoney(binaryPerson,money);
+            distributeMoneyService.distributeMoney(binaryPerson, money);
         }
     }
 }
