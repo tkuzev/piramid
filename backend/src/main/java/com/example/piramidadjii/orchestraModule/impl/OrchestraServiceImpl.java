@@ -54,10 +54,10 @@ public class OrchestraServiceImpl implements OrchestraService {
     }
 
     @Override
-    public void editProfile(EditPersonDTO editPersonDTO) {
-        SubscriptionPlan plan = subscriptionPlanRepository.findById(editPersonDTO.getSubscriptionPlanId()).orElseThrow();
-        subscriptionPlanService.upgradeSubscriptionPlan(editPersonDTO.getId(), plan);
-        registrationPersonService.editPerson(editPersonDTO);
+    public void editProfile(RegistrationPerson registrationPerson) {
+        SubscriptionPlan plan = subscriptionPlanRepository.findById(registrationPerson.getSubscriptionPlan().getId()).orElseThrow();
+        subscriptionPlanService.upgradeSubscriptionPlan(registrationPerson.getId(), plan);
+        registrationPersonService.editPerson(registrationPerson);
     }
 
     @Override

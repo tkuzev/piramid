@@ -12,5 +12,6 @@ public interface RegistrationPersonService {
 
     void setSubscription(RegistrationPerson registrationPerson, long id);
 
-    void editPerson(EditPersonDTO editPersonDTO);
+    void editPerson(RegistrationPerson registrationPerson);
+    RegistrationPerson displayPersonDetails(String email);
 }
