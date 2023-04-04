@@ -7,6 +7,7 @@ import com.example.piramidadjii.bankAccountModule.repositories.BankRepository;
 import com.example.piramidadjii.baseModule.enums.Description;
 import com.example.piramidadjii.baseModule.enums.OperationType;
 import com.example.piramidadjii.baseModule.events.DistributeMoneyEvent;
+import com.example.piramidadjii.baseModule.events.EventService;
 import com.example.piramidadjii.baseModule.events.RenewSubscriptionPlansEvent;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
@@ -64,6 +65,8 @@ public class BaseScheduled {
 
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
+    @Autowired
+    private EventService eventService;
 
     public BaseScheduled() {
         this.date = LocalDate.now();
@@ -72,14 +75,13 @@ public class BaseScheduled {
 
     @Scheduled(cron = "00 00 00 1 * *", zone = "Europe/Sofia")
     public void binaryDistributeMoney(){
-        DistributeMoneyEvent distributeMoneyEvent=new DistributeMoneyEvent(DistributeMoneyEvent.class.getSimpleName());
-        applicationEventPublisher.publishEvent(distributeMoneyEvent);
+        eventService.distributeMoney();
     }
     @Scheduled(cron = "00 00 00 * * *", zone = "Europe/Sofia")
     public void renewSubscriptionPlans(){
-        RenewSubscriptionPlansEvent renewSubscriptionPlansEvent=new RenewSubscriptionPlansEvent(RenewSubscriptionPlansEvent.class.getSimpleName());
-        applicationEventPublisher.publishEvent(renewSubscriptionPlansEvent);
+        eventService.renewSubscriptionPlan();
     }
+
 
     @EventListener(RenewSubscriptionPlansEvent.class)
     public void getTax() {
@@ -90,13 +92,11 @@ public class BaseScheduled {
 
     @EventListener(DistributeMoneyEvent.class)
     public void binaryTree() {
-        System.out.println("v eventa sme");
         List<BinaryPerson> binaryPersonList = binaryPersonRepository.findAll();
-        binaryPersonList.forEach(this::updateMoney);
+        binaryPersonList.parallelStream().forEach(this::updateMoney);
         updateBossMoney();
         moneyToGive = BigDecimal.ZERO;
     }
-
     private void updateBossMoney() {
 
         BankAccount helperBankAccount = bankAccountRepository.findById(HELPER_BANK_ID).orElseThrow();

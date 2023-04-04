@@ -74,6 +74,7 @@ public class FacadeController {
 
     @PostMapping("/profile/edit")
     public void edit(@RequestBody EditPersonDTO editPersonDTO) {
+        RegistrationPerson mapped = modelMapper.map(editPersonDTO, RegistrationPerson.class);
         facadeService.editProfile(editPersonDTO);
     }
 
