@@ -8,12 +8,11 @@
       <form [formGroup]="profileForm">
         <div class="row name">
           <mat-icon class="icon">sentiment_very_satisfied</mat-icon>
-          <mat-form-field>
+          <mat-form-field >
             <mat-label class="color">Name</mat-label>
             <input formControlName="name"
                    matInput
-                   name="name"
-                   [disabled]="!editingMode">
+                   name="name">
             <mat-error *ngIf="profileForm.get('name')?.hasError('required')">Required field!</mat-error>
             <mat-error *ngIf="profileForm.get('name')?.hasError('pattern')">Letters only!</mat-error>
             <mat-error *ngIf="profileForm.get('name')?.hasError('maxlength')">Field should be between 1 and
@@ -27,8 +26,7 @@
             <mat-label>Email</mat-label>
             <input formControlName="email"
                    matInput
-                   name="email"
-                   [disabled]="!editingMode">
+                   name="email">
             <mat-error *ngIf="profileForm.get('email')?.hasError('required')">Required field!</mat-error>
             <mat-error *ngIf="profileForm.get('email')?.hasError('email')">Not a valid email!</mat-error>
           </mat-form-field>
@@ -37,11 +35,10 @@
           <mat-icon class="icon">password</mat-icon>
           <mat-form-field>
             <mat-label>Password</mat-label>
-            <input [type]="showPassword ? 'text' : 'password'"
+            <input [type]="!showPassword ? 'text' : 'password'"
                    formControlName="password"
                    matInput
-                   name="password"
-                   [disabled]="!editingMode">
+                   name="password">
             <mat-icon class="icon" matSuffix
                       (click)="togglePasswordVisibility()">{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
             <mat-error *ngIf="profileForm.get('password')?.hasError('required')">Required field!</mat-error>
@@ -54,8 +51,7 @@
           <mat-icon class="icon">card_membership</mat-icon>
           <mat-form-field>
             <mat-label>Subscription Plan</mat-label>
-            <mat-select formControlName="subscriptionPlan"
-                        [disabled]="!editingMode">
+            <mat-select formControlName="subscriptionPlan">
               <!--                      [(ngModel)]="planovete.dto">-->
               <mat-option value=1>Bronze</mat-option>
               <mat-option value=2>Silver</mat-option>
@@ -70,7 +66,7 @@
 
     <div class="col-2 ">
       <div class="row buttonEdit">
-        <button type="submit" mat-mini-fab class="btn" (click)="edit()">
+        <button type="submit" mat-mini-fab class="btn" (click)="toggleEditMode()">
           <mat-icon class="icon">edit</mat-icon>
         </button>
       </div>

@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ThemePalette} from "@angular/material/core";
 import { PersonService } from 'src/app/services/person.service';
 import {RegistrationPerson} from "../../models/registration-person";
+import {exhaustMap} from "rxjs";
 
 @Component({
   selector: 'app-profile-info',
@@ -18,11 +19,13 @@ export class ProfileInfoComponent implements OnInit {
   constructor(private fb: FormBuilder, private  personService: PersonService) { }
 
   ngOnInit() {
+    console.log(localStorage.getItem('currentUserEmail'))
     this.profileForm = this.fb.group({
-      name: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z]+'), Validators.maxLength(25)]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required, Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')]),
-      subscriptionPlan: new FormControl('Bronze', [Validators.required])
+      name: new FormControl({value: '', disabled: true}, [Validators.required, Validators.pattern('[a-zA-Z]+'), Validators.maxLength(25)]),
+      email: new FormControl({value: '', disabled: true},[Validators.required, Validators.email]),
+      password: new FormControl({value: '', disabled: true},[Validators.required, Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')]),
+      subscriptionPlan: new FormControl({value: '', disabled: true}, [Validators.required]),
+      // isSubscriptionEnabled: new FormControl({value:'', disabled: true})
     });
 
     this.personService.getProfileInfo().subscribe(data=>{
