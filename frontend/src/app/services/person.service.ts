@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {Sell} from "../models/sell";
 import {BinaryPerson} from "../models/binary-person";
 import {LoginPerson} from "../models/login-person";
-import {firstValueFrom, map, Observable} from "rxjs";
+import {firstValueFrom, map, Observable, Subscription} from "rxjs";
 import {RegistrationPerson} from "../models/registration-person";
 
 
@@ -15,7 +15,7 @@ export class PersonService {
   private readonly usersUrl: string;
   private readonly authUrl: string;
 
-  id:number
+  id: number
   email: string = localStorage.getItem('currentUserEmail')
   constructor(private http: HttpClient) {
     this.usersUrl = 'http://localhost:8080/user';
@@ -68,17 +68,18 @@ export class PersonService {
     let requestParams = new HttpParams();
     this.id = await firstValueFrom(this.personGetId());
     requestParams = requestParams.append('id', this.id);
-    // this.personGetId().subscribe(
-    //   (id)=> {
-    //     this.id = id
-    //   },
-    //   (err)=>{console.log("err")},
-    //   ()=>{
-    //     requestParams = requestParams.append('id', this.id)
-    //     console.log(requestParams)
-    //
-    //   })
-    console.log(requestParams)
+    // console.log(requestParams)
     return this.http.get<any>(this.usersUrl + '/wallet/balance', {params: requestParams});
   }
+
+  async monthlyIncome(){
+    let requestParams = new HttpParams();
+    this.id = await firstValueFrom(this.personGetId());
+    requestParams = requestParams.append('id', this.id);
+    // this.chartSubscription = this.http.get<any>(this.usersUrl + '/income', {params: requestParams}).subscribe(
+    //   value => (console.log())
+    // )
+    return this.http.get<any>(this.usersUrl + '/income', {params: requestParams})
+  }
+
 }

@@ -53,8 +53,8 @@ public class FacadeController {
         binaryRegistrationService.registerNewBinaryPerson(person, binaryPersonDTO.getBinaryPersonToPutItOnId(), binaryPersonDTO.isPreferredDirection());
     }
 
-    @GetMapping("/user/income/{id}")
-    public Map<String, BigDecimal> monthlyIncome(@PathVariable Long id) {
+    @GetMapping("/user/income")
+    public Map<String, BigDecimal> monthlyIncome(@RequestParam("id") Long id) {
         return facadeService.monthlyIncome(id);
     }
 
