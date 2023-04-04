@@ -12,7 +12,8 @@
             <mat-label class="color">Name</mat-label>
             <input formControlName="name"
                    matInput
-                   name="name">
+                   name="name"
+                   [disabled]="!editingMode">
             <mat-error *ngIf="profileForm.get('name')?.hasError('required')">Required field!</mat-error>
             <mat-error *ngIf="profileForm.get('name')?.hasError('pattern')">Letters only!</mat-error>
             <mat-error *ngIf="profileForm.get('name')?.hasError('maxlength')">Field should be between 1 and
@@ -26,7 +27,8 @@
             <mat-label>Email</mat-label>
             <input formControlName="email"
                    matInput
-                   name="email">
+                   name="email"
+                   [disabled]="!editingMode">
             <mat-error *ngIf="profileForm.get('email')?.hasError('required')">Required field!</mat-error>
             <mat-error *ngIf="profileForm.get('email')?.hasError('email')">Not a valid email!</mat-error>
           </mat-form-field>
@@ -38,7 +40,8 @@
             <input [type]="showPassword ? 'text' : 'password'"
                    formControlName="password"
                    matInput
-                   name="password">
+                   name="password"
+                   [disabled]="!editingMode">
             <mat-icon class="icon" matSuffix
                       (click)="togglePasswordVisibility()">{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
             <mat-error *ngIf="profileForm.get('password')?.hasError('required')">Required field!</mat-error>
@@ -51,7 +54,8 @@
           <mat-icon class="icon">card_membership</mat-icon>
           <mat-form-field>
             <mat-label>Subscription Plan</mat-label>
-            <mat-select formControlName="plan">
+            <mat-select formControlName="subscriptionPlan"
+                        [disabled]="!editingMode">
               <!--                      [(ngModel)]="planovete.dto">-->
               <mat-option value=1>Bronze</mat-option>
               <mat-option value=2>Silver</mat-option>
@@ -66,7 +70,7 @@
 
     <div class="col-2 ">
       <div class="row buttonEdit">
-        <button type="submit" mat-mini-fab class="btn">
+        <button type="submit" mat-mini-fab class="btn" (click)="edit()">
           <mat-icon class="icon">edit</mat-icon>
         </button>
       </div>
