@@ -3,6 +3,7 @@ package com.example.piramidadjii.facade;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.facade.dto.EditPersonDTO;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
+import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,7 +20,7 @@ public interface FacadeService {
 
     void createTransaction(RegistrationPerson registrationPerson, BigDecimal price);
 
-    void editProfile(RegistrationPerson registrationPerson);
+    void editProfile(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan);
 
     List<BigDecimal> wallet(Long registrationPersonId);
 

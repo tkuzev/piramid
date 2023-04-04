@@ -7,6 +7,7 @@ import com.example.piramidadjii.facade.FacadeService;
 import com.example.piramidadjii.facade.dto.EditPersonDTO;
 import com.example.piramidadjii.orchestraModule.OrchestraService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
+import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.services.SubscriptionPlanService;
 import com.example.piramidadjii.registrationTreeModule.services.TransactionService;
 import com.example.piramidadjii.registrationTreeModule.services.impl.RegistrationPersonServiceImpl;
@@ -61,8 +62,8 @@ public class FacadeServiceImpl implements FacadeService {
     }
 
     @Override
-    public void editProfile(RegistrationPerson registrationPerson) {
-        orchestraService.editProfile(registrationPerson);
+    public void editProfile(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan) {
+        orchestraService.editProfile(registrationPerson,subscriptionPlan);
     }
 
     @Override

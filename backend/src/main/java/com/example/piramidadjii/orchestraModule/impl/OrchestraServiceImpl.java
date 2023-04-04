@@ -54,9 +54,8 @@ public class OrchestraServiceImpl implements OrchestraService {
     }
 
     @Override
-    public void editProfile(RegistrationPerson registrationPerson) {
-        SubscriptionPlan plan = subscriptionPlanRepository.findById(registrationPerson.getSubscriptionPlan().getId()).orElseThrow();
-        subscriptionPlanService.upgradeSubscriptionPlan(registrationPerson.getId(), plan);
+    public void editProfile(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan) {
+        subscriptionPlanService.upgradeSubscriptionPlan(registrationPerson.getId(), subscriptionPlan);
         registrationPersonService.editPerson(registrationPerson);
     }
 

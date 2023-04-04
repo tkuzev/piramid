@@ -6,7 +6,9 @@ import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationServ
 import com.example.piramidadjii.facade.FacadeService;
 import com.example.piramidadjii.facade.dto.*;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
+import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
+import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @RestController
@@ -30,6 +33,8 @@ public class FacadeController {
     private BinaryPersonRepository binaryPersonRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private SubscriptionPlanRepository subscriptionPlanRepository;
 
 
     @PostMapping("/user/sell")
@@ -74,7 +79,9 @@ public class FacadeController {
 
     @PostMapping("/profile/edit")
     public void edit(@RequestBody EditPersonDTO editPersonDTO) {
-        facadeService.editProfile(customModelMapperShowUserData(editPersonDTO));
+        SubscriptionPlan subscriptionPlan=subscriptionPlanRepository.findById(editPersonDTO.getSubscriptionPlanId()).orElseThrow();
+        System.out.println(subscriptionPlan.getName());
+        facadeService.editProfile(customModelMapperShowUserData(editPersonDTO), subscriptionPlan);
     }
 
     @GetMapping("user/email")
@@ -103,12 +110,15 @@ public class FacadeController {
     }
 
     @GetMapping("user/getPersonDetails")
-    public RegistrationPerson getPersonDetails(@RequestParam("email") String email){
-        return facadeService.displayPersonDetails(email);
+    public RegisterPersonDTO getPersonDetails(@RequestParam("email") String email){
+        registrationPersonRepository.findByEmail(email);
+        RegistrationPerson person = facadeService.displayPersonDetails(email);
+        return modelMapper.map(person,RegisterPersonDTO.class);
     }
 
-    private static RegistrationPerson customModelMapperShowUserData(EditPersonDTO editPersonDTO){
-        RegistrationPerson person = new RegistrationPerson();
+    private  RegistrationPerson customModelMapperShowUserData(EditPersonDTO editPersonDTO){
+        RegistrationPerson person=new RegistrationPerson();
+        person.setId(editPersonDTO.getId());
         person.setName(editPersonDTO.getName());
         person.setEmail(editPersonDTO.getEmail());
         person.setPassword(editPersonDTO.getPassword());

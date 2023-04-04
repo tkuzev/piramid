@@ -99,7 +99,6 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
     @Override
     public void editPerson(RegistrationPerson registrationPerson) {
         RegistrationPerson personToEdit = registrationPersonRepository.findById(registrationPerson.getId()).orElseThrow();
-
         personToEdit.setEmail(registrationPerson.getEmail());
         personToEdit.setName(registrationPerson.getName());
         personToEdit.setPassword(registrationPerson.getPassword());
