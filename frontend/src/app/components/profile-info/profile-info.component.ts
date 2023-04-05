@@ -21,10 +21,10 @@ export class ProfileInfoComponent implements OnInit {
   ngOnInit() {
     console.log(localStorage.getItem('currentUserEmail'))
     this.profileForm = this.fb.group({
-      name: new FormControl({value: '', disabled: true}, [Validators.required, Validators.pattern('[a-zA-Z]+'), Validators.maxLength(25)]),
-      email: new FormControl({value: '', disabled: true},[Validators.required, Validators.email]),
-      password: new FormControl({value: '', disabled: true},[Validators.required, Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')]),
-      subscriptionPlan: new FormControl({value: '', disabled: true}, [Validators.required]),
+      name: new FormControl({value: '', disabled: false}, [Validators.required, Validators.pattern('[a-zA-Z]+'), Validators.maxLength(25)]),
+      email: new FormControl({value: '', disabled: false},[Validators.required, Validators.email]),
+      password: new FormControl({value: '', disabled: false},[Validators.required, Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')]),
+      subscriptionPlan: new FormControl({value: '', disabled: false}, [Validators.required]),
       // isSubscriptionEnabled: new FormControl({value:'', disabled: true})
     });
 
