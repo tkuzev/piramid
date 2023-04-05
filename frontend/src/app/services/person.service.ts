@@ -50,11 +50,8 @@ export class PersonService {
     localStorage.clear();
   }
 
-  isLoggedIn() {
-    console.log("current users email is:"+localStorage.getItem('currentUserEmail'))
-    console.log(localStorage.getItem('currentUser'));
-    console.log(JSON.parse(localStorage.getItem("email")))
-    console.log(!!localStorage.getItem('currentUser')); // Check if the auth_token exists in localStorage
+  isLoggedIn(): boolean {
+    return localStorage.getItem('currentUser') != null;
   }
   public makeSell(sell: Sell){
     return this.http.post<Sell>(this.usersUrl+"/sell",sell);

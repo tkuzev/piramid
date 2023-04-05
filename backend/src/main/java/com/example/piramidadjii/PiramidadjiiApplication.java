@@ -22,7 +22,6 @@ public class PiramidadjiiApplication {
     }
 
     public static void main(String[] args) {
-
         SpringApplication.run(PiramidadjiiApplication.class, args);
     }
 

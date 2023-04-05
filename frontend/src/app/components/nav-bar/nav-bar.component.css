@@ -38,7 +38,9 @@
   outline: none;
   box-shadow: none;
 }
-
+.display-btn{
+  margin: 0;
+}
 .nav-bar-btn:hover {
   background: linear-gradient(to right, white, black, black);
   background-size: 200% 100%;
