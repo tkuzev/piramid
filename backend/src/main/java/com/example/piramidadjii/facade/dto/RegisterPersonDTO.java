@@ -1,5 +1,6 @@
 package com.example.piramidadjii.facade.dto;
 
+import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,5 +15,7 @@ public class RegisterPersonDTO {
     Long parentId;
     BigDecimal money;
     String password;
+    boolean isSubscriptionEnabled;
+    SubscriptionPlan subscriptionPlan;
 
 }
