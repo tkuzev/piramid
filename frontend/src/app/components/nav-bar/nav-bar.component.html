@@ -10,7 +10,7 @@
       <button mat-button class="nav-bar-btn" style="color: white" routerLink="/login">Login</button>
       <button mat-button class="nav-bar-btn" style="color: white" routerLink="/profile">Profile</button>
       <button mat-button class="nav-bar-btn" style="color: white" routerLink="/income">Income</button>
-      <button mat-button (click)="refresh()" [matMenuTriggerFor]="menu" class="nav-bar-btn" style="color: white">Wallet</button>
+      <button mat-button [matMenuTriggerFor]="menu" class="nav-bar-btn" style="color: white">Wallet</button>
       <button mat-button class="nav-bar-btn" style="color: white" (click)="logout()">Logout</button>
       <mat-menu class="mat-menu" #menu="matMenu">
         <div class="col-auto">

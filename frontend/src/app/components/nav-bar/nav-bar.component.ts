@@ -3,20 +3,24 @@ import {DepositWithdrawComponent} from "../deposit-withdraw/deposit-withdraw.com
 import {MatDialog} from "@angular/material/dialog";
 import {PersonService} from "../../services/person.service";
 import {Router} from "@angular/router";
+import {error} from "@angular/compiler-cli/src/transformers/util";
+import {Observable, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css']
 })
-export class NavBarComponent implements OnInit{
+export class NavBarComponent implements OnInit {
 
   money: Array<number>;
   balance: number = 0;
   leftC: number = 0;
   rightC: number = 0;
+  buttonValue: number
 
-  buttonValue : number
+  navBarSubscription
+
 
   constructor(public dialog: MatDialog,
               private personService: PersonService,
@@ -41,39 +45,44 @@ export class NavBarComponent implements OnInit{
       data: {buttonValue: this.buttonValue}
     });
   }
-  logout(){
+
+  logout() {
     this.personService.logout()
-    this.balance = 0;
-    this.leftC = 0;
-    this.rightC = 0;
-    this.router.navigate(['/'])
-
+    this.router.navigate(['/']).then(() => {
+      window.location.reload()
+    })
+    this.navBarSubscription.unsubscribe()
+    // console.log(this.navBarSubscription)
   }
 
-  refresh(){
-  }
   ngOnInit(): void {
-    this.method()
+    this.fillWalletDrp()
   }
 
-  method(){
-    this.personService.getRegisteredPersonBalance().then(value => {
-        value.subscribe(
+  fillWalletDrp() {
+    this.personService.getRegisteredPersonBalance().then((value) => {
+        console.log(value)
+        this.navBarSubscription = value.subscribe(
           data => {
             this.money = data
-            if(this.money[0] != null) {
+            if (this.money[0] != null) {
               this.balance = this.money[0]
             }
-            if(this.money[1] != null) {
+            if (this.money[1] != null) {
               this.leftC = this.money[1]
             }
-            if(this.money[1] != null) {
-              this.rightC=this.money[2]
+            if (this.money[1] != null) {
+              this.rightC = this.money[2]
             }
           }
         )
+      // console.log(this.navBarSubscription)
       }
-  )
-
+    ).catch(() => {
+      this.balance = 0
+      this.rightC = 0
+      this.leftC = 0
+    })
   }
+
 }
