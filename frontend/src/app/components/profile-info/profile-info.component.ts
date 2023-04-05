@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ThemePalette} from "@angular/material/core";
 import { PersonService } from 'src/app/services/person.service';
 import {RegistrationPerson} from "../../models/registration-person";
-import {exhaustMap} from "rxjs";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-profile-info',
@@ -12,20 +12,21 @@ import {exhaustMap} from "rxjs";
 })
 export class ProfileInfoComponent implements OnInit {
   color: ThemePalette = "primary";
-  showPassword: boolean = false;
   profileData: RegistrationPerson;
-  editingMode: boolean = false;
+  enableEdit: boolean = true;
+  enableSave: boolean = false;
   profileForm: FormGroup;
-  constructor(private fb: FormBuilder, private  personService: PersonService) { }
+  status: string;
+  exp_date: string;
+  plan: string;
+  id: number;
+
+  constructor(private fb: FormBuilder, private  personService: PersonService, private router: Router) { }
 
   ngOnInit() {
-    console.log(localStorage.getItem('currentUserEmail'))
     this.profileForm = this.fb.group({
-      name: new FormControl({value: '', disabled: false}, [Validators.required, Validators.pattern('[a-zA-Z]+'), Validators.maxLength(25)]),
-      email: new FormControl({value: '', disabled: false},[Validators.required, Validators.email]),
-      password: new FormControl({value: '', disabled: false},[Validators.required, Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')]),
-      subscriptionPlan: new FormControl({value: '', disabled: false}, [Validators.required]),
-      // isSubscriptionEnabled: new FormControl({value:'', disabled: true})
+      name: new FormControl({value: '', disabled: true}, [Validators.required, Validators.pattern('[a-zA-Z]+'), Validators.maxLength(25)]),
+      email: new FormControl({value: '', disabled: true},[Validators.required, Validators.email]),
     });
 
     this.personService.getProfileInfo().subscribe(data=>{
@@ -34,25 +35,35 @@ export class ProfileInfoComponent implements OnInit {
       this.profileForm.setValue({
         name: this.profileData.name,
         email: this.profileData.email,
-        password: this.profileData.password,
-        subscriptionPlan: this.profileData.subscriptionPlan.name,
-        isSubscriptionEnabled: this.profileData.isSubscriptionEnabled
       });
     });
+
   }
 
   toggleEditMode(): void {
-    this.editingMode = !this.editingMode;
-  }
 
-  togglePasswordVisibility(): void {
-    this.showPassword = !this.showPassword;
-  }
+    console.log(this.profileData.id);
+    this.enableEdit = !this.enableEdit;
+    this.enableSave = !this.enableSave;
 
+    if (this.enableSave) {
+      this.profileForm.get('name').enable();
+      this.profileForm.get('email').enable();
+    } else {
+      this.profileForm.get('name').disable();
+      this.profileForm.get('email').disable();
+    }
+  }
   edit() {
-    this.personService.editProfile(this.profileForm.value).subscribe(data=>{
+    this.toggleEditMode();
+
+    this.personService.editProfile(this.profileData).subscribe(data=>{
+
       //popup success
+      //refresh page
     })
   }
+
+
 }
 

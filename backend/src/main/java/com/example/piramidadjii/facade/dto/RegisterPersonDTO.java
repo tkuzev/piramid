@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 @Setter
 public class RegisterPersonDTO {
 
+    Long id;
     String name;
     String email;
     Long parentId;

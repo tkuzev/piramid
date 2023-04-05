@@ -8,21 +8,30 @@
   min-height: 100vh;
 }
 
-.card-up{
-  width: 680px;
-  height: 360px;
+.profile-card-left{
+  width: 500px;
+  height: 500px;
   border-radius: 10px;
   box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.5);
   background: linear-gradient(to bottom right, #90caf9, #ce93d8);
 }
 
-.card-down{
-  width: 680px;
-  height: 90px;
+.profile-card-right{
+  width: 500px;
+  height: 500px;
   border-radius: 10px;
-  background: linear-gradient(to bottom right, #90caf9, #ce93d8);
   box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.5);
-  align-items: center;
+  background: linear-gradient(to bottom left, #90caf9, #ce93d8);
+}
+
+.form-header{
+  height: 30%;
+  font-family: "Neon", sans-serif;
+  color: white;
+}
+
+.form-header h1{
+  font-size: 60px;
 }
 
 .profile-header h1{
@@ -30,10 +39,6 @@
   font-family: "Neon", sans-serif;
   align-items: center;
   color: #ce93d8;
-}
-
-.text{
-  font-family: "Poppins", sans-serif;
 }
 
 .icon{
@@ -46,44 +51,26 @@
   padding-left: 20px;
 }
 
-.profile-form mat-label{
-  font-family: "Poppins", sans-serif;
+.profile-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn{
-  background: #90caf9;
+.subscription_plan{
+  padding: 10px;
   color: white;
 }
 
-.profile_form{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.expiration_date{
+  padding: 10px;
+  color: white;
 }
 
-.buttonEdit{
-  flex-direction: column;
-  align-items: center;
-  padding-top: 30px;
-}
-
-.buttonSave{
-  align-items: center;
-  justify-content: center;
-  display: flex;
-}
-
-::ng-deep.mdc-menu-surface{
-  background-color:  white;
-}
-
-::ng-deep.mat-mdc-option .mdc-list-item__primary-text {
-  color:black;
-}
-
-::ng-deep.mat-mdc-option:hover:not(.mdc-list-item--disabled){
-  background: rgb(198, 179, 255);
+.status{
+  padding: 10px;
+  color: white;
 }
 
 .renew{
@@ -98,4 +85,38 @@
   font-size: medium;
   margin-bottom: 0;
   margin-top: 7px;
+}
+
+.btn{
+  background: #90caf9;
+}
+
+.buttons{
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.space{
+  height: 20%;
+}
+
+a:hover{
+  color: white;
+}
+
+a{
+  color: white;
+}
+::ng-deep.mdc-menu-surface{
+  background-color:  white;
+}
+
+::ng-deep.mat-mdc-option .mdc-list-item__primary-text {
+  color:black;
+}
+
+::ng-deep.mat-mdc-option:hover:not(.mdc-list-item--disabled){
+  background: rgb(198, 179, 255);
 }
