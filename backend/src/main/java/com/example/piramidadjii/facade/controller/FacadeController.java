@@ -16,9 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 @RestController
@@ -90,26 +88,39 @@ public class FacadeController {
     }
 
     @GetMapping("/getTree")
-    public ResponseEntity<Map<BinaryPerson, Boolean>> getTree(@RequestParam Long id) {
+    public ResponseEntity<Set<BinaryDTO>> getTree(@RequestParam Long id) {
         BinaryPerson binaryPerson = binaryPersonRepository.findById(id).orElseThrow();
         Map<BinaryPerson, Boolean> tree = facadeService.getTree(binaryPerson);
-        return new ResponseEntity<>(tree, HttpStatus.OK);
+
+        Set<BinaryDTO> dtoTree=new HashSet<>();
+        tree.forEach((k,v) -> {
+            BinaryDTO binaryDTO = modelMapper.map(k, BinaryDTO.class);
+            binaryDTO.setDirection(v);
+            dtoTree.add(binaryDTO);
+        });
+        return new ResponseEntity<>(dtoTree, HttpStatus.OK);
     }
 
-    @GetMapping("binary/getById")
-    public ResponseEntity<BinaryDTO> getBinaryById(@RequestParam Long id) {
+    @GetMapping("/binary/getById")
+    public BinaryDTO getBinaryById(@RequestParam Long id) {
         BinaryPerson binaryPerson = binaryPersonRepository.findById(id).orElseThrow();
-        BinaryDTO dto = modelMapper.map(binaryPerson, BinaryDTO.class);
+        return modelMapper.map(binaryPerson, BinaryDTO.class);
+    }
+
+    @GetMapping("/registration/getById")
+    public ResponseEntity<RegisterPersonDTO> getRegistrationPersonById(@RequestParam Long id) {
+        RegistrationPerson registrationPerson = registrationPersonRepository.findById(id).orElseThrow();
+        RegisterPersonDTO dto = modelMapper.map(registrationPerson, RegisterPersonDTO.class);
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @GetMapping("user/getPersonId")
+    @GetMapping("/user/getPersonId")
     public Long getPersonId(@RequestParam("email") String email) {
         RegistrationPerson registrationPerson = registrationPersonRepository.findByEmail(email).orElseThrow();
         return registrationPerson.getId();
     }
 
-    @GetMapping("user/getPersonDetails")
+    @GetMapping("/user/getPersonDetails")
     public RegisterPersonDTO getPersonDetails(@RequestParam("email") String email){
         registrationPersonRepository.findByEmail(email);
         RegistrationPerson person = facadeService.displayPersonDetails(email);

@@ -9,21 +9,29 @@
         <h1>Add your new binary person</h1>
       </div>
 
-      <div class="row register-form">
-        <form class="fields-form" [formGroup]="registerForm">
+      <div class="row register-form" >
+        <form class="fields-form" (ngSubmit)="onSubmit()" [formGroup]="registerForm">
           <mat-form-field>
             <mat-label>Choose a spot</mat-label>
-            <mat-select>
-              <!--            neshto mai s ngFor da pravq opcii kato e gotov metoda-->
-              <mat-option value=1>ngFor</mat-option>
+            <mat-select [(ngModel)]="selectedPerson" formControlName="person">
+              <mat-option *ngFor="let person of subTree" [value]="person">
+                <div class="row">
+                  <div class="col-auto">
+                    {{person.name}}
+                  </div>
+                  <div class="col-auto">
+                    {{person.direction}}
+                  </div>
+                </div>
+              </mat-option>
             </mat-select>
           </mat-form-field>
+
           <mat-form-field>
             <mat-label>Choose a direction</mat-label>
-            <mat-select formControlName="direction">
-              <!--                      [(ngModel)]="planovete.dto">-->
-              <mat-option value=1>Left</mat-option>
-              <mat-option value=2>Right</mat-option>
+            <mat-select [(ngModel)]="direction" formControlName="direction">
+              <mat-option [value]="true">Left</mat-option>
+              <mat-option [value]="false">Right</mat-option>
             </mat-select>
             <mat-error *ngIf="registerForm.get('direction')?.hasError('required')">Required field!</mat-error>
           </mat-form-field>
