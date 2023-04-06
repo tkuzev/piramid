@@ -119,6 +119,7 @@ public class FacadeController {
         person.setId(editPersonDTO.getId());
         person.setName(editPersonDTO.getName());
         person.setEmail(editPersonDTO.getEmail());
+        person.setSubscriptionEnabled(editPersonDTO.isSubscriptionEnabled());
         return person;
     }
 

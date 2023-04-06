@@ -62,7 +62,6 @@ export class NavBarComponent implements OnInit {
 
   fillWalletDrp() {
     this.personService.getRegisteredPersonBalance().then((value) => {
-        console.log(value)
         this.navBarSubscription = value.subscribe(
           data => {
             this.money = data
@@ -87,7 +86,6 @@ export class NavBarComponent implements OnInit {
   }
 
   isLogged(){
-    console.log(this.personService.isLoggedIn())
     return this.personService.isLoggedIn()
   }
 }

@@ -39,7 +39,7 @@ public class RegistrationPerson extends Person {
     private BankAccount bankAccount;
 
     private LocalDate subscriptionExpirationDate;
-    private Boolean isSubscriptionEnabled;
+    private Boolean subscriptionEnabled;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Role role;

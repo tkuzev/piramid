@@ -15,8 +15,7 @@
             <mat-label class="color">Name</mat-label>
             <input formControlName="name"
                    matInput
-                   name="name"
-                   [disabled]="!enableSave">
+                   name="name">
             <mat-icon class="icon" matSuffix>sentiment_very_satisfied</mat-icon>
             <mat-error *ngIf="profileForm.get('name')?.hasError('required')">Required field!</mat-error>
             <mat-error *ngIf="profileForm.get('name')?.hasError('pattern')">Letters only!</mat-error>
@@ -30,22 +29,27 @@
             <mat-label>Email</mat-label>
             <input formControlName="email"
                    matInput
-                   name="email"
-                   [disabled]="!enableSave">
+                   name="email">
             <mat-icon class="icon" matSuffix>email</mat-icon>
             <mat-error *ngIf="profileForm.get('email')?.hasError('required')">Required field!</mat-error>
             <mat-error *ngIf="profileForm.get('email')?.hasError('email')">Not a valid email!</mat-error>
           </mat-form-field>
         </div>
+
+        <div class="row renew">
+          <mat-checkbox formControlName="subscriptionEnabled" [color]=color [checked]="autoPay">
+            <p>Pay subscription plan automatically!</p>
+          </mat-checkbox>
+        </div>
       </form>
 
       <div class="row space">
-        <div class="col buttons">
+        <div class="col center">
           <button [disabled]="!enableEdit"mat-mini-fab class="btn" (click)="toggleEditMode()">
             <mat-icon class="icon">edit</mat-icon>
           </button>
         </div>
-        <div class="col buttons">
+        <div class="col center">
           <button type="submit" [disabled]="!enableSave" mat-mini-fab class="btn" (click)="edit()">
             <mat-icon class="icon">check</mat-icon>
           </button>
@@ -62,35 +66,11 @@
         <h1>Subscription details</h1>
       </div>
 
-      <div class="row subscription_plan">
+      <div class="row h-50 sub-details center">
         <p>Subscription plan: {{plan}}</p>
-      </div>
-
-      <div class="row expiration_date">
-        <p>Expiration date: {{exp_date}}</p>
-      </div>
-
-      <div class="row status">
+        <p>Expiration date: {{formattedExpDate}}</p>
         <p>Current status: {{status}}</p>
-      </div>
-
-      <div class="row renew">
-        <mat-checkbox [color]=color>
-          <p>Pay subscription plan automatically!</p>
-        </mat-checkbox>
       </div>
     </div>
   </div>
 </div>
-
-<!--    <div class="col-2 ">-->
-<!--      <div class="row buttonEdit">-->
-<!--        <button type="submit" mat-mini-fab class="btn" (click)="toggleEditMode()">-->
-<!--          <mat-icon class="icon">edit</mat-icon>-->
-<!--        </button>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--    <div class="col-2 buttonSave">-->
-<!--      <button type="submit" [disabled]="true" mat-mini-fab class="btn"><mat-icon class="icon">check</mat-icon></button>-->
-<!--    </div>-->

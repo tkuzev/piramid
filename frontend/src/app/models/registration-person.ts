@@ -5,6 +5,7 @@ export class RegistrationPerson {
   name: string;
   email: string;
   password:string;
-  isSubscriptionEnabled: boolean;
+  subscriptionEnabled: boolean;
   subscriptionPlan: SubscriptionPlan;
+  subscriptionExpirationDate: Date;
 }
