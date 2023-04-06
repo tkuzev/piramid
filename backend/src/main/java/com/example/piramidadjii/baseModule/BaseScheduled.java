@@ -178,7 +178,7 @@ public class BaseScheduled {
         BigDecimal newBalance = registrationPerson.getBankAccount().getBalance()
                 .subtract(registrationPerson.getSubscriptionPlan().getRegistrationFee());
 
-        if (registrationPerson.getIsSubscriptionEnabled() && newBalance.compareTo(BigDecimal.ZERO) >= 0) {
+        if (registrationPerson.getSubscriptionEnabled() && newBalance.compareTo(BigDecimal.ZERO) >= 0) {
             registrationPerson.getBankAccount().setBalance(newBalance);
             registrationPerson.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
             registrationPersonRepository.save(registrationPerson);
@@ -189,7 +189,7 @@ public class BaseScheduled {
             file.delete();
         } else {
             mailSenderService.sendEmailWithoutAttachment(registrationPerson.getEmail(), "Неуспешно плащане на месечен абонамент", "Недостатъчен баланс за заплащане на месечната такса.");
-            registrationPerson.setIsSubscriptionEnabled(false);
+            registrationPerson.setSubscriptionEnabled(false);
             registrationPersonRepository.save(registrationPerson);
         }
 
