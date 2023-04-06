@@ -41,8 +41,6 @@ export class ProfileInfoComponent implements OnInit {
   }
 
   toggleEditMode(): void {
-
-    console.log(this.profileData.id);
     this.enableEdit = !this.enableEdit;
     this.enableSave = !this.enableSave;
 
@@ -55,15 +53,15 @@ export class ProfileInfoComponent implements OnInit {
     }
   }
   edit() {
-    this.toggleEditMode();
+    this.profileData.name = this.profileForm.get('name').value;
+    this.profileData.email = this.profileForm.get('email').value;
 
-    this.personService.editProfile(this.profileData).subscribe(data=>{
-
+    this.personService.editProfile(this.profileData).subscribe(data => {
       //popup success
       //refresh page
-    })
+    });
+
+    this.toggleEditMode();
   }
-
-
 }
 
