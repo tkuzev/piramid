@@ -20,7 +20,7 @@ public interface FacadeService {
 
     void createTransaction(RegistrationPerson registrationPerson, BigDecimal price);
 
-    void editProfile(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan);
+    void editProfile(RegistrationPerson registrationPerson);
 
     List<BigDecimal> wallet(Long registrationPersonId);
 

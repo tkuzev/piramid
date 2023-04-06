@@ -8,6 +8,7 @@ import {IncomePageComponent} from "./components/income-page/income-page.componen
 import {LoginFormComponent} from "./components/login-form/login-form.component";
 import {ChartComponent} from "./components/chart/chart.component";
 import {BinaryRegistrationComponent} from "./components/binary-registration/binary-registration.component";
+import {ChangePasswordComponent} from "./components/change-password/change-password.component";
 
 
 const routes: Routes = [
@@ -18,6 +19,8 @@ const routes: Routes = [
   {path:'income', component: IncomePageComponent},
   {path:'login', component: LoginFormComponent},
   {path: 'chart', component: ChartComponent},
+  {path:'register/binary',component: BinaryRegistrationComponent}, //:fatherId/:childId
+  {path:'changePassword',component: ChangePasswordComponent},
   {path:'register/binary/:fatherId/:childId',component: BinaryRegistrationComponent}
 ];
 

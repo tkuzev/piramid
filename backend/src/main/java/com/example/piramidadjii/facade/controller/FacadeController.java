@@ -55,8 +55,8 @@ public class FacadeController {
         binaryRegistrationService.registerNewBinaryPerson(person, binaryPersonDTO.getBinaryPersonToPutItOnId(), binaryPersonDTO.isPreferredDirection());
     }
 
-    @GetMapping("/user/income/{id}")
-    public Map<String, BigDecimal> monthlyIncome(@PathVariable Long id) {
+    @GetMapping("/user/income")
+    public Map<String, BigDecimal> monthlyIncome(@RequestParam("id") Long id) {
         return facadeService.monthlyIncome(id);
     }
 
@@ -75,11 +75,9 @@ public class FacadeController {
         return facadeService.wallet(registrationPersonId);
     }
 
-    @PostMapping("/profile/edit")
+    @PutMapping("/user/edit")
     public void edit(@RequestBody EditPersonDTO editPersonDTO) {
-        SubscriptionPlan subscriptionPlan=subscriptionPlanRepository.findById(editPersonDTO.getSubscriptionPlanId()).orElseThrow();
-        System.out.println(subscriptionPlan.getName());
-        facadeService.editProfile(customModelMapperShowUserData(editPersonDTO), subscriptionPlan);
+        facadeService.editProfile(customModelMapperShowUserData(editPersonDTO));
     }
 
     @GetMapping("user/email")
@@ -132,8 +130,6 @@ public class FacadeController {
         person.setId(editPersonDTO.getId());
         person.setName(editPersonDTO.getName());
         person.setEmail(editPersonDTO.getEmail());
-        person.setPassword(editPersonDTO.getPassword());
-        person.setIsSubscriptionEnabled(editPersonDTO.isSubscriptionEnabled());
         return person;
     }
 
