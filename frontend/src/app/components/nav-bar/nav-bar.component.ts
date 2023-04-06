@@ -57,6 +57,7 @@ export class NavBarComponent implements OnInit {
 
   ngOnInit(): void {
     this.fillWalletDrp()
+    this.isLogged()
   }
 
   fillWalletDrp() {
@@ -85,4 +86,8 @@ export class NavBarComponent implements OnInit {
     })
   }
 
+  isLogged(){
+    console.log(this.personService.isLoggedIn())
+    return this.personService.isLoggedIn()
+  }
 }
