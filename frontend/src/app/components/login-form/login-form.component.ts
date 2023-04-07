@@ -33,7 +33,7 @@ export class LoginFormComponent {
         this.error = error;
         this.loading = false;
       },
-      ()=>{this.router.navigate(['/'])}
+      ()=>{this.router.navigate(['/wrapper/home'])}
     )
   }
 

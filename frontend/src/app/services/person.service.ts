@@ -48,6 +48,7 @@ export class PersonService {
 
   public logout(){
     localStorage.clear();
+    this.email = ''
   }
 
   isLoggedIn(): boolean {
@@ -73,9 +74,6 @@ export class PersonService {
     let requestParams = new HttpParams();
     this.id = await firstValueFrom(this.personGetId());
     requestParams = requestParams.append('id', this.id);
-    // this.chartSubscription = this.http.get<any>(this.usersUrl + '/income', {params: requestParams}).subscribe(
-    //   value => (console.log())
-    // )
     return this.http.get<any>(this.usersUrl + '/income', {params: requestParams})
   }
 
@@ -83,7 +81,6 @@ export class PersonService {
   getProfileInfo(): Observable<any>{
     let requestParams = new HttpParams();
     requestParams = requestParams.append('email', this.email);
-    console.log(requestParams)
     return this.http.get<any>(this.usersUrl + '/getPersonDetails', {params: requestParams});
   }
 

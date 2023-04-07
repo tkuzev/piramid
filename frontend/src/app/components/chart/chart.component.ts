@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Chart, ChartData, ChartOptions} from "chart.js";
 import {PersonService} from "../../services/person.service";
 import {ChartSchm} from "./chart-schm";
@@ -18,29 +18,28 @@ export class ChartComponent implements OnInit, OnDestroy {
   silver: number = 0
   gold: number = 0
   plat: number = 0
-  chart: ChartSchm = new ChartSchm(0,0,0,0)
+  chart: ChartSchm = new ChartSchm(0, 0, 0, 0)
 
   chartSubscription
-  constructor(private personService: PersonService, private router: Router) {
+
+  constructor(private personService: PersonService,  private cdr: ChangeDetectorRef) {
   }
 
   monthlyIncome() {
     this.personService.monthlyIncome().then(
-        value => {
-         this.chartSubscription = value.subscribe(
+      value => {
+        this.chartSubscription = value.subscribe(
           data => {
-              this.map = data
-              console.log(data)
-              this.bronze = this.map['Bronze']
-              this.gold = this.map['Gold']
-              this.silver = this.map['Silver']
-              this.plat = this.map['Platinum']
-              this.chart = new ChartSchm(this.bronze, this.silver, this.gold, this.plat)
+            this.map = data
+            this.bronze = this.map['Bronze']
+            this.gold = this.map['Gold']
+            this.silver = this.map['Silver']
+            this.plat = this.map['Platinum']
+            this.chart = new ChartSchm(this.bronze, this.silver, this.gold, this.plat)
           }
         )
-          console.log(this.chartSubscription)
       }
-    ).catch(()=>{
+    ).catch(() => {
       this.chart = new ChartSchm(0, 0, 0, 0)
     })
   }
@@ -48,10 +47,11 @@ export class ChartComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.monthlyIncome()
   }
-  ngOnDestroy(){
-    if(this.chartSubscription!=null){
+
+  ngOnDestroy() {
+    if (this.chartSubscription != null) {
       this.chartSubscription.unsubscribe()
+      this.cdr.detectChanges()
     }
-    console.log(this.chartSubscription)
   }
 }
