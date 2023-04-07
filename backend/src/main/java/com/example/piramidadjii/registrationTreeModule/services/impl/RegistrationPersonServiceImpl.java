@@ -4,7 +4,6 @@ import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
 import com.example.piramidadjii.baseModule.enums.Description;
 import com.example.piramidadjii.configModule.ConfigurationService;
-import com.example.piramidadjii.facade.dto.EditPersonDTO;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
@@ -20,7 +19,6 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class RegistrationPersonServiceImpl implements RegistrationPersonService {
@@ -49,7 +47,7 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         bankAccountRepository.save(bankAccount);
         registrationPerson.setBankAccount(bankAccount);
         registrationPerson.setPassword(passwordEncoder.encode(registrationPerson.getPassword()));
-        registrationPerson.setIsSubscriptionEnabled(true);
+        registrationPerson.setSubscriptionEnabled(true);
         registrationPerson.setRole(roleRepository.getRoleByName("klient").orElseThrow());
         registrationPersonRepository.save(registrationPerson);
         subscriptionPlans.stream()
@@ -57,7 +55,7 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
                 .findFirst()
                 .ifPresent(subscriptionPlan -> {
                     setSubscription(registrationPerson, subscriptionPlan.getId());
-                    registrationPerson.setIsSubscriptionEnabled(true);
+                    registrationPerson.setSubscriptionEnabled(true);
                     registrationPerson.setSubscriptionExpirationDate(LocalDate.now().plusMonths(1));
                     registrationPersonRepository.save(registrationPerson);
                 });
@@ -101,8 +99,7 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         RegistrationPerson personToEdit = registrationPersonRepository.findById(registrationPerson.getId()).orElseThrow();
         personToEdit.setEmail(registrationPerson.getEmail());
         personToEdit.setName(registrationPerson.getName());
-        personToEdit.setPassword(registrationPerson.getPassword());
-        personToEdit.setIsSubscriptionEnabled(registrationPerson.getIsSubscriptionEnabled());
+        personToEdit.setSubscriptionEnabled(registrationPerson.getSubscriptionEnabled());
         registrationPersonRepository.save(personToEdit);
     }
 

@@ -12,4 +12,6 @@ export class BinPerson{
     name: string
     email: string
 
+    direction:boolean
+
 }

@@ -84,7 +84,7 @@ export class PersonService {
     return this.http.get<any>(this.usersUrl + '/getPersonDetails', {params: requestParams});
   }
 
-  editProfile(personData: any): Observable<any>{
+  editProfile(personData: RegistrationPerson): Observable<any>{
     return this.http.put<any>(this.usersUrl + '/edit', personData);
   }
 }

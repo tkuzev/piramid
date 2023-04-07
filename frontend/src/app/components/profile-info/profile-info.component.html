@@ -3,16 +3,20 @@
     <h1>Profile</h1>
   </div>
 
-  <div class="row mb-5 card-up">
-    <div class="col-10 profile_form">
+  <div class="row cards">
+    <div class="col profile-card-left profile-form mr-5">
+      <div class="row form-header">
+        <h1>Personal details</h1>
+      </div>
+
       <form [formGroup]="profileForm">
         <div class="row name">
-          <mat-icon class="icon">sentiment_very_satisfied</mat-icon>
-          <mat-form-field >
+          <mat-form-field>
             <mat-label class="color">Name</mat-label>
             <input formControlName="name"
                    matInput
                    name="name">
+            <mat-icon class="icon" matSuffix>sentiment_very_satisfied</mat-icon>
             <mat-error *ngIf="profileForm.get('name')?.hasError('required')">Required field!</mat-error>
             <mat-error *ngIf="profileForm.get('name')?.hasError('pattern')">Letters only!</mat-error>
             <mat-error *ngIf="profileForm.get('name')?.hasError('maxlength')">Field should be between 1 and
@@ -21,68 +25,52 @@
           </mat-form-field>
         </div>
         <div class="row email">
-          <mat-icon class="icon">email</mat-icon>
           <mat-form-field>
             <mat-label>Email</mat-label>
             <input formControlName="email"
                    matInput
                    name="email">
+            <mat-icon class="icon" matSuffix>email</mat-icon>
             <mat-error *ngIf="profileForm.get('email')?.hasError('required')">Required field!</mat-error>
             <mat-error *ngIf="profileForm.get('email')?.hasError('email')">Not a valid email!</mat-error>
           </mat-form-field>
         </div>
-        <div class="row password">
-          <mat-icon class="icon">password</mat-icon>
-          <mat-form-field>
-            <mat-label>Password</mat-label>
-            <input [type]="!showPassword ? 'text' : 'password'"
-                   formControlName="password"
-                   matInput
-                   name="password">
-            <mat-icon class="icon" matSuffix
-                      (click)="togglePasswordVisibility()">{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            <mat-error *ngIf="profileForm.get('password')?.hasError('required')">Required field!</mat-error>
-            <mat-error *ngIf="profileForm.get('password')?.hasError('pattern')">Minimum eight characters, at
-              least one letter, one number and one special character!
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="row subscription_plan">
-          <mat-icon class="icon">card_membership</mat-icon>
-          <mat-form-field>
-            <mat-label>Subscription Plan</mat-label>
-            <mat-select formControlName="subscriptionPlan">
-              <!--                      [(ngModel)]="planovete.dto">-->
-              <mat-option value=1>Bronze</mat-option>
-              <mat-option value=2>Silver</mat-option>
-              <mat-option value=3>Gold</mat-option>
-              <mat-option value=4>Platinum</mat-option>
-            </mat-select>
-            <mat-error *ngIf="profileForm.get('plan')?.hasError('required')">Required field!</mat-error>
-          </mat-form-field>
+
+        <div class="row renew">
+          <mat-checkbox formControlName="subscriptionEnabled" [color]=color [checked]="autoPay">
+            <p>Pay subscription plan automatically!</p>
+          </mat-checkbox>
         </div>
       </form>
-    </div>
 
-    <div class="col-2 ">
-      <div class="row buttonEdit">
-        <button type="submit" mat-mini-fab class="btn" (click)="toggleEditMode()">
-          <mat-icon class="icon">edit</mat-icon>
-        </button>
+      <div class="row space">
+        <div class="col center">
+          <button [disabled]="!enableEdit"mat-mini-fab class="btn" (click)="toggleEditMode()">
+            <mat-icon class="icon">edit</mat-icon>
+          </button>
+        </div>
+        <div class="col center">
+          <button type="submit" [disabled]="!enableSave" mat-mini-fab class="btn" (click)="edit()">
+            <mat-icon class="icon">check</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="row password">
+        <a routerLink="/changePassword">Click here to change your password.</a>
       </div>
     </div>
-  </div>
 
-  <div class="row card-down">
-    <div class="col-10 renew">
-      <mat-icon>autorenew</mat-icon>
-      <mat-checkbox [color]=color>
-        <p>Pay subscription plan automatically!</p>
-      </mat-checkbox>
-    </div>
+    <div class="col profile-card-right profile-form">
+      <div class="row form-header">
+        <h1>Subscription details</h1>
+      </div>
 
-    <div class="col-2 buttonSave">
-      <button type="submit" [disabled]="true" mat-mini-fab class="btn"><mat-icon class="icon">check</mat-icon></button>
+      <div class="row h-50 sub-details center">
+        <p>Subscription plan: {{plan}}</p>
+        <p>Expiration date: {{formattedExpDate}}</p>
+        <p>Current status: {{status}}</p>
+      </div>
     </div>
   </div>
 </div>

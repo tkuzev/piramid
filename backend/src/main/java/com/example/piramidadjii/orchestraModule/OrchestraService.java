@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public interface OrchestraService {
     void registerPerson(RegistrationPerson registrationPerson, BigDecimal money);
 
-    void editProfile(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan);
+    void editProfile(RegistrationPerson registrationPerson);
 
     void createTransaction(RegistrationPerson person, BigDecimal money);
 }
