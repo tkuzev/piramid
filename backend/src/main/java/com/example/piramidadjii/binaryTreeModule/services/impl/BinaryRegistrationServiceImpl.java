@@ -37,7 +37,7 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
 
             mailSenderService.sendEmailWithoutAttachment(findSuitableParent(registrationPerson).getEmail(),
                     "Register a person in this binary tree:", "Click here to register him ->" +
-                            "http://localhost:8080/register/b=");
+                            "http://localhost:4200/register/binary/"+parentId+"/"+registrationPerson.getId());
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
@@ -47,8 +47,9 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     @Override
     public Map<BinaryPerson, Boolean> getTree(BinaryPerson binaryPerson) {
         Map<BinaryPerson, Boolean> tree = new HashMap<>();
-        tree.put(binaryPerson, null);
-
+        if (Objects.isNull(binaryPerson.getLeftChild()) || Objects.isNull(binaryPerson.getRightChild())) {
+            tree.put(binaryPerson, null);
+        }
         traverseHelper(binaryPerson.getLeftChild(), tree, false);
         traverseHelper(binaryPerson.getRightChild(), tree, true);
         return tree;

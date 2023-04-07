@@ -48,13 +48,11 @@ export class PersonService {
 
   public logout(){
     localStorage.clear();
+    this.email = ''
   }
 
-  isLoggedIn() {
-    console.log("current users email is:"+localStorage.getItem('currentUserEmail'))
-    console.log(localStorage.getItem('currentUser'));
-    console.log(JSON.parse(localStorage.getItem("email")))
-    console.log(!!localStorage.getItem('currentUser')); // Check if the auth_token exists in localStorage
+  isLoggedIn(): boolean {
+    return localStorage.getItem('currentUser') != null;
   }
   public makeSell(sell: Sell){
     return this.http.post<Sell>(this.usersUrl+"/sell",sell);
@@ -76,9 +74,6 @@ export class PersonService {
     let requestParams = new HttpParams();
     this.id = await firstValueFrom(this.personGetId());
     requestParams = requestParams.append('id', this.id);
-    // this.chartSubscription = this.http.get<any>(this.usersUrl + '/income', {params: requestParams}).subscribe(
-    //   value => (console.log())
-    // )
     return this.http.get<any>(this.usersUrl + '/income', {params: requestParams})
   }
 
@@ -86,11 +81,10 @@ export class PersonService {
   getProfileInfo(): Observable<any>{
     let requestParams = new HttpParams();
     requestParams = requestParams.append('email', this.email);
-    console.log(requestParams)
     return this.http.get<any>(this.usersUrl + '/getPersonDetails', {params: requestParams});
   }
 
-  editProfile(personData: any): Observable<any>{
+  editProfile(personData: RegistrationPerson): Observable<any>{
     return this.http.put<any>(this.usersUrl + '/edit', personData);
   }
 }

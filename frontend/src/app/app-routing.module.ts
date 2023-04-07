@@ -8,17 +8,24 @@ import {IncomePageComponent} from "./components/income-page/income-page.componen
 import {LoginFormComponent} from "./components/login-form/login-form.component";
 import {ChartComponent} from "./components/chart/chart.component";
 import {BinaryRegistrationComponent} from "./components/binary-registration/binary-registration.component";
+import {NavBarComponent} from "./components/nav-bar/nav-bar.component";
 
 
 const routes: Routes = [
-  {path: '', component: HomePageComponent},
-  {path:'wallet', component: WalletComponent},
-  {path:'profile', component: ProfileInfoComponent},
-  {path:'register', component: RegistrationFormComponent},
-  {path:'income', component: IncomePageComponent},
-  {path:'login', component: LoginFormComponent},
-  {path: 'chart', component: ChartComponent},
-  {path:'register/binary',component: BinaryRegistrationComponent} //:fatherId/:childId
+  {
+    path: 'wrapper', component: NavBarComponent,
+    children:[
+      {path:'income', component: IncomePageComponent},
+      {path:'home', component: HomePageComponent},
+      {path:'wallet', component: WalletComponent},
+      {path:'profile', component: ProfileInfoComponent},
+      {path:'register', component: RegistrationFormComponent},
+      {path:'login', component: LoginFormComponent},
+      {path: 'chart', component: ChartComponent},
+      {path:'register/binary',component: BinaryRegistrationComponent} //:fatherId/:childId
+    ]
+  },
+  {path: "", component: NavBarComponent}
 ];
 
 @NgModule({

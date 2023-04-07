@@ -50,7 +50,7 @@ create table registration_person
     id                           bigint       not null auto_increment,
     name                         varchar(20)  not null,
     email                        varchar(255) not null unique,
-    is_subscription_enabled      bit,
+    subscription_enabled      bit,
     subscription_expiration_date date,
     bank_account_id              bigint       not null,
     parent_id                    bigint,

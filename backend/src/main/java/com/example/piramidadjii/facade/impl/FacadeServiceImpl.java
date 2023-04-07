@@ -62,8 +62,8 @@ public class FacadeServiceImpl implements FacadeService {
     }
 
     @Override
-    public void editProfile(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan) {
-        orchestraService.editProfile(registrationPerson,subscriptionPlan);
+    public void editProfile(RegistrationPerson registrationPerson) {
+        orchestraService.editProfile(registrationPerson);
     }
 
     @Override

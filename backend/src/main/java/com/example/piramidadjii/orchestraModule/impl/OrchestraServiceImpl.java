@@ -54,8 +54,7 @@ public class OrchestraServiceImpl implements OrchestraService {
     }
 
     @Override
-    public void editProfile(RegistrationPerson registrationPerson, SubscriptionPlan subscriptionPlan) {
-        subscriptionPlanService.upgradeSubscriptionPlan(registrationPerson.getId(), subscriptionPlan);
+    public void editProfile(RegistrationPerson registrationPerson) {
         registrationPersonService.editPerson(registrationPerson);
     }
 
