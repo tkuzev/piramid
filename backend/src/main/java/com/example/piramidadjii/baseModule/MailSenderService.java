@@ -17,7 +17,6 @@ public class MailSenderService {
     @Autowired
     private JavaMailSender mailSender;
 
-
     public void sendEmail(String recipient,
                           String subject,
                           String text,

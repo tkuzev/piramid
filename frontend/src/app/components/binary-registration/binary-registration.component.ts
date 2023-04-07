@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {BinaryService} from "../../services/binary.service";
 import {BinPerson} from "../../models/bin-person";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {RegistrationPerson} from "../../models/registration-person";
 import {BinaryPerson} from "../../models/binary-person";
 
@@ -23,7 +23,7 @@ export class BinaryRegistrationComponent implements OnInit{
   selectedPerson: BinPerson;
 
 
-  constructor(private fb: FormBuilder, private binaryService: BinaryService, private route: ActivatedRoute) {
+  constructor(private fb: FormBuilder, private binaryService: BinaryService, private route: ActivatedRoute, private router:Router) {
   }
 
   registerForm = this.fb.group({
@@ -44,6 +44,16 @@ export class BinaryRegistrationComponent implements OnInit{
   onSubmit() {
       this.nqkwoDTO.preferredDirection=this.direction
       this.nqkwoDTO.binaryPersonToPutItOnId=this.selectedPerson.id
-      this.binaryService.postBinaryPerson(this.childId,this.nqkwoDTO).subscribe()
+      this.binaryService.postBinaryPerson(this.childId,this.nqkwoDTO).subscribe(
+        (response) => {
+          // Handle successful response
+          this.router.navigate(['/']);
+        },
+        (error) => {
+          // Handle error response
+          console.error(error);
+        }
+      )
+
   }
 }
