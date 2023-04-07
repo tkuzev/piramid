@@ -25,7 +25,7 @@
 }
 
 .form-header{
-  height: 30%;
+  height: 20%;
   font-family: "Neon", sans-serif;
   color: white;
 }
@@ -62,6 +62,7 @@
   color: white;
   font-size: 17px;
   font-family: "Poppins", sans-serif;
+  height: 60%;
 }
 
 .renew{
