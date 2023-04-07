@@ -9,6 +9,7 @@ import {LoginFormComponent} from "./components/login-form/login-form.component";
 import {ChartComponent} from "./components/chart/chart.component";
 import {BinaryRegistrationComponent} from "./components/binary-registration/binary-registration.component";
 import {NavBarComponent} from "./components/nav-bar/nav-bar.component";
+import {ChangePasswordComponent} from "./components/change-password/change-password.component";
 
 
 const routes: Routes = [
@@ -22,7 +23,8 @@ const routes: Routes = [
       {path:'register', component: RegistrationFormComponent},
       {path:'login', component: LoginFormComponent},
       {path: 'chart', component: ChartComponent},
-      {path:'register/binary',component: BinaryRegistrationComponent} //:fatherId/:childId
+      {path:'register/binary',component: BinaryRegistrationComponent},
+      {path:'changePassword',component: ChangePasswordComponent}
     ]
   },
   {path: "", component: NavBarComponent}

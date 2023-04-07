@@ -23,7 +23,7 @@ export class ProfileInfoComponent implements OnInit {
   formattedExpDate: string;
   autoPay: boolean;
 
-  constructor(private fb: FormBuilder, private  personService: PersonService, private router: Router) { }
+  constructor(private fb: FormBuilder, private  personService: PersonService) { }
 
   ngOnInit() {
     this.profileForm = this.fb.group({
@@ -73,9 +73,8 @@ export class ProfileInfoComponent implements OnInit {
     this.profileData.name = this.profileForm.get('name').value;
     this.profileData.email = this.profileForm.get('email').value;
     this.profileData.subscriptionEnabled = this.profileForm.get('subscriptionEnabled').value;
-    console.log(this.profileData.subscriptionEnabled)
+
     this.personService.editProfile(this.profileData).subscribe(data => {
-      console.log(this.profileData)
       //popup success
       //refresh page
     });
