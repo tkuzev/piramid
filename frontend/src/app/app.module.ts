@@ -16,7 +16,6 @@ import {RegistrationFormComponent} from './components/registration-form/registra
 import {ProfileInfoComponent} from './components/profile-info/profile-info.component';
 import {IncomePageComponent} from './components/income-page/income-page.component';
 import {LoginFormComponent} from './components/login-form/login-form.component';
-import {WalletComponent} from './components/wallet/wallet.component';
 import {MatIconModule} from "@angular/material/icon";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {BrowserModule} from "@angular/platform-browser";
@@ -39,7 +38,6 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
     ProfileInfoComponent,
     IncomePageComponent,
     LoginFormComponent,
-    WalletComponent,
     ChartComponent,
     DepositWithdrawComponent,
     BinaryRegistrationComponent,
