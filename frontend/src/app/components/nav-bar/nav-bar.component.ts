@@ -2,7 +2,7 @@ import {AfterViewInit, ChangeDetectorRef, Component, Inject, Input, OnInit} from
 import {DepositWithdrawComponent} from "../deposit-withdraw/deposit-withdraw.component";
 import {MatDialog} from "@angular/material/dialog";
 import {PersonService} from "../../services/person.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {error} from "@angular/compiler-cli/src/transformers/util";
 import {Observable, Subscription} from "rxjs";
 
@@ -13,19 +13,18 @@ import {Observable, Subscription} from "rxjs";
 })
 export class NavBarComponent implements OnInit {
 
-  money: Array<number>;
-  balance: number = 0;
-  leftC: number = 0;
-  rightC: number = 0;
+  money: Array<number>
+  balance: number = 0
+  leftC: number = 0
+  rightC: number = 0
   buttonValue: number
-
   navBarSubscription
 
 
   constructor(public dialog: MatDialog,
               private personService: PersonService,
               private router: Router,
-              private changeDetector: ChangeDetectorRef) {
+            ) {
   }
 
   withdraw(): void {
@@ -47,22 +46,23 @@ export class NavBarComponent implements OnInit {
   }
 
   logout() {
-    this.personService.logout()
-    this.router.navigate(['/']).then(() => {
-      window.location.reload()
-    })
     this.navBarSubscription.unsubscribe()
+    this.personService.logout()
+    this.balance = 0
+    this.leftC = 0
+    this.rightC = 0
+    this.router.navigate(['/wrapper/home'])
     // console.log(this.navBarSubscription)
   }
 
   ngOnInit(): void {
     this.fillWalletDrp()
     this.isLogged()
+    this.router.navigate(['/wrapper/home'])
   }
 
   fillWalletDrp() {
     this.personService.getRegisteredPersonBalance().then((value) => {
-        console.log(value)
         this.navBarSubscription = value.subscribe(
           data => {
             this.money = data
@@ -87,7 +87,6 @@ export class NavBarComponent implements OnInit {
   }
 
   isLogged(){
-    console.log(this.personService.isLoggedIn())
     return this.personService.isLoggedIn()
   }
 }
