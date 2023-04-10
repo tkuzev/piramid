@@ -9,7 +9,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @SpringBootApplication
-@EnableScheduling
 public class PiramidadjiiApplication {
 
     @Bean

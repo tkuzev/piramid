@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import { ActivatedRoute, Router } from '@angular/router';
 import { PersonService } from 'src/app/services/person.service';
@@ -9,7 +9,7 @@ import { kur } from 'src/app/models/kur';
   templateUrl: './registration-form.component.html',
   styleUrls: ['./registration-form.component.css']
 })
-export class RegistrationFormComponent implements OnInit{
+export class RegistrationFormComponent{
 
   private registrationPerson: kur
 
@@ -18,9 +18,7 @@ export class RegistrationFormComponent implements OnInit{
               private router: Router,
               private personService: PersonService) {
   }
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
+ 
   newReg =this.fb.group({
     name: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z]+')]),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -29,12 +27,14 @@ export class RegistrationFormComponent implements OnInit{
   });
   
   onSubmit() {
+    debugger
       this.registrationPerson.email = this.newReg.get("email").value
       this.registrationPerson.name = this.newReg.get("name").value
       this.registrationPerson.money = parseInt(this.newReg.get("money").value)
       this.registrationPerson.password = this.newReg.get("password").value
       this.personService.personGetId().subscribe(value => this.registrationPerson.parentId = value)
-
+      debugger
+      console.log(this.registrationPerson)
       this.personService.registerPerson(this.registrationPerson);
   }
 }
