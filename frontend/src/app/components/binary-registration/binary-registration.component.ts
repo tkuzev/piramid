@@ -21,6 +21,7 @@ export class BinaryRegistrationComponent implements OnInit{
   nqkwoDTO:BinaryPerson=new BinaryPerson();
   direction: boolean;
   selectedPerson: BinPerson;
+  fatherId: number
 
 
   constructor(private fb: FormBuilder, private binaryService: BinaryService, private route: ActivatedRoute, private router:Router) {
@@ -33,11 +34,11 @@ export class BinaryRegistrationComponent implements OnInit{
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      const fatherId: number = params['fatherId'];
+      this.fatherId = params['fatherId'];
       this.childId = params['childId'];
-      this.binaryService.getBinaryPersonById(fatherId).subscribe(value =>this.parent = value)
+      this.binaryService.getBinaryPersonById(this.fatherId).subscribe(value =>this.parent = value)
       this.binaryService.getRegistrationPersonById(this.childId).subscribe(value => this.child = value)
-      this.binaryService.getTree(fatherId).subscribe(value => this.subTree = value);
+      this.binaryService.getTree(this.fatherId).subscribe(value => this.subTree = value);
     })
   }
 
@@ -45,13 +46,13 @@ export class BinaryRegistrationComponent implements OnInit{
       this.nqkwoDTO.preferredDirection=this.direction
       this.nqkwoDTO.binaryPersonToPutItOnId=this.selectedPerson.id
       this.binaryService.postBinaryPerson(this.childId,this.nqkwoDTO).subscribe(
-        (response) => {
+        () => {
           // Handle successful response
           this.router.navigate(['/']);
         },
-        (error) => {
+        () => {
           // Handle error response
-          console.error(error);
+          this.router.navigate(['register/binary/'+this.fatherId+'/'+this.childId])
         }
       )
 
