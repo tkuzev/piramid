@@ -114,6 +114,7 @@ public class FacadeController {
 
     @GetMapping("/user/getPersonId")
     public Long getPersonId(@RequestParam("email") String email) {
+        System.out.println(email);
         RegistrationPerson registrationPerson = registrationPersonRepository.findByEmail(email).orElseThrow();
         return registrationPerson.getId();
     }
