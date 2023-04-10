@@ -34,10 +34,10 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     @Override
     public void sendBinaryRegistrationEmail(RegistrationPerson registrationPerson, Long parentId) {
         try {
-
-            mailSenderService.sendEmailWithoutAttachment(findSuitableParent(registrationPerson).getEmail(),
+            RegistrationPerson suitableParent = findSuitableParent(registrationPerson);
+            mailSenderService.sendEmailWithoutAttachment(suitableParent.getEmail(),
                     "Register a person in this binary tree:", "Click here to register him ->" +
-                            "http://localhost:4200/register/binary/"+parentId+"/"+registrationPerson.getId());
+                            "http://localhost:4200/register/binary/"+suitableParent.getId()+"/"+registrationPerson.getId());
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
