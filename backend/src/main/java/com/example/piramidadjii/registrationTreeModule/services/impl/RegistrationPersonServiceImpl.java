@@ -22,6 +22,9 @@ import java.util.Objects;
 
 @Service
 public class RegistrationPersonServiceImpl implements RegistrationPersonService {
+
+    private static final long BOSS_BANK_ACCOUNT_ID = 1;
+
     @Autowired
     private RegistrationPersonRepository registrationPersonRepository;
     @Autowired
@@ -34,22 +37,30 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RoleRepository roleRepository;
-    private static final long BOSS_BANK_ACCOUNT_ID = 1;
 
     @Override
-    public RegistrationPerson registerPerson(RegistrationPerson registrationPerson, BigDecimal money) {
-        List<SubscriptionPlan> subscriptionPlans = subscriptionPlanRepository.findAll().stream().sorted
-                (Comparator.comparing(SubscriptionPlan::getRegistrationFee).reversed()).toList();
+    public RegistrationPerson registerPerson(RegistrationPerson registrationPerson, BigDecimal accountDeposit) {
 
-//        RegistrationPerson registrationPerson = setPersonDetails(name,email ,parentId);
+        // find subscription plans
+        List<SubscriptionPlan> subscriptionPlans =
+                subscriptionPlanRepository.findAll()
+                        .stream()
+                        .sorted(Comparator.comparing(SubscriptionPlan::getRegistrationFee).reversed())
+                        .toList();
+
+        // create new bank account and deposit
         BankAccount bankAccount = new BankAccount();
-        bankAccount.setBalance(money);
+        bankAccount.setBalance(accountDeposit);
         bankAccountRepository.save(bankAccount);
+
+        //register person
         registrationPerson.setBankAccount(bankAccount);
         registrationPerson.setPassword(passwordEncoder.encode(registrationPerson.getPassword()));
         registrationPerson.setSubscriptionEnabled(true);
         registrationPerson.setRole(roleRepository.getRoleByName("klient").orElseThrow());
         registrationPersonRepository.save(registrationPerson);
+
+        // find apropriate plan
         subscriptionPlans.stream()
                 .filter(x -> checkBalance(registrationPerson.getBankAccount().getBalance(), x.getId()) >= 0)
                 .findFirst()
@@ -60,9 +71,10 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
                     registrationPersonRepository.save(registrationPerson);
                 });
 
-
-        if (Objects.isNull(registrationPerson.getSubscriptionPlan()))
+        //
+        if (Objects.isNull(registrationPerson.getSubscriptionPlan())) {
             throw new RuntimeException();
+        }
 
         return registrationPerson;
     }
@@ -72,6 +84,7 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         return balance.compareTo(subscriptionPlanRepository.getSubscriptionPlanById(planId).orElseThrow().getRegistrationFee());
     }
 
+    //todo
     @Override
     public void setSubscription(RegistrationPerson registrationPerson, long id) {
         BankAccount bossBankAccount = bankAccountRepository.findById(BOSS_BANK_ACCOUNT_ID).orElseThrow();

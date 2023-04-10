@@ -12,6 +12,8 @@ import com.example.piramidadjii.baseModule.events.RenewSubscriptionPlansEvent;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.configModule.ConfigurationService;
+//import com.example.piramidadjii.kafka.PraznimKonteineriEvent;
+//import com.example.piramidadjii.kafka.Producer;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import lombok.SneakyThrows;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
+//import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -50,6 +53,8 @@ public class BaseScheduled {
 
     @Autowired
     private BankAccountRepository bankAccountRepository;
+//    @Autowired
+//    private Producer producer;
 
     @Autowired
     ConfigurationService configurationService;
@@ -73,15 +78,21 @@ public class BaseScheduled {
         this.formatter = DateTimeFormatter.ofPattern("MMMM", new Locale("bg"));
     }
 
-    @Scheduled(cron = "00 00 00 1 * *", zone = "Europe/Sofia")
-    public void binaryDistributeMoney(){
-        eventService.distributeMoney();
-    }
-    @Scheduled(cron = "00 00 00 * * *", zone = "Europe/Sofia")
-    public void renewSubscriptionPlans(){
-        eventService.renewSubscriptionPlan();
-    }
+//    @KafkaListener(topics = "praznene", groupId = "consumerGroup1")
+//    public void binaryDistributeMoney(){
+//        eventService.distributeMoney();
+//    }
+//    @KafkaListener(topics = "praznene", groupId = "consumerGroup1")
+//    public void renewSubscriptionPlans(){
+//        eventService.renewSubscriptionPlan();
+//    }
 
+//    @Scheduled(cron = "00 00 00 1 * *")
+//    public void kur(){
+//        PraznimKonteineriEvent praznimKonteineriEvent = new PraznimKonteineriEvent();
+//        praznimKonteineriEvent.setPayload("dqvole");
+//        producer.sendEvent(praznimKonteineriEvent);
+//    }
 
     @EventListener(RenewSubscriptionPlansEvent.class)
     public void getTax() {
@@ -91,6 +102,7 @@ public class BaseScheduled {
     }
 
     @EventListener(DistributeMoneyEvent.class)
+
     public void binaryTree() {
         List<BinaryPerson> binaryPersonList = binaryPersonRepository.findAll();
         binaryPersonList.parallelStream().forEach(this::updateMoney);

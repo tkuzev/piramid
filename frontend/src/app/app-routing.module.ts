@@ -21,6 +21,18 @@ const routes: Routes = [
       {path:'profile', component: ProfileInfoComponent},
       {path:'register', component: RegistrationFormComponent},
       {path:'login', component: LoginFormComponent},
+      {
+        path:'profile',
+        loadChildren: ()=>import('src/app/modules/profile-info/profile-info.module').then(m=>m.ProfileInfoModule)
+      },
+      {
+        path:'register',
+        loadChildren: ()=>import('src/app/modules/register/register.module').then(m=>m.RegisterModule)
+      },
+      {
+        path:'login',
+        loadChildren: ()=>import('src/app/modules/login/login.module').then(m=>m.LoginModule)
+      },
       {path: 'chart', component: ChartComponent},
       {path:'register/binary',component: BinaryRegistrationComponent},
       {path:'changePassword',component: ChangePasswordComponent},

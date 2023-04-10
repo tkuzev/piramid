@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="col-md-6 right align-items-center justify-content-center">
-      <form [formGroup]="newReg" *ngIf="newReg" class="fields-form">
+      <form [formGroup]="newReg" (ngSubmit)="onSubmit()" *ngIf="newReg" class="fields-form">
         <h1 class="align-self-center">Registration</h1>
         <mat-form-field>
           <mat-label>Name</mat-label>
@@ -44,7 +44,7 @@
           <mat-error *ngIf="newReg.get('password')?.hasError('required')">Password required!</mat-error>
           <mat-error *ngIf="newReg.get('password')?.hasError('pattern')">Enter valid password!</mat-error>
         </mat-form-field>
-        <button mat-raised-button class="btn" [disabled]="!newReg.valid" routerLink="/wrapper/home">Register</button>
+        <button type="submit" mat-raised-button [disabled]="!newReg.valid" routerLink="/wrapper/home">Register</button>
       </form>
     </div>
   </div>

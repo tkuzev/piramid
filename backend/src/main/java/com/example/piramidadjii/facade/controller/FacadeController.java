@@ -53,6 +53,7 @@ public class FacadeController {
     public void registerBinaryPerson(@PathVariable Long childId, @RequestBody BinaryPersonDTO binaryPersonDTO) {
         RegistrationPerson person = registrationPersonRepository.findById(childId).orElseThrow();
         binaryRegistrationService.registerNewBinaryPerson(person, binaryPersonDTO.getBinaryPersonToPutItOnId(), binaryPersonDTO.isPreferredDirection());
+
     }
 
     @GetMapping("/user/income")

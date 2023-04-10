@@ -17,11 +17,16 @@
               <mat-option *ngFor="let person of subTree" [value]="person">
                 <div class="row">
                   <div class="col-auto">
-                    {{person.name}}
+                      {{person.name}}
                   </div>
-                  <div class="col-auto">
-                    {{person.direction}}
+                  <div *ngIf="person.direction; else left" class="col-auto">
+                    right
                   </div>
+                  <ng-template #left>
+                    <div>
+                      left
+                    </div>
+                  </ng-template>
                 </div>
               </mat-option>
             </mat-select>
