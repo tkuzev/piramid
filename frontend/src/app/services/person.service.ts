@@ -5,6 +5,7 @@ import {BinaryPerson} from "../models/binary-person";
 import {LoginPerson} from "../models/login-person";
 import {firstValueFrom, map, Observable, Subscription} from "rxjs";
 import {RegistrationPerson} from "../models/registration-person";
+import { kur } from '../models/kur';
 
 
 @Injectable({
@@ -42,8 +43,8 @@ export class PersonService {
   //   return this.http.post(this.usersUrl+"/getPersonId",) localStorage.getItem("currentUserEmail")
   // }
 
-  public registerPerson(registerPerson: RegistrationPerson){
-    return this.http.post<RegistrationPerson>(this.usersUrl+"register",registerPerson);
+  public registerPerson(registerPerson: kur){
+    return this.http.post<kur>(this.usersUrl+"register",registerPerson);
   }
 
   public logout(){
