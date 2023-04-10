@@ -1,17 +1,23 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import { SubscriptionPlanService } from 'src/app/services/subscription-plan.service';
+import {SubscriptionPlan} from "../../models/SubscriptionPlan";
 
 @Component({
   selector: 'app-subscription-plans',
   templateUrl: './subscription-plans.component.html',
   styleUrls: ['./subscription-plans.component.css']
 })
-export class SubscriptionPlansComponent {
-  name: string = 'Platinum';
+
+export class SubscriptionPlansComponent implements OnInit {
+  name: string;
   flatPercent: number = 5;
-  price: number = 500;
-  level1: number = 5;
-  level2: number = 4;
-  level3: number = 3;
-  level4: number = 2;
-  isEligibleForBinary: boolean = true;
+  plans: SubscriptionPlan[];
+
+  constructor(private subscriptionPlanService: SubscriptionPlanService) {
+  }
+  ngOnInit(): void {
+    this.subscriptionPlanService.getPlans().subscribe((plans => {
+      this.plans = plans;
+    }));
+  }
 }

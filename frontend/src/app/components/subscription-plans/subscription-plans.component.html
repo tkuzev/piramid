@@ -1,8 +1,10 @@
 <div class="container-fluid center">
-  <div class="row plan-card">
-    <div class="col center">
+  <div class="col center">
+  <div class="row">
+    <div class="col center ml-5 plan-card" *ngFor="let plan of plans">
+    <div  class="col center">
       <div class="row text head">
-        <p>{{name}}</p>
+        <p>{{plan.name}}</p>
       </div>
 
       <div class="row text normal-text">
@@ -20,41 +22,43 @@
       <div class="row text">
         <div class="col">
           <p>One level:</p>
-          <p class="small-text">{{level1}}% of the price.</p>
+          <p class="small-text">{{plan.percents.charAt(0)}}% of the price.</p>
         </div>
 
         <div class="col">
           <p>Two levels:</p>
-          <p *ngIf="level2!=null" class="small-text">{{level2}}% of the price.</p>
-          <mat-icon *ngIf="level2==null" class="normal-text">clear</mat-icon>
+          <p *ngIf="plan.percents.charAt(3)!=''" class="small-text">{{plan.percents.charAt(3)}}% of the price.</p>
+          <mat-icon *ngIf="plan.percents.charAt(3)==''" class="normal-text">clear</mat-icon>
         </div>
 
         <div class="col">
           <p>Three levels:</p>
-          <p *ngIf="level3!=null" class="small-text">{{level3}}% of the price.</p>
-          <mat-icon *ngIf="level3==null" class="normal-text">clear</mat-icon>
+          <p *ngIf="plan.percents.charAt(6)!=''" class="small-text">{{plan.percents.charAt(6)}}% of the price.</p>
+          <mat-icon *ngIf="plan.percents.charAt(6)==''" class="normal-text">clear</mat-icon>
         </div>
 
         <div class="col">
           <p>Four levels:</p>
-          <p *ngIf="level4!=null" class="small-text">{{level4}}% of the price.</p>
-          <mat-icon *ngIf="level4==null" class="normal-text">clear</mat-icon>
+          <p *ngIf="plan.percents.charAt(9)!=''" class="small-text">{{plan.percents.charAt(9)}}% of the price.</p>
+          <mat-icon *ngIf="plan.percents.charAt(9)==''" class="normal-text">clear</mat-icon>
         </div>
       </div>
 
       <div class="row text normal-text">
         <p>Access to binary:&nbsp;<p>
-        <mat-icon *ngIf="isEligibleForBinary">check_circle_outline</mat-icon>
-        <mat-icon *ngIf="!isEligibleForBinary">clear</mat-icon>
+        <mat-icon *ngIf="plan.eligibleForBinary">check</mat-icon>
+        <mat-icon *ngIf="!plan.eligibleForBinary">clear</mat-icon>
       </div>
 
       <div class="row text normal-text space center">
-        <p>{{price}}lv./monthly</p>
+        <p class="price">{{plan.registrationFee}}lv./monthly</p>
       </div>
 
       <div class="row">
         <button type="submit" mat-raised-button class="btn text">Buy</button>
       </div>
     </div>
+    </div>
+  </div>
   </div>
 </div>

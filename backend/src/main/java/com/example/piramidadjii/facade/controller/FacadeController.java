@@ -6,7 +6,6 @@ import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationServ
 import com.example.piramidadjii.facade.FacadeService;
 import com.example.piramidadjii.facade.dto.*;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
-import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import com.example.piramidadjii.registrationTreeModule.repositories.SubscriptionPlanRepository;
 import org.modelmapper.ModelMapper;
@@ -125,6 +124,10 @@ public class FacadeController {
         RegistrationPerson person = facadeService.displayPersonDetails(email);
         return modelMapper.map(person,RegisterPersonDTO.class);
     }
+    @GetMapping("/user/getAllSubscriptionPlans")
+    public List<SubscriptionPlanDTO> getAllRegistrationPlans(){
+        return subscriptionPlanRepository.findAll().stream().map(plan->modelMapper.map(plan,SubscriptionPlanDTO.class)).toList();
+    }
 
     private  RegistrationPerson customModelMapperShowUserData(EditPersonDTO editPersonDTO){
         RegistrationPerson person=new RegistrationPerson();
@@ -143,4 +146,5 @@ public class FacadeController {
         person.setPassword(registerPersonDTO.getPassword());
         return person;
     }
+
 }

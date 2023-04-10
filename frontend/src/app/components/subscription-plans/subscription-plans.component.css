@@ -35,6 +35,11 @@
   font-style: italic;
 }
 
+.price{
+  font-size: 20px;
+  font-style: italic;
+}
+
 .center{
   display: flex;
   flex-direction: column;
