@@ -26,9 +26,7 @@ export class LoginFormComponent {
     loginPerson.email = this.newLog.get("email").value
     loginPerson.password = this.newLog.get("password").value
     this.personService.login(loginPerson).subscribe(
-      data => {
-        this.gotoHomePage()
-      },
+      () =>{},
       error => {
         this.error = error;
         this.loading = false;
@@ -36,10 +34,6 @@ export class LoginFormComponent {
       ()=>{this.router.navigate(['/wrapper/home'])}
     )
   }
-
-  gotoHomePage() {
-    this.router.navigate(['/']).then(()=>{window.location.reload()})
-  };
 
   newLog = this.fb.group({
     email: new FormControl('', [Validators.required, Validators.email]),
