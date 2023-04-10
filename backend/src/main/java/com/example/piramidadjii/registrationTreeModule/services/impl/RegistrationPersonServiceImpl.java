@@ -2,6 +2,7 @@ package com.example.piramidadjii.registrationTreeModule.services.impl;
 
 import com.example.piramidadjii.bankAccountModule.entities.BankAccount;
 import com.example.piramidadjii.bankAccountModule.repositories.BankAccountRepository;
+import com.example.piramidadjii.bankAccountModule.services.BankService;
 import com.example.piramidadjii.baseModule.enums.Description;
 import com.example.piramidadjii.configModule.ConfigurationService;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
@@ -37,6 +38,8 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private BankService bankService;
 
     @Override
     public RegistrationPerson registerPerson(RegistrationPerson registrationPerson, BigDecimal accountDeposit) {
@@ -71,10 +74,6 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
                     registrationPersonRepository.save(registrationPerson);
                 });
 
-        //
-        if (Objects.isNull(registrationPerson.getSubscriptionPlan())) {
-            throw new RuntimeException();
-        }
 
         return registrationPerson;
     }
@@ -97,6 +96,7 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         BigDecimal newBalance = personBalance.subtract(fee);
 
         registrationPerson.setSubscriptionPlan(subscriptionPlanRepository.getSubscriptionPlanById(id).orElseThrow());
+
         personBankAccount.setBalance(newBalance);
         bossBankAccount.setBalance(bossBalance.add(fee));
 

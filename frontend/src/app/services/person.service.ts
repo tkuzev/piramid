@@ -39,7 +39,6 @@ export class PersonService {
   personGetId(): Observable<number>{
     let requestParams = new HttpParams();
     requestParams = requestParams.append("email", this.email)
-    debugger
     console.log(this.email)
     return this.http.get<number>(this.usersUrl+'/getPersonId', {params:requestParams})
   }

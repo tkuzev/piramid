@@ -100,6 +100,9 @@ values (3, 'Gold', '4//3//2', 400, true);
 insert into subscription_plan (id, name, percents, registration_fee, is_eligible_for_binary)
 values (4, 'Platinum', '5//4//3//2', 500, true);
 
+insert into subscription_plan (id, name, percents, registration_fee, is_eligible_for_binary)
+values (5, 'Default', '0', 0, false);
+
 insert into role (id, name)
 VALUES (1, "klient");
 
