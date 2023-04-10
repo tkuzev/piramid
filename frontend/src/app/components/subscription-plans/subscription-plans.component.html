@@ -1,1 +1,60 @@
-<p>subscription-plans works!</p>
+<div class="container-fluid center">
+  <div class="row plan-card">
+    <div class="col center">
+      <div class="row text head">
+        <p>{{name}}</p>
+      </div>
+
+      <div class="row text normal-text">
+        <p>On sale:</p>
+      </div>
+
+      <div class="row text small-text">
+        <p>{{flatPercent}}% of the selling price.</p>
+      </div>
+
+      <div class="row text normal-text">
+        <p>Included benefits from sales below you:</p>
+      </div>
+
+      <div class="row text">
+        <div class="col">
+          <p>One level:</p>
+          <p class="small-text">{{level1}}% of the price.</p>
+        </div>
+
+        <div class="col">
+          <p>Two levels:</p>
+          <p *ngIf="level2!=null" class="small-text">{{level2}}% of the price.</p>
+          <mat-icon *ngIf="level2==null" class="normal-text">clear</mat-icon>
+        </div>
+
+        <div class="col">
+          <p>Three levels:</p>
+          <p *ngIf="level3!=null" class="small-text">{{level3}}% of the price.</p>
+          <mat-icon *ngIf="level3==null" class="normal-text">clear</mat-icon>
+        </div>
+
+        <div class="col">
+          <p>Four levels:</p>
+          <p *ngIf="level4!=null" class="small-text">{{level4}}% of the price.</p>
+          <mat-icon *ngIf="level4==null" class="normal-text">clear</mat-icon>
+        </div>
+      </div>
+
+      <div class="row text normal-text">
+        <p>Access to binary:&nbsp;<p>
+        <mat-icon *ngIf="isEligibleForBinary">check_circle_outline</mat-icon>
+        <mat-icon *ngIf="!isEligibleForBinary">clear</mat-icon>
+      </div>
+
+      <div class="row text normal-text space center">
+        <p>{{price}}lv./monthly</p>
+      </div>
+
+      <div class="row">
+        <button type="submit" mat-raised-button class="btn text">Buy</button>
+      </div>
+    </div>
+  </div>
+</div>
