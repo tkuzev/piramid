@@ -17,25 +17,30 @@ export class PersonService {
   private readonly authUrl: string;
 
   id: number
-  email: string = localStorage.getItem('currentUserEmail')
+  email: string
   constructor(private http: HttpClient) {
     this.usersUrl = 'http://localhost:8080/user';
     this.authUrl = 'http://localhost:8080/auth';
+    this.email = localStorage.getItem('currentUserEmail')
   }
 
-  public login(loginPerson: LoginPerson):Observable<any>{
+  public login(loginPerson: LoginPerson){
       return this.http.post<LoginPerson>(this.authUrl+"/login",loginPerson).pipe(map(response =>{
         const token = response;
         if(token){
           localStorage.setItem('currentUserEmail',loginPerson.email)
           localStorage.setItem('currentUser',JSON.stringify({email:loginPerson.email,token}))
+          this.email = loginPerson.email
         }
         return response;
       }));
+
   }
   personGetId(): Observable<number>{
     let requestParams = new HttpParams();
     requestParams = requestParams.append("email", this.email)
+    debugger
+    console.log(this.email)
     return this.http.get<number>(this.usersUrl+'/getPersonId', {params:requestParams})
   }
 
@@ -44,7 +49,7 @@ export class PersonService {
   // }
 
   public registerPerson(registerPerson: kur){
-    return this.http.post<kur>(this.usersUrl+"register",registerPerson);
+    return this.http.post<kur>(this.usersUrl+"/register/registrationTree",registerPerson);
   }
 
   public logout(){

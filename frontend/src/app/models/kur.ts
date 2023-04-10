@@ -7,7 +7,6 @@ export class kur{
     parentId:number;
     money:number;
     password:string;
-    subscriptionEnabled:Boolean;
     subscriptionPlan:SubscriptionPlan;
     subscriptionExpirationDate:Date;
 }
