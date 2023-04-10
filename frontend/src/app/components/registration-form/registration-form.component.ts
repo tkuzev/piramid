@@ -27,14 +27,13 @@ export class RegistrationFormComponent{
   });
   
   onSubmit() {
-    debugger
+    
       this.registrationPerson.email = this.newReg.get("email").value
       this.registrationPerson.name = this.newReg.get("name").value
       this.registrationPerson.money = parseInt(this.newReg.get("money").value)
       this.registrationPerson.password = this.newReg.get("password").value
       this.personService.personGetId().subscribe(value => this.registrationPerson.parentId = value)
-      debugger
       console.log(this.registrationPerson)
-      this.personService.registerPerson(this.registrationPerson);
+      this.personService.registerPerson(this.registrationPerson).subscribe();
   }
 }
