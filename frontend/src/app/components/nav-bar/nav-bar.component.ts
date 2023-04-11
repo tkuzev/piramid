@@ -1,17 +1,14 @@
-import {AfterViewInit, ChangeDetectorRef, Component, Inject, Input, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, Inject, Input, OnChanges, OnInit} from '@angular/core';
 import {DepositWithdrawComponent} from "../deposit-withdraw/deposit-withdraw.component";
 import {MatDialog} from "@angular/material/dialog";
 import {PersonService} from "../../services/person.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {error} from "@angular/compiler-cli/src/transformers/util";
-import {Observable, Subscription} from "rxjs";
-
+import {Router} from "@angular/router";
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css']
 })
-export class NavBarComponent implements OnInit {
+export class NavBarComponent implements OnInit{
 
   money: Array<number>
   balance: number = 0
@@ -48,15 +45,11 @@ export class NavBarComponent implements OnInit {
   logout() {
     this.navBarSubscription.unsubscribe()
     this.personService.logout()
-    this.balance = 0
-    this.leftC = 0
-    this.rightC = 0
     this.router.navigate(['/wrapper/home'])
     // console.log(this.navBarSubscription)
   }
 
   ngOnInit(): void {
-    this.fillWalletDrp()
     this.isLogged()
     this.router.navigate(['/wrapper/home'])
   }
@@ -89,4 +82,5 @@ export class NavBarComponent implements OnInit {
   isLogged(){
     return this.personService.isLoggedIn()
   }
+
 }
