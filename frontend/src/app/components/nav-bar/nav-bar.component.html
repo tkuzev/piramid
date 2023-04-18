@@ -12,7 +12,7 @@
           <button mat-button class="nav-bar-btn" style="color: white" routerLink="/wrapper/register">Register</button>
           <button mat-button class="nav-bar-btn" style="color: white" routerLink="/wrapper/profile">Profile</button>
           <button mat-button class="nav-bar-btn" style="color: white" routerLink="/wrapper/income">Income</button>
-          <button mat-button [matMenuTriggerFor]="menu" class="nav-bar-btn" style="color: white">Wallet</button>
+          <button mat-button (click)="fillWalletDrp()" [matMenuTriggerFor]="menu" class="nav-bar-btn" style="color: white">Wallet</button>
           <button mat-button class="nav-bar-btn" style="color: white" routerLink="/wrapper/plans">Plans</button>
           <button mat-button class="nav-bar-btn" style="color: white" routerLink="/wrapper/home" (click)="logout()">Logout</button>
         </div>

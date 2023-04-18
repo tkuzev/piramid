@@ -34,7 +34,6 @@ export class LoginFormComponent {
       ()=>{this.router.navigate(['/wrapper/home'])}
     )
   }
-
   newLog = this.fb.group({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')])
