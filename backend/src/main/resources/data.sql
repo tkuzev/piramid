@@ -89,19 +89,19 @@ insert into binary_person (id, left_container, right_container, name, email, ban
 values (1, 0, 0, 'Boss', 'navasililievbratmu@gmail.com', 1);
 
 insert into subscription_plan (id, name, percents, registration_fee, is_eligible_for_binary)
-values (1, 'Bronze', '2', 200, false);
+values (1, 'Default', '0', 0, false);
 
 insert into subscription_plan (id, name, percents, registration_fee, is_eligible_for_binary)
-values (2, 'Silver', '3//2', 300, false);
+values (2, 'Bronze', '2', 200, false);
 
 insert into subscription_plan (id, name, percents, registration_fee, is_eligible_for_binary)
-values (3, 'Gold', '4//3//2', 400, true);
+values (3, 'Silver', '3//2', 300, false);
 
 insert into subscription_plan (id, name, percents, registration_fee, is_eligible_for_binary)
-values (4, 'Platinum', '5//4//3//2', 500, true);
+values (4, 'Gold', '4//3//2', 400, true);
 
 insert into subscription_plan (id, name, percents, registration_fee, is_eligible_for_binary)
-values (5, 'Default', '0', 0, false);
+values (5, 'Platinum', '5//4//3//2', 500, true);
 
 insert into role (id, name)
 VALUES (1, "klient");
