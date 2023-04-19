@@ -5,6 +5,8 @@ import com.example.piramidadjii.bankAccountModule.repositories.BankAccountReposi
 import com.example.piramidadjii.bankAccountModule.services.BankService;
 import com.example.piramidadjii.baseModule.enums.Description;
 import com.example.piramidadjii.configModule.ConfigurationService;
+import com.example.piramidadjii.facade.exceptions.EmailNotFoundException;
+import com.example.piramidadjii.facade.exceptions.IdNotFoundException;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
@@ -20,6 +22,7 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class RegistrationPersonServiceImpl implements RegistrationPersonService {
@@ -38,11 +41,11 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RoleRepository roleRepository;
-    @Autowired
-    private BankService bankService;
+
 
     @Override
-    public RegistrationPerson registerPerson(RegistrationPerson registrationPerson, BigDecimal accountDeposit) {
+    public RegistrationPerson registerPerson(Long parentId,String name,String email,String password, BigDecimal accountDeposit) {
+        RegistrationPerson registrationPerson=new RegistrationPerson();
 
         // find subscription plans
         List<SubscriptionPlan> subscriptionPlans =
@@ -57,8 +60,12 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         bankAccountRepository.save(bankAccount);
 
         //register person
+        RegistrationPerson parent = registrationPersonRepository.findById(parentId).orElseThrow();
+        registrationPerson.setParent(parent);
+        registrationPerson.setName(name);
+        registrationPerson.setEmail(email);
         registrationPerson.setBankAccount(bankAccount);
-        registrationPerson.setPassword(passwordEncoder.encode(registrationPerson.getPassword()));
+        registrationPerson.setPassword(passwordEncoder.encode(password));
         registrationPerson.setSubscriptionEnabled(true);
         registrationPerson.setRole(roleRepository.getRoleByName("klient").orElseThrow());
         registrationPersonRepository.save(registrationPerson);
@@ -116,10 +123,27 @@ public class RegistrationPersonServiceImpl implements RegistrationPersonService 
         personToEdit.setPassword(passwordEncoder.encode(registrationPerson.getPassword()));
         registrationPersonRepository.save(personToEdit);
     }
-
     @Override
     public RegistrationPerson displayPersonDetails(String email) {
         return registrationPersonRepository.getByEmail(email).orElseThrow();
+    }
+
+    @Override
+    public RegistrationPerson getRegistrationPersonByEmail(String email) {
+        Optional<RegistrationPerson> personRepositoryByEmail = registrationPersonRepository.findByEmail(email);
+        if (personRepositoryByEmail.isPresent()){
+            return personRepositoryByEmail.get();
+        }
+        throw new EmailNotFoundException();
+    }
+
+    @Override
+    public RegistrationPerson getRegistrationPersonById(Long id) {
+        Optional<RegistrationPerson> personById = registrationPersonRepository.findById(id);
+        if (personById.isPresent()){
+            return personById.get();
+        }
+        throw new IdNotFoundException(id);
     }
 
 

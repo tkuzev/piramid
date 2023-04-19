@@ -8,6 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UpgradeSubscriptionPlanDTO {
-    private RegistrationPerson registrationPerson;
+    private Long registrationPersonId;
     private SubscriptionPlan subscriptionPlan;
 }

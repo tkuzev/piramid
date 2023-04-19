@@ -7,9 +7,11 @@ import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan
 import java.math.BigDecimal;
 
 public interface OrchestraService {
-    void registerPerson(RegistrationPerson registrationPerson, BigDecimal money);
+    void registerPerson(Long parentId,String name,String email,String password, BigDecimal money);
 
     void editProfile(RegistrationPerson registrationPerson);
 
-    void createTransaction(RegistrationPerson person, BigDecimal money);
+    void createTransaction(Long personId, BigDecimal money);
+
+    void upgradeSubscriptionPlan(Long id,SubscriptionPlan subscriptionPlan);
 }

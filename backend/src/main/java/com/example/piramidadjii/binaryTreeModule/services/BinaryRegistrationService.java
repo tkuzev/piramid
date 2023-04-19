@@ -6,9 +6,11 @@ import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPers
 import java.util.Map;
 
 public interface BinaryRegistrationService {
-    void registerNewBinaryPerson(RegistrationPerson person, Long personToPutItOnId, boolean preferredDirection);
+    void registerNewBinaryPerson(Long personId, Long personToPutItOnId, boolean preferredDirection);
 
     void sendBinaryRegistrationEmail(RegistrationPerson registrationPerson, Long parentId);
 
-    Map<BinaryPerson, Boolean> getTree(BinaryPerson binaryPerson);
+    Map<BinaryPerson, Boolean> getTree(Long binaryPersonId);
+
+    BinaryPerson getBinaryById(Long id);
 }

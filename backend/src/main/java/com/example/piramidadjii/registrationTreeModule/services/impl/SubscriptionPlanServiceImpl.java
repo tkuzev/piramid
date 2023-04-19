@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
@@ -42,11 +43,14 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
     public void upgradeSubscriptionPlan(Long id, SubscriptionPlan subscriptionPlan) {
         RegistrationPerson registrationPerson = registrationPersonRepository.findById(id).orElseThrow();
 
+
         BankAccount bossBankAccount = bankAccountRepository.findById(BOSS_BANK_ACCOUNT_ID).orElseThrow();
 
         if (isUpdateUnavailable(registrationPerson, subscriptionPlan)) {
             throw new RuntimeException("nqmash pari da si upgreidnesh plana");
         }
+
+
 
         BigDecimal money = subscriptionPlan.getRegistrationFee().subtract(registrationPerson.getSubscriptionPlan().getRegistrationFee());
 
@@ -56,6 +60,11 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
         registrationPerson.setSubscriptionPlan(subscriptionPlan);
         bankAccountRepository.save(registrationPerson.getBankAccount());
         bankAccountRepository.save(bossBankAccount);
+    }
+
+    @Override
+    public List<SubscriptionPlan> listOfAllSubscriptionPlans() {
+        return subscriptionPlanRepository.findAll().subList(2,(int) subscriptionPlanRepository.count());
     }
 
 

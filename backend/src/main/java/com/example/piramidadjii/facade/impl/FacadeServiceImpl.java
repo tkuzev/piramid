@@ -37,8 +37,8 @@ public class FacadeServiceImpl implements FacadeService {
     JWTGenerator jwtGenerator;
 
     @Override
-    public void registerPerson(RegistrationPerson registrationPerson, BigDecimal money) {
-        orchestraService.registerPerson(registrationPerson, money);
+    public void registerPerson(Long parentId,String name,String email,String password, BigDecimal money) {
+        orchestraService.registerPerson(parentId,name,email,password, money);
     }
 
     @Override
@@ -57,8 +57,8 @@ public class FacadeServiceImpl implements FacadeService {
     }
 
     @Override
-    public void createTransaction(RegistrationPerson registrationPerson, BigDecimal price) {
-        orchestraService.createTransaction(registrationPerson, price);
+    public void createTransaction(Long registrationPersonId, BigDecimal price) {
+        orchestraService.createTransaction(registrationPersonId, price);
     }
 
     @Override
@@ -77,12 +77,42 @@ public class FacadeServiceImpl implements FacadeService {
     }
 
     @Override
-    public Map<BinaryPerson, Boolean> getTree(BinaryPerson binaryPerson) {
-        return binaryRegistrationService.getTree(binaryPerson);
+    public Map<BinaryPerson, Boolean> getTree(Long binaryPersonId) {
+        return binaryRegistrationService.getTree(binaryPersonId);
     }
 
     @Override
     public RegistrationPerson displayPersonDetails(String email) {
         return registrationPersonService.displayPersonDetails(email);
+    }
+
+    @Override
+    public BinaryPerson getBinaryPersonById(Long id) {
+        return binaryRegistrationService.getBinaryById(id);
+    }
+
+    @Override
+    public RegistrationPerson getRegistrationPersonByEmail(String email) {
+        return registrationPersonService.getRegistrationPersonByEmail(email);
+    }
+
+    @Override
+    public List<SubscriptionPlan> getAllSubscriptionPlans() {
+        return subscriptionPlanService.listOfAllSubscriptionPlans();
+    }
+
+    @Override
+    public RegistrationPerson getRegistrationPersonById(Long id) {
+       return registrationPersonService.getRegistrationPersonById(id);
+    }
+
+    @Override
+    public void registerNewBinaryPerson(Long childId, Long personToPutItOnId, Boolean preferredDirection) {
+        binaryRegistrationService.registerNewBinaryPerson(childId,personToPutItOnId,preferredDirection);
+    }
+
+    @Override
+    public void upgradeSubscriptionPlan(Long id, SubscriptionPlan subscriptionPlan) {
+        orchestraService.upgradeSubscriptionPlan(id,subscriptionPlan);
     }
 }

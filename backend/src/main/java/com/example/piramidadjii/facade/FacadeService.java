@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface FacadeService {
-    void registerPerson(RegistrationPerson registrationPerson, BigDecimal money);
+    void registerPerson(Long parentId,String name,String email,String password, BigDecimal money);
 
     Map<String, BigDecimal> monthlyIncome(Long id);
 
@@ -18,7 +18,7 @@ public interface FacadeService {
 
     void withdraw(Long id, BigDecimal money);
 
-    void createTransaction(RegistrationPerson registrationPerson, BigDecimal price);
+    void createTransaction(Long registrationPersonId, BigDecimal price);
 
     void editProfile(RegistrationPerson registrationPerson);
 
@@ -26,7 +26,19 @@ public interface FacadeService {
 
     String getEmailFromJWT(String token);
 
-    Map<BinaryPerson, Boolean> getTree(BinaryPerson binaryPerson);
+    Map<BinaryPerson, Boolean> getTree(Long binaryPersonId);
 
     RegistrationPerson displayPersonDetails(String email);
+
+    BinaryPerson getBinaryPersonById(Long id);
+
+    RegistrationPerson getRegistrationPersonByEmail(String email);
+
+    List<SubscriptionPlan> getAllSubscriptionPlans();
+
+    RegistrationPerson getRegistrationPersonById(Long id);
+
+    void registerNewBinaryPerson(Long childId, Long personToPutItOnId, Boolean preferredDirection);
+
+    void upgradeSubscriptionPlan(Long id,SubscriptionPlan subscriptionPlan);
 }

@@ -28,10 +28,6 @@ public class OrchestraServiceImpl implements OrchestraService {
     @Autowired
     private RegistrationPersonService registrationPersonService;
     @Autowired
-    private SubscriptionPlanService subscriptionPlanService;
-    @Autowired
-    private SubscriptionPlanRepository subscriptionPlanRepository;
-    @Autowired
     private RegistrationPersonRepository registrationPersonRepository;
     @Autowired
     private TransactionService transactionService;
@@ -39,17 +35,20 @@ public class OrchestraServiceImpl implements OrchestraService {
     private DistributeMoneyService distributeMoneyService;
     @Autowired
     private BinaryPersonRepository binaryPersonRepository;
+    @Autowired
+    private SubscriptionPlanService subscriptionPlanService;
 
 
     @Override
-    public void registerPerson(RegistrationPerson registrationPerson, BigDecimal money) {
-        if (registrationPersonRepository.existsByEmail(registrationPerson.getEmail())) {
+    public void registerPerson(Long parentId,String name,String email,String password, BigDecimal money) {
+        if (registrationPersonRepository.existsByEmail(email)){
             throw new RuntimeException("Emaila trqq da e unique");
         }
 
-        RegistrationPerson registrationPerson1 = registrationPersonService.registerPerson(registrationPerson, money);
+        RegistrationPerson registrationPerson = registrationPersonService.registerPerson(parentId,name,email,password, money);
+
         if (registrationPerson.getSubscriptionPlan().isEligibleForBinary()) {
-            binaryRegistrationService.sendBinaryRegistrationEmail(registrationPerson1, registrationPerson1.getId());
+            binaryRegistrationService.sendBinaryRegistrationEmail(registrationPerson, registrationPerson.getId());
         }
     }
 
@@ -59,11 +58,22 @@ public class OrchestraServiceImpl implements OrchestraService {
     }
 
     @Override
-    public void createTransaction(RegistrationPerson person, BigDecimal money) {
-        transactionService.createTransaction(person, money);
-        if (binaryPersonRepository.existsById(person.getId())) {
-            BinaryPerson binaryPerson = binaryPersonRepository.findById(person.getId()).orElseThrow();
+    public void createTransaction(Long personId, BigDecimal money) {
+        transactionService.createTransaction(personId, money);
+        if (binaryPersonRepository.existsById(personId)) {
+            BinaryPerson binaryPerson = binaryPersonRepository.findById(personId).orElseThrow();
             distributeMoneyService.distributeMoney(binaryPerson, money);
         }
+    }
+
+    @Override
+    public void upgradeSubscriptionPlan(Long id, SubscriptionPlan subscriptionPlan) {
+        subscriptionPlanService.upgradeSubscriptionPlan(id,subscriptionPlan);
+        RegistrationPerson registrationPerson = registrationPersonRepository.findById(id).orElseThrow();
+
+        if (!registrationPerson.getSubscriptionPlan().isEligibleForBinary() && subscriptionPlan.isEligibleForBinary()){
+            binaryRegistrationService.sendBinaryRegistrationEmail(registrationPerson, registrationPerson.getId());
+        }
+
     }
 }

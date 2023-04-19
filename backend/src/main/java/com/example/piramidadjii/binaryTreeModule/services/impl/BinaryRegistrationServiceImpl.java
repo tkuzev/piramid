@@ -4,6 +4,7 @@ import com.example.piramidadjii.baseModule.MailSenderService;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.binaryTreeModule.services.BinaryRegistrationService;
+import com.example.piramidadjii.facade.exceptions.IdNotFoundException;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
 import jakarta.mail.MessagingException;
@@ -12,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Stack;
+import java.util.*;
 
 @Service
 public class BinaryRegistrationServiceImpl implements BinaryRegistrationService {
@@ -27,8 +25,13 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
     private MailSenderService mailSenderService;
 
     @Override
-    public void registerNewBinaryPerson(RegistrationPerson person, Long personToPutItOn, boolean preferredDirection) {
-        addBinaryPerson(binParent(findSuitableParent(person)), person.getId(), personToPutItOn, preferredDirection);
+    public void registerNewBinaryPerson(Long personId, Long personToPutItOn, boolean preferredDirection) {
+        Optional<RegistrationPerson> person = registrationPersonRepository.findById(personId);
+        if (person.isPresent()){
+            addBinaryPerson(binParent(findSuitableParent(person.get())), person.get().getId(), personToPutItOn, preferredDirection);
+        }else {
+            throw new IdNotFoundException(personId);
+        }
     }
 
     @Override
@@ -45,14 +48,28 @@ public class BinaryRegistrationServiceImpl implements BinaryRegistrationService 
 
 
     @Override
-    public Map<BinaryPerson, Boolean> getTree(BinaryPerson binaryPerson) {
-        Map<BinaryPerson, Boolean> tree = new HashMap<>();
-        if (Objects.isNull(binaryPerson.getLeftChild()) || Objects.isNull(binaryPerson.getRightChild())) {
-            tree.put(binaryPerson, null);
+    public Map<BinaryPerson, Boolean> getTree(Long binaryPersonId) {
+        Optional<BinaryPerson> binaryPerson = binaryPersonRepository.findById(binaryPersonId);
+        if (binaryPerson.isPresent()){
+            Map<BinaryPerson, Boolean> tree = new HashMap<>();
+            if (Objects.isNull(binaryPerson.get().getLeftChild()) || Objects.isNull(binaryPerson.get().getRightChild())) {
+                tree.put(binaryPerson.get(), null);
+            }
+            traverseHelper(binaryPerson.get().getLeftChild(), tree, false);
+            traverseHelper(binaryPerson.get().getRightChild(), tree, true);
+            return tree;
+        }else {
+            throw new IdNotFoundException(binaryPersonId);
         }
-        traverseHelper(binaryPerson.getLeftChild(), tree, false);
-        traverseHelper(binaryPerson.getRightChild(), tree, true);
-        return tree;
+    }
+
+    @Override
+    public BinaryPerson getBinaryById(Long id) {
+        Optional<BinaryPerson> binaryPerson = binaryPersonRepository.findById(id);
+        if (binaryPerson.isPresent()){
+            return binaryPerson.get();
+        }
+        throw new IdNotFoundException(id);
     }
 
 

@@ -8,7 +8,7 @@ import java.util.Map;
 
 
 public interface TransactionService {
-    void createTransaction(RegistrationPerson registrationPerson, BigDecimal price);
+    void createTransaction(Long registrationPersonId, BigDecimal price);
 
     Map<String, BigDecimal> monthlyIncome(Long id);
 

@@ -9,6 +9,7 @@ import com.example.piramidadjii.baseModule.enums.OperationType;
 import com.example.piramidadjii.binaryTreeModule.entities.BinaryPerson;
 import com.example.piramidadjii.binaryTreeModule.repositories.BinaryPersonRepository;
 import com.example.piramidadjii.configModule.ConfigurationService;
+import com.example.piramidadjii.facade.exceptions.IdNotFoundException;
 import com.example.piramidadjii.registrationTreeModule.entities.RegistrationPerson;
 import com.example.piramidadjii.registrationTreeModule.entities.SubscriptionPlan;
 import com.example.piramidadjii.registrationTreeModule.repositories.RegistrationPersonRepository;
@@ -47,13 +48,18 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public void createTransaction(RegistrationPerson registrationPerson, BigDecimal price) {
+    public void createTransaction(Long registrationPersonId, BigDecimal price) {
+        Optional<RegistrationPerson> registrationPerson = registrationPersonRepository.findById(registrationPersonId);
+        if (registrationPerson.isEmpty()){
+            throw new IdNotFoundException(registrationPersonId);
+        }
+
         final Long[] percent = new Long[1];
         AtomicInteger counter = new AtomicInteger(0);
         Description[] description = new Description[1];
         Long profit = 100L;
 
-        traverseFromNodeToRoot(registrationPerson).limit(5).forEach(node -> setNewTransactions(registrationPerson, price, percent, counter, node, description));
+        traverseFromNodeToRoot(registrationPerson.get()).limit(5).forEach(node -> setNewTransactions(registrationPerson.get(), price, percent, counter, node, description));
 
         transactionDetails(registrationPersonRepository.getRegistrationPersonById(1L).orElseThrow(), price, profit - percentages, Description.MONEY_LEFT, counter);
 

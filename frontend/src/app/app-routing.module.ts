@@ -34,11 +34,12 @@ const routes: Routes = [
         loadChildren: ()=>import('src/app/modules/login/login.module').then(m=>m.LoginModule)
       },
       {path: 'chart', component: ChartComponent},
-      {path:'register/binary',component: BinaryRegistrationComponent},
+
       {path:'changePassword',component: ChangePasswordComponent},
       {path:'plans',component: SubscriptionPlansComponent},
     ]
   },
+  {path:'register/binary/:fatherId/:childId',component: BinaryRegistrationComponent},
   {path: "", component: NavBarComponent}
 ];
 
