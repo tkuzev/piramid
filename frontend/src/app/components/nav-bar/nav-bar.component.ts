@@ -3,6 +3,7 @@ import {DepositWithdrawComponent} from "../deposit-withdraw/deposit-withdraw.com
 import {MatDialog} from "@angular/material/dialog";
 import {PersonService} from "../../services/person.service";
 import {Router} from "@angular/router";
+import {Deposit} from "../../models/deposit";
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
