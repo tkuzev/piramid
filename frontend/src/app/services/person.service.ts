@@ -6,6 +6,8 @@ import {LoginPerson} from "../models/login-person";
 import {firstValueFrom, map, Observable, Subscription} from "rxjs";
 import {RegistrationPerson} from "../models/registration-person";
 import { kur } from '../models/kur';
+import {Deposit} from "../models/deposit";
+import {Withdraw} from "../models/withdraw";
 
 
 @Injectable({
@@ -92,4 +94,13 @@ export class PersonService {
   editProfile(personData: RegistrationPerson): Observable<any>{
     return this.http.put<any>(this.usersUrl + '/edit', personData);
   }
+
+  deposit(deposit: Deposit){
+    return this.http.post<Deposit>(this.usersUrl+'/deposit',deposit);
+  }
+
+  withdraw(withdraw: Withdraw){
+    return this.http.post<Withdraw>(this.usersUrl+'/withdraw',withdraw);
+  }
+
 }
